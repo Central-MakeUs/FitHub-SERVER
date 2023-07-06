@@ -101,6 +101,19 @@ public class TokenProvider implements InitializingBean {
         }
     }
 
+    public Long validateAndReturnId(String token) throws JwtAuthenticationException{
+        try{
+            Claims body = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+            return Long.valueOf(body.getSubject());
+        }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
+            throw new JwtAuthenticationException(ErrorCode.JWT_BAD_REQUEST);
+        }catch (UnsupportedJwtException e){
+            throw new JwtAuthenticationException(ErrorCode.JWT_UNSUPPORTED_TOKEN);
+        }catch (IllegalArgumentException e){
+            throw new JwtAuthenticationException(ErrorCode.JWT_BAD_REQUEST);
+        }
+    }
+
     public String resolveToken(HttpServletRequest request){
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")){
