@@ -1,0 +1,40 @@
+package fithub.app.exception.common;
+
+import org.springframework.http.HttpStatus;
+
+public enum ErrorCode {
+
+    //Common
+    FORBIDDEN(HttpStatus.FORBIDDEN, "4003", "접근 권한이 없습니다."),
+    UNAUTHORIZED(HttpStatus.UNAUTHORIZED,"4004" ,"인증정보가 유효하지 않습니다."),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST,"4005" ,"잘못된 요청 입니다."),
+
+    // Auth
+    JWT_BAD_REQUEST(HttpStatus.UNAUTHORIZED, "4006","잘못된 JWT 서명입니다."),
+    JWT_ACCESS_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "4007","액세스 토큰이 만료되었습니다."),
+    JWT_REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "4008","리프레시 토큰이 만료되었습니다. 다시 로그인하시기 바랍니다."),
+    JWT_UNSUPPORTED_TOKEN(HttpStatus.UNAUTHORIZED, "4009","지원하지 않는 JWT 토큰입니다."),
+    JWT_TOKEN_NOT_FOUND(HttpStatus.UNAUTHORIZED, "4010","유효한 JWT 토큰이 없습니다."),
+
+    MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED, "4011","해당 사용자가 존재하지 않습니다");
+
+    private final HttpStatus status;
+    private final String code;
+    private final String message;
+
+
+
+    ErrorCode(HttpStatus status, String code, String message){
+        this.status = status;
+        this.code = code;
+        this.message = message;
+    }
+
+    public HttpStatus getStatus() {return status;}
+    public String getCode() {
+        return code;
+    }
+    public String getMessage() {return message;}
+
+
+}
