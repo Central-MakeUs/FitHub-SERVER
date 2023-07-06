@@ -28,35 +28,13 @@ spring:
       org:
         hibernate:
           type: trace
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          kakao:
-#            client-name: kakao
-#            client-id: ${kakao.client.id}
-#            client-secret: ${kakao.client.secret}
-#            client-authentication-method: POST
-#            scope:
-#              - profile_nickname
-#              - account_email
-#              - profile_image
-#            redirect-uri: http://api.drop-the-beatbox.store/login/oauth2/code/kakao
-#            authorization-grant-type: authorization_code
-#        provider:
-#          kakao:
-#            authorization-uri: https://kauth.kakao.com/oauth/authorize
-#            token-uri: https://kauth.kakao.com/oauth/token
-#            user-info-uri: https://kapi.kakao.com/v2/user/me
-#            user-name-attribute: id
-#
-#jwt:
-#  header: Authorization
-#  secret: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
-#  authorities-key: authoritiesKey
-#  access-token-validity-in-seconds: 1210000000 # 30 m
-#  refresh-token-validity-in-seconds: 1210000000 # 14 d
-##  1800000
+jwt:
+  header: Authorization
+  secret: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
+  authorities-key: authoritiesKey
+  access-token-validity-in-seconds: 1210000000 # 30 m
+  refresh-token-validity-in-seconds: 1210000000 # 14 d
+#  1800000
 #springdoc:
 #  use-fqn: true
 #

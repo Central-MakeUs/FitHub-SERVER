@@ -21,27 +21,27 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true ,nullable = false)
+    @Column(unique = true ,nullable = true)
     private String email;
 
-    @Column(length = 11, unique = true, nullable = false)
+    @Column(length = 11, unique = true, nullable = true)
     private String phoneNum;
 
-    @Column(length = 12, unique = true, nullable = false)
+    @Column(length = 12, unique = true, nullable = true)
     private String nickname;
 
     private String profileUrl;
 
-    @Column(length = 20, nullable = false)
+    @Column(length = 20, nullable = true)
     private String name;
 
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Integer age;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Boolean isSocial;
 
     @Enumerated(EnumType.STRING)
@@ -49,7 +49,7 @@ public class User extends BaseEntity {
 
     private String password;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private Boolean marketingAgree;
 
     @Enumerated(EnumType.STRING)
@@ -60,4 +60,17 @@ public class User extends BaseEntity {
 
     @Column(columnDefinition = "BIGINT DEFAULT 0")
     private Long reported;
+
+    private String socialId;
+
+    public User update(String name){
+        this.name = name;
+        return this;
+    }
+
+    public User socialJoin(String email, SocialType socialType){
+        this.email = email;
+        this.socialType = socialType;
+        return this;
+    }
 }
