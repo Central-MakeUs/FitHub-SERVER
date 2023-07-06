@@ -27,11 +27,5 @@ public class UserController {
 
         return ResponseEntity.ok(UserConverter.toOauthDto(result));
     }
-
-    @GetMapping("/users/hi")
-    public String testAPI(){
-        return "ssss";
-    }
-
 }
 
