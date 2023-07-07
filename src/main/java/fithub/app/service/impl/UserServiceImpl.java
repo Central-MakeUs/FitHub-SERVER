@@ -64,6 +64,36 @@ public class UserServiceImpl implements UserService {
 
     }
 
+    public OAuthResult.OAuthResultDto appleOAuth(String socialId){
+        SocialType socialType = SocialType.APPLE;
+
+        Boolean isLogin = true;
+        String jwt = null;
+        Optional<User> userOptional = userRepository.findBySocialIdAndSocialType(socialId, socialType);
+
+        if (!userOptional.isPresent()){
+            isLogin = false;
+            User newUser = userRepository.save(
+                    User.builder()
+                            .isSocial(true)
+                            .socialId(socialId)
+                            .socialType(socialType)
+                            .build()
+            );
+
+            jwt = tokenProvider.createAccessToken(newUser.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
+        }
+        else{
+            User user = userOptional.get();
+            jwt = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
+        }
+
+        return OAuthResult.OAuthResultDto.builder()
+                .isLogin(isLogin)
+                .jwt(jwt)
+                .build();
+    }
+
 
 //    @Override
 //    @Transactional
