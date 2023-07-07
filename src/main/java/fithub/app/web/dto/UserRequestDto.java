@@ -10,4 +10,9 @@ public class UserRequestDto {
     public static class socialDto{
         private String socialId;
     }
+
+    @Getter @Setter
+    public static class AppleSocialDto{
+        private String identityToken;
+    }
 }
