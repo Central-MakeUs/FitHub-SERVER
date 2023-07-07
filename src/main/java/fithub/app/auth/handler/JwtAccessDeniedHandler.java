@@ -29,9 +29,9 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 
         ErrorCode errorCode = ErrorCode.FORBIDDEN;
         ApiErrorResult apiErrorResult = ApiErrorResult.builder()
-                .errorCode(errorCode)
+                .code(errorCode)
                 .message(errorCode.getMessage())
-                .cause(JwtRequestFilter.class.getName())
+                .result(JwtRequestFilter.class.getName())
                 .build();
         try{
             writer.write(apiErrorResult.toString());
