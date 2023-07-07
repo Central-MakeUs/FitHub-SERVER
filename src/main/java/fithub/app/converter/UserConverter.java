@@ -40,7 +40,6 @@ public class UserConverter {
     public static UserResponseDto.OauthDto toOauthDto(OAuthResult.OAuthResultDto result){
         return UserResponseDto.OauthDto.builder()
                 .accessToken(result.getJwt())
-                .isLogin(result.getIsLogin())
                 .build();
     }
 }

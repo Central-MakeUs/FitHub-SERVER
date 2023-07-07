@@ -4,25 +4,30 @@ import org.springframework.http.HttpStatus;
 
 public enum ResponseCode {
 
-    AUTO_LOGIN_NEW_FACE(HttpStatus.OK, "2001", "새로온 사용자 입니다."),
-    AUTO_LOGIN_INFO_NULL(HttpStatus.OK, "2002", "회원정보 입력이 필요합니다."),
-    AUTO_LOGIN_SUCCESS(HttpStatus.OK, "2001", "로그인 된 사용자 입니다.");
+    AUTO_LOGIN_NEW_FACE(2001, "새로온 사용자 입니다.", null),
+    AUTO_LOGIN_INFO_NULL(2002, "회원정보 입력이 필요합니다.", null),
+    AUTO_LOGIN_SUCCESS(2003, "로그인 된 사용자 입니다.", null),
 
-    private final HttpStatus status;
-    private final String code;
+    KAKAO_OAUTH_LOGIN(2004, "로그인 입니다.", null),
+
+    KAKAO_OAUTH_JOIN(2005, "회원가입 입니다.",null);
+
+    private final Integer code;
     private final String message;
+    private final Object result;
 
 
 
-    ResponseCode(HttpStatus status, String code, String message){
-        this.status = status;
+    ResponseCode(Integer code, String message, Object result){
         this.code = code;
         this.message = message;
+        this.result = result;
     }
 
-    public HttpStatus getStatus() {return status;}
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
     public String getMessage() {return message;}
+
+    public Object getResult() {return result;}
 }

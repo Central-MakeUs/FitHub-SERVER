@@ -28,9 +28,9 @@ public class JwtAuthenticationExceptionHandler extends OncePerRequestFilter {
             ErrorCode errorCode = ErrorCode.valueOf(errorCodeName);
 
             ApiErrorResult apiErrorResult = ApiErrorResult.builder()
-                    .errorCode(errorCode)
+                    .code(errorCode)
                     .message(errorCode.getMessage())
-                    .cause(JwtRequestFilter.class.getName())
+                    .result(JwtRequestFilter.class.getName())
                     .build();
 
             writer.write(apiErrorResult.toString());

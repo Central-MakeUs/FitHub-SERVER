@@ -1,12 +1,15 @@
 package fithub.app.web.controller;
 
 import fithub.app.converter.UserConverter;
+import fithub.app.converter.common.BaseConverter;
 import fithub.app.domain.User;
 import fithub.app.service.AppleService;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
+import fithub.app.utils.ResponseCode;
 import fithub.app.web.dto.UserRequestDto;
 import fithub.app.web.dto.UserResponseDto;
+import fithub.app.web.dto.common.BaseDto;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,11 +28,18 @@ public class UserController {
     private final AppleService appleService;
 
     @PostMapping("/users/login/social/kakao")
-    public ResponseEntity<UserResponseDto.OauthDto> kakaoOauth(@RequestBody UserRequestDto.socialDto request){
+    public ResponseEntity<BaseDto.BaseResponseDto> kakaoOauth(@RequestBody UserRequestDto.socialDto request){
 
         OAuthResult.OAuthResultDto result = userService.kakaoOAuth(request.getSocialId());
 
-        return ResponseEntity.ok(UserConverter.toOauthDto(result));
+        ResponseCode responseCode;
+
+        if (result.getIsLogin())
+            responseCode = ResponseCode.KAKAO_OAUTH_LOGIN;
+        else
+            responseCode = ResponseCode.KAKAO_OAUTH_JOIN;
+
+        return ResponseEntity.ok(BaseConverter.toBaseDto(responseCode, UserConverter.toOauthDto(result)));
     }
 
     @PostMapping("/users/login/social/apple")

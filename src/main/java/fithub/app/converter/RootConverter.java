@@ -11,10 +11,4 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class RootConverter {
 
-    public static RootApiResponseDto.AutoLoginDto toAutoLoginDto(ResponseCode result){
-        return RootApiResponseDto.AutoLoginDto.builder()
-                .code(result.getCode())
-                .message(result.getMessage())
-                .build();
-    }
 }
