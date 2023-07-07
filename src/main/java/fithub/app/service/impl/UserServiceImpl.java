@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
         Boolean isLogin = true;
         String jwt = null;
-        Optional<User> userOptional = userRepository.findByEmailAndSocialType(socialId, socialType);
+        Optional<User> userOptional = userRepository.findBySocialIdAndSocialType(socialId, socialType);
 
         if (!userOptional.isPresent()){
             isLogin = false;

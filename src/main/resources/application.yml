@@ -17,7 +17,7 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
         show_sql: true
-        format_sql: false
+        format_sql: true
         use_sql_comments: false
         hbm2ddl:
           auto: update
