@@ -43,13 +43,21 @@ public class UserController {
     }
 
     @PostMapping("/users/login/social/apple")
-    public String appleOauth(@ModelAttribute UserRequestDto.AppleSocialDto request) throws IOException {
+    public ResponseEntity<BaseDto.BaseResponseDto> appleOauth(@ModelAttribute UserRequestDto.AppleSocialDto request) throws IOException {
         String identityToken = request.getIdentityToken();
         String socialId;
 
         socialId = appleService.userIdFromApple(identityToken);
+        OAuthResult.OAuthResultDto result = userService.kakaoOAuth(socialId);
 
-        return "temp";
+        ResponseCode responseCode;
+
+        if (result.getIsLogin())
+            responseCode = ResponseCode.KAKAO_OAUTH_LOGIN;
+        else
+            responseCode = ResponseCode.KAKAO_OAUTH_JOIN;
+
+        return ResponseEntity.ok(BaseConverter.toBaseDto(responseCode, UserConverter.toOauthDto(result)));
     }
 }
 
