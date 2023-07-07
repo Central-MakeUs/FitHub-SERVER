@@ -2,12 +2,14 @@ package fithub.app.web.controller;
 
 import fithub.app.auth.provider.TokenProvider;
 import fithub.app.converter.RootConverter;
+import fithub.app.converter.common.BaseConverter;
 import fithub.app.domain.User;
 import fithub.app.exception.common.ErrorCode;
 import fithub.app.exception.handler.UserException;
 import fithub.app.repository.UserRepository;
 import fithub.app.utils.ResponseCode;
 import fithub.app.web.dto.RootApiResponseDto;
+import fithub.app.web.dto.common.BaseDto;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -33,13 +35,13 @@ public class RootApi {
     }
 
     @GetMapping("/")
-    public ResponseEntity<RootApiResponseDto.AutoLoginDto> AutoLogin(@RequestHeader(value = "Authorization", required = false) String authorizationHeader, HttpServletRequest request){
+    public ResponseEntity<BaseDto.BaseResponseDto> AutoLogin(@RequestHeader(value = "Authorization", required = false) String authorizationHeader, HttpServletRequest request){
 
 
-        RootApiResponseDto.AutoLoginDto result = null;
+        ResponseCode result = null;
 
         if(authorizationHeader == null)
-            result = RootConverter.toAutoLoginDto(ResponseCode.AUTO_LOGIN_NEW_FACE);
+            result = ResponseCode.AUTO_LOGIN_NEW_FACE;
         else{
             String token = authorizationHeader.substring(7);
             System.out.println(token);
@@ -47,10 +49,10 @@ public class RootApi {
             User user = userRepository.findById(userId).orElseThrow(()-> new UserException(ErrorCode.MEMBER_NOT_FOUND));
 
             if (user.getAge() != null && user.getGender() != null)
-                result = RootConverter.toAutoLoginDto(ResponseCode.AUTO_LOGIN_SUCCESS);
+                result = ResponseCode.AUTO_LOGIN_SUCCESS;
             else
-                result = RootConverter.toAutoLoginDto(ResponseCode.AUTO_LOGIN_INFO_NULL);
+                result = ResponseCode.AUTO_LOGIN_INFO_NULL;
         }
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(BaseConverter.toBaseDto(result, null));
     }
 }

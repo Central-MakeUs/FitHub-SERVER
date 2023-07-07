@@ -10,9 +10,9 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ApiErrorResult {
 
-    private ErrorCode errorCode;
+    private ErrorCode code;
     private String message;
-    private String cause;
+    private Object result;
 
     @Override
     public String toString(){

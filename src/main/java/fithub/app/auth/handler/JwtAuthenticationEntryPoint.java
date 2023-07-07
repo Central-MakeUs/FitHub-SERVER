@@ -28,9 +28,9 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         PrintWriter writer = response.getWriter();
         ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
         ApiErrorResult apiErrorResult = ApiErrorResult.builder()
-                .errorCode(errorCode)
+                .code(errorCode)
                 .message(errorCode.getMessage())
-                .cause(JwtRequestFilter.class.getName())
+                .result(JwtRequestFilter.class.getName())
                 .build();
         try {
             writer.write(apiErrorResult.toString());
