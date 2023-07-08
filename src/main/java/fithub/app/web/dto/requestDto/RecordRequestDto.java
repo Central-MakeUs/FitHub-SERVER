@@ -2,19 +2,19 @@ package fithub.app.web.dto.requestDto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
-public class ArticleRequestDto {
+public class RecordRequestDto {
 
-    @Getter @Setter
-    public static class uploadArticleDto{
+    @Getter
+    @Setter
+    public static class uploadRecordDto{
         Long categoryId;
         String title;
         String contents;
     }
 
     @Getter @Setter
-    public static class updateArticleDto{
+    public static class updateRecordDto{
         String title;
         String contents;
     }

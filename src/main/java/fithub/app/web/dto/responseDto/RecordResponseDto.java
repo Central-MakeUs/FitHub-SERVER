@@ -1,23 +1,23 @@
 package fithub.app.web.dto.responseDto;
 
-import fithub.app.domain.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
-public class ArticleResponseDto {
+public class RecordResponseDto {
+
 
     @Builder
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticleSpecDto{
-        Long articleId;
-        ExerciseCategoryResponseDto.CategoryDto articleCategory;
+    public static class RecordSpecDto{
+        Long recordId;
+        ExerciseCategoryResponseDto.CategoryDto recordCategory;
         UserResponseDto.ArticleUserDto userInfo;
         String title;
         String contents;
-        PictureResponseDto.PictureDtoList articlePictureList;
+        PictureResponseDto.PictureDto recordPicture;
         LocalDateTime createdAt;
         HashTagResponseDto.HashtagDto Hashtags;
         Boolean isLiked;
@@ -28,9 +28,9 @@ public class ArticleResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticleDto{
-        Long articleId;
-        ExerciseCategoryResponseDto.CategoryDto articleCategory;
+    public static class recordDto{
+        Long recordId;
+        ExerciseCategoryResponseDto.CategoryDto recordCategory;
         String title;
         String contents;
         Long comments;
@@ -42,8 +42,8 @@ public class ArticleResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticleDtoList{
-        ArticleDto[] articleList;
+    public static class recordDtoList{
+        recordDto[] recordList;
         Long size;
     }
 
@@ -51,8 +51,8 @@ public class ArticleResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticleCreateDto{
-        Long articleId;
+    public static class recordCreateDto{
+        Long recordId;
         String title;
         Long ownerId;
         LocalDateTime createdAt;
@@ -62,8 +62,8 @@ public class ArticleResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticleUpdateDto{
-        Long articleId;
+    public static class recordUpdateDto{
+        Long recordId;
         LocalDateTime updatedAt;
     }
 
@@ -71,8 +71,8 @@ public class ArticleResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticleDeleteDto{
-        Long articleId;
+    public static class recordDeleteDto{
+        Long recordId;
         LocalDateTime deletedAt;
     }
 
@@ -80,8 +80,8 @@ public class ArticleResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticleDeleteDtoList{
-        ArticleDeleteDto[] deletedArticleList;
+    public static class recordDeleteDtoList{
+         recordDeleteDto[] deletedRecordList;
         Long size;
     }
 
@@ -89,8 +89,17 @@ public class ArticleResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticleLikeDto{
-        Long articleId;
+    public static class recordLikeDto{
+        Long recordId;
+        Long userId;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class recordScrapDto{
+        Long recordId;
         Long userId;
     }
 
@@ -99,17 +108,7 @@ public class ArticleResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticleScrapDto{
-        Long articleId;
-        Long userId;
-    }
-
-
-    @Builder
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticlePictureUploadDto{
+    public static class recordPictureUploadDto{
         Long articleId;
         String pictureUrl;
     }

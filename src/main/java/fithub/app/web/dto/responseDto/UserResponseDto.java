@@ -22,6 +22,16 @@ public class UserResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ArticleUserDto{
+        Long ownerId;
+        String ProfileUrl;
+        String nickname;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UserListDto{
         private List<UserDto> userList;
         private Integer size;
