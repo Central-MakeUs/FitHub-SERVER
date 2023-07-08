@@ -4,6 +4,7 @@ import fithub.app.domain.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ArticleResponseDto {
 
@@ -19,7 +20,7 @@ public class ArticleResponseDto {
         String contents;
         PictureResponseDto.PictureDtoList articlePictureList;
         LocalDateTime createdAt;
-        HashTagResponseDto.HashtagDto Hashtags;
+        HashTagResponseDto.HashtagDtoList Hashtags;
         Boolean isLiked;
         Boolean isScraped;
     }
@@ -43,8 +44,8 @@ public class ArticleResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ArticleDtoList{
-        ArticleDto[] articleList;
-        Long size;
+        List<ArticleDto> articleList;
+        Integer size;
     }
 
     @Builder
@@ -81,8 +82,8 @@ public class ArticleResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ArticleDeleteDtoList{
-        ArticleDeleteDto[] deletedArticleList;
-        Long size;
+        List<ArticleDeleteDto> deletedArticleList;
+        Integer size;
     }
 
     @Builder

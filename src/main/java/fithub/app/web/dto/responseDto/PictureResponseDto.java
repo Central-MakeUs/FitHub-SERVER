@@ -2,13 +2,15 @@ package fithub.app.web.dto.responseDto;
 
 import lombok.*;
 
+import java.util.List;
+
 public class PictureResponseDto {
     @Builder
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class PictureDto{
-        Long pictureId;
+        Integer pictureId;
         String pictureUrl;
     }
 
@@ -17,7 +19,7 @@ public class PictureResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class PictureDtoList{
-        PictureDto[] pictureList;
-        Long size;
+        List<PictureDto> pictureList;
+        Integer size;
     }
 }
