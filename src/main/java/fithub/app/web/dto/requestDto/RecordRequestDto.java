@@ -9,7 +9,6 @@ public class RecordRequestDto {
     @Setter
     public static class uploadRecordDto{
         Long categoryId;
-        String title;
         String contents;
     }
 

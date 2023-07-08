@@ -3,6 +3,7 @@ package fithub.app.web.dto.responseDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class RecordResponseDto {
 
@@ -15,11 +16,10 @@ public class RecordResponseDto {
         Long recordId;
         ExerciseCategoryResponseDto.CategoryDto recordCategory;
         UserResponseDto.ArticleUserDto userInfo;
-        String title;
         String contents;
-        PictureResponseDto.PictureDto recordPicture;
+        String pictureUrl;
         LocalDateTime createdAt;
-        HashTagResponseDto.HashtagDto Hashtags;
+        HashTagResponseDto.HashtagDtoList Hashtags;
         Boolean isLiked;
         Boolean isScraped;
     }
@@ -31,10 +31,8 @@ public class RecordResponseDto {
     public static class recordDto{
         Long recordId;
         ExerciseCategoryResponseDto.CategoryDto recordCategory;
-        String title;
-        String contents;
-        Long comments;
-        Long views;
+        String pictureUrl;
+        Long likes;
         LocalDateTime createdAt;
     }
 
@@ -43,8 +41,8 @@ public class RecordResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class recordDtoList{
-        recordDto[] recordList;
-        Long size;
+        List<recordDto> recordList;
+        Integer size;
     }
 
     @Builder
@@ -53,7 +51,6 @@ public class RecordResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class recordCreateDto{
         Long recordId;
-        String title;
         Long ownerId;
         LocalDateTime createdAt;
     }
@@ -81,8 +78,8 @@ public class RecordResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class recordDeleteDtoList{
-         recordDeleteDto[] deletedRecordList;
-        Long size;
+        List<recordDeleteDto> deletedRecordList;
+        Integer size;
     }
 
     @Builder

@@ -42,4 +42,12 @@ public class UserConverter {
                 .accessToken(result.getJwt())
                 .build();
     }
+
+    public static UserResponseDto.ArticleUserDto toArticleUserDto(User user){
+        return UserResponseDto.ArticleUserDto.builder()
+                .ownerId(user.getId())
+                .ProfileUrl(user.getProfileUrl())
+                .nickname(user.getNickname())
+                .build();
+    }
 }

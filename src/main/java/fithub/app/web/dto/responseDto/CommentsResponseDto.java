@@ -3,6 +3,7 @@ package fithub.app.web.dto.responseDto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class CommentsResponseDto {
 
@@ -23,8 +24,8 @@ public class CommentsResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CommentsDtoList{
-        CommentsDto[] commentList;
-        Long size;
+        List<CommentsDto> commentList;
+        Integer size;
     }
 
     @Builder
