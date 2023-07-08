@@ -23,12 +23,12 @@ public class ArticleConverter {
         staticArticleRepository = this.articleRepository;
     }
 
-    public static ArticleResponseDto.ArticleSpecDto toArticleSpecDto(User user, Article article, List<ArticleImages> articleImages, List<HashTag> hashTagList,
+    public static ArticleResponseDto.ArticleSpecDto toArticleSpecDto(Article article, List<ArticleImages> articleImages, List<HashTag> hashTagList,
                                                                       Boolean isLiked, Boolean isScraped){
         return ArticleResponseDto.ArticleSpecDto.builder()
                 .articleId(article.getId())
                 .articleCategory(ExerciseCategoryConverter.toCategoryDto(article.getExerciseCategory()))
-                .userInfo(UserConverter.toArticleUserDto(user))
+                .userInfo(UserConverter.toArticleUserDto(article.getUser()))
                 .title(article.getTitle())
                 .contents(article.getContents())
                 .articlePictureList(PictureConverter.toPictureDtoList(articleImages))
