@@ -1,4 +1,4 @@
-package fithub.app.web.dto;
+package fithub.app.web.dto.responseDto;
 
 import lombok.*;
 
@@ -16,6 +16,16 @@ public class UserResponseDto {
         private String name;
         private String nickname;
         private String profileUrl;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ArticleUserDto{
+        Long ownerId;
+        String ProfileUrl;
+        String nickname;
     }
 
     @Builder

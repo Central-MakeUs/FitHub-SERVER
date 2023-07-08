@@ -1,4 +1,4 @@
-package fithub.app.web.dto;
+package fithub.app.web.dto.requestDto;
 
 import lombok.Getter;
 import lombok.Setter;

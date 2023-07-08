@@ -1,4 +1,4 @@
-package fithub.app.web.dto;
+package fithub.app.web.dto.responseDto;
 
 import lombok.*;
 
