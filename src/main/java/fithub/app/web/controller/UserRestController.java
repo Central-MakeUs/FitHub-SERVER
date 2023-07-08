@@ -25,7 +25,7 @@ import java.io.IOException;
 @RestController
 @Validated
 @RequiredArgsConstructor
-public class UserController {
+public class UserRestController {
 
     private final UserService userService;
 
