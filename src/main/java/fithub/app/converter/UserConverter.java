@@ -6,7 +6,7 @@ import fithub.app.exception.common.ErrorCode;
 import fithub.app.exception.handler.UserException;
 import fithub.app.repository.UserRepository;
 import fithub.app.utils.OAuthResult;
-import fithub.app.web.dto.UserResponseDto;
+import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

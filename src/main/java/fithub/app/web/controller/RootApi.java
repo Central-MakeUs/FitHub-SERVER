@@ -1,16 +1,13 @@
 package fithub.app.web.controller;
 
 import fithub.app.auth.provider.TokenProvider;
-import fithub.app.converter.RootConverter;
 import fithub.app.converter.common.BaseConverter;
 import fithub.app.domain.User;
 import fithub.app.exception.common.ErrorCode;
 import fithub.app.exception.handler.UserException;
 import fithub.app.repository.UserRepository;
 import fithub.app.utils.ResponseCode;
-import fithub.app.web.dto.RootApiResponseDto;
 import fithub.app.web.dto.common.BaseDto;
-import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -25,8 +22,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
