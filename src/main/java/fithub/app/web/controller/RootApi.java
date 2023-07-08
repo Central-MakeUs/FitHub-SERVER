@@ -11,6 +11,13 @@ import fithub.app.utils.ResponseCode;
 import fithub.app.web.dto.RootApiResponseDto;
 import fithub.app.web.dto.common.BaseDto;
 import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,6 +41,14 @@ public class RootApi {
         return "I'm healthy";
     }
 
+    @Operation(summary = "자동 로그인 API", description = "자동 로그인 API 입니다.")
+    @Parameters({
+            @Parameter(name = "member", hidden = true)
+    })
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK : 정상응답, 로그인 된 사용자 code : 2001, 회원가입 후 정보 입력이 필요한 사용자 code : 2002, 처음 온 사용자 code : 2003", content = @Content(schema = @Schema(implementation = BaseDto.BaseResponseDto.class))),
+
+    })
     @GetMapping("/")
     public ResponseEntity<BaseDto.BaseResponseDto> AutoLogin(@RequestHeader(value = "Authorization", required = false) String authorizationHeader, HttpServletRequest request){
 
