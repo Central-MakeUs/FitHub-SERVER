@@ -46,17 +46,22 @@ public class ArticleRestController {
     }
 
     @DeleteMapping("/article/{id}")
-    public ResponseEntity<ArticleResponseDto.ArticleDeleteDto> deleteArticle(@PathVariable Long id){
+    public ResponseEntity<ArticleResponseDto.ArticleDeleteDto> deleteArticle(@PathVariable Long id, @AuthUser User user){
         return null;
     }
 
     @DeleteMapping("/articles")
-    public ResponseEntity<ArticleResponseDto.ArticleDeleteDtoList> deleteListArticle(@RequestBody ArticleRequestDto.deleteListArticleDto request){
+    public ResponseEntity<ArticleResponseDto.ArticleDeleteDtoList> deleteListArticle(@RequestBody ArticleRequestDto.deleteListArticleDto request, @AuthUser User user){
         return null;
     }
 
-    @PostMapping("/articles/{id}/likes")
+    @PostMapping("/article/{id}/likes")
     public ResponseEntity<ArticleResponseDto.ArticleLikeDto> likeArticle(@PathVariable Long id, @AuthUser User user){
+        return null;
+    }
+
+    @PostMapping("/article/{id}/scrap")
+    public ResponseEntity<ArticleResponseDto.ArticleScrapDto> scrapArticle(@PathVariable Long id, @AuthUser User user){
         return null;
     }
 }

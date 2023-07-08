@@ -18,4 +18,9 @@ public class RecordRequestDto {
         String title;
         String contents;
     }
+
+    @Getter @Setter
+    public static class deleteListRecordDto{
+        Long[] recordIdList;
+    }
 }
