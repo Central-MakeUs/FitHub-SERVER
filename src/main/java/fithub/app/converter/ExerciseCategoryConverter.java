@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -25,4 +27,25 @@ public class ExerciseCategoryConverter {
                 .name(exerciseCategory.getName())
                 .build();
     }
+
+    public static ExerciseCategoryResponseDto.CategoryFullDto toCategoryFullDto(ExerciseCategory exerciseCategory){
+        return ExerciseCategoryResponseDto.CategoryFullDto.builder()
+                .categoryId(exerciseCategory.getId())
+                .categoryImage(exerciseCategory.getImageUrl())
+                .name(exerciseCategory.getName())
+                .build();
+    }
+
+    public static ExerciseCategoryResponseDto.CategoryFullDtoList toCategoryFullDtoList(List<ExerciseCategory> exerciseCategories){
+        List<ExerciseCategoryResponseDto.CategoryFullDto> categoryFullDtoList =
+            exerciseCategories.stream()
+                    .map(exerciseCategory -> toCategoryFullDto(exerciseCategory))
+                    .collect(Collectors.toList());
+
+        return ExerciseCategoryResponseDto.CategoryFullDtoList.builder()
+                .categoryList(categoryFullDtoList)
+                .size(categoryFullDtoList.size())
+                .build();
+    }
+
 }

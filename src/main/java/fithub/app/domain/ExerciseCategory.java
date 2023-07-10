@@ -16,6 +16,8 @@ public class ExerciseCategory extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String imageUrl;
+
     @Column(columnDefinition = "VARCHAR(15)", unique = true)
     private String name;
 }

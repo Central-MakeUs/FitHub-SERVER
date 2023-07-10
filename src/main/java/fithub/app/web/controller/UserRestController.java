@@ -1,13 +1,17 @@
 package fithub.app.web.controller;
 
+import fithub.app.converter.ExerciseCategoryConverter;
 import fithub.app.converter.UserConverter;
 import fithub.app.converter.common.BaseConverter;
 import fithub.app.service.AppleService;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
 import fithub.app.utils.ResponseCode;
+import fithub.app.web.dto.requestDto.ExerciseCategoryRequestDto;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.common.BaseDto;
+import fithub.app.web.dto.responseDto.ExerciseCategoryResponseDto;
+import fithub.app.web.dto.responseDto.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -17,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,6 +81,21 @@ public class UserRestController {
             responseCode = ResponseCode.KAKAO_OAUTH_JOIN;
 
         return ResponseEntity.ok(BaseConverter.toBaseDto(responseCode, UserConverter.toOauthDto(result)));
+    }
+
+    @GetMapping("/users/nickname")
+    public ResponseEntity<BaseDto> getExistNickname(@RequestParam String nickname){
+        return null;
+    }
+
+    @GetMapping("/users/exercise-categories")
+    public ResponseEntity<BaseDto> getExerciseCategoryList(){
+        return null;
+    }
+
+    @PostMapping("/users/sign-up")
+    public ResponseEntity<BaseDto> signUpByPhoneNum(@RequestBody UserRequestDto.UserInfoDto request){
+        return null;
     }
 }
 
