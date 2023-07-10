@@ -1,4 +1,4 @@
-package fithub.app.auth.annotation;
+package fithub.app.auth.handler.annotation;
 
 
 import java.lang.annotation.ElementType;

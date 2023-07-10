@@ -18,7 +18,13 @@ public enum ErrorCode {
     FAILED_TO_VALIDATE_APPLE_LOGIN(HttpStatus.UNAUTHORIZED, 4011, "애플 auth 서버에서 데이터를 받아오지 못했습니다"),
     FAILED_TO_FIND_AVALIABLE_RSA(HttpStatus.UNAUTHORIZED, 4012, "Identity Token에서 유효한 값을 찾지 못했습니다"),
 
-    MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED, 4013,"해당 사용자가 존재하지 않습니다");
+    MEMBER_NOT_FOUND(HttpStatus.UNAUTHORIZED, 4013,"해당 사용자가 존재하지 않습니다"),
+
+    PHONE_AUTH_ERROR(HttpStatus.UNAUTHORIZED, 4014, "인증 번호가 맞지 않습니다."),
+
+    PHONE_AUTH_TIMEOUT(HttpStatus.UNAUTHORIZED, 4015, "유효시간이 지났습니다."),
+
+    PHONE_AUTH_NOT_FOUND(HttpStatus.BAD_REQUEST, 4016, "인증문자 발급이 필요합니다.");
 
     private final HttpStatus status;
     private final Integer code;

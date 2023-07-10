@@ -1,5 +1,8 @@
 package fithub.app.exception.common;
 
+import lombok.Getter;
+
+@Getter
 public class CustomException extends RuntimeException{
 
     private ErrorCode errorCode;

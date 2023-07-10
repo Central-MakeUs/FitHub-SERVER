@@ -1,4 +1,4 @@
-package fithub.app.auth.annotation;
+package fithub.app.auth.handler.annotation;
 
 import fithub.app.converter.UserConverter;
 import fithub.app.domain.User;

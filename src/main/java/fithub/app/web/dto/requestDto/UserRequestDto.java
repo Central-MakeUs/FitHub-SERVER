@@ -39,4 +39,15 @@ public class UserRequestDto {
         private String birthNum;
         private List<Long> preferExercises;
     }
+
+    @Getter @Setter
+    public static class SmsRequestDto{
+        private String targetPhoneNum;
+    }
+
+    @Getter @Setter
+    public static class PhoneNumAuthDto{
+        private String phoneNum;
+        private Integer authNum;
+    }
 }

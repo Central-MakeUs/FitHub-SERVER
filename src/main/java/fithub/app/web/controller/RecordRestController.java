@@ -1,6 +1,6 @@
 package fithub.app.web.controller;
 
-import fithub.app.auth.annotation.AuthUser;
+import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.domain.User;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
