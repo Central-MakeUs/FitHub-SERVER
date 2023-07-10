@@ -83,18 +83,25 @@ public class UserRestController {
         return ResponseEntity.ok(BaseConverter.toBaseDto(responseCode, UserConverter.toOauthDto(result)));
     }
 
-    @GetMapping("/users/nickname")
-    public ResponseEntity<BaseDto> getExistNickname(@RequestParam String nickname){
+
+    @GetMapping("/users/exist-nickname")
+    public ResponseEntity<BaseDto.BaseResponseDto> getExistNickname(@RequestParam String nickname){
         return null;
     }
 
-    @GetMapping("/users/exercise-categories")
-    public ResponseEntity<BaseDto> getExerciseCategoryList(){
+    @GetMapping("/users/exercise-category")
+    public ResponseEntity<BaseDto.BaseResponseDto> getExerciseCategoryList(){
         return null;
     }
 
     @PostMapping("/users/sign-up")
-    public ResponseEntity<BaseDto> signUpByPhoneNum(@RequestBody UserRequestDto.UserInfoDto request){
+
+    public ResponseEntity<BaseDto.BaseResponseDto> signUpByPhoneNum(@RequestBody UserRequestDto.UserInfo request){
+        return null;
+    }
+
+    @PostMapping("/users/sign-up/oauth")
+    public ResponseEntity<BaseDto.BaseResponseDto> signUpByOAuth(@RequestBody UserRequestDto.UserOAuthInfo request){
         return null;
     }
 }

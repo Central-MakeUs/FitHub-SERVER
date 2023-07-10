@@ -36,16 +36,28 @@ public class ExerciseCategoryConverter {
                 .build();
     }
 
+<<<<<<< HEAD
     public static ExerciseCategoryResponseDto.CategoryFullDtoList toCategoryFullDtoList(List<ExerciseCategory> exerciseCategories){
         List<ExerciseCategoryResponseDto.CategoryFullDto> categoryFullDtoList =
             exerciseCategories.stream()
                     .map(exerciseCategory -> toCategoryFullDto(exerciseCategory))
                     .collect(Collectors.toList());
+=======
+    public static ExerciseCategoryResponseDto.CategoryFullDtoList toCategoryFullDtoList(List<ExerciseCategory> exerciseCategoryList){
+        List<ExerciseCategoryResponseDto.CategoryFullDto> categoryFullDtoList =
+                exerciseCategoryList
+                        .stream()
+                        .map(exerciseCategory -> toCategoryFullDto(exerciseCategory))
+                        .collect(Collectors.toList());
+>>>>>>> 00c5bf386e0b5d206853432ac967c4f94d9e64df
 
         return ExerciseCategoryResponseDto.CategoryFullDtoList.builder()
                 .categoryList(categoryFullDtoList)
                 .size(categoryFullDtoList.size())
                 .build();
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 00c5bf386e0b5d206853432ac967c4f94d9e64df
 }

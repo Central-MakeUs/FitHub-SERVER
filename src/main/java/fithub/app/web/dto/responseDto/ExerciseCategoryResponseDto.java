@@ -25,7 +25,6 @@ public class ExerciseCategoryResponseDto {
         String name;
     }
 
-
     @Builder
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,6 +33,4 @@ public class ExerciseCategoryResponseDto {
         List<CategoryFullDto> categoryList;
         Integer size;
     }
-
-
 }

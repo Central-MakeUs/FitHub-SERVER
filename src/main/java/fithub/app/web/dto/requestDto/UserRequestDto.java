@@ -19,24 +19,24 @@ public class UserRequestDto {
         private String identityToken;
     }
 
-    public static class OAuthUserInfoDto{
-        Boolean marketingAgree;
-        String name;
-        String phoneNum;
-        String nickname;
-        String birth;
-        Integer gender;
-        List<Integer> preferExercises;
+    @Getter @Setter
+    public static class UserOAuthInfo{
+        private Boolean marketingAgree;
+        private String phoneNumber;
+        private String name;
+        private String nickname;
+        private String birthNum;
+        private List<Long> preferExercises;
     }
 
-    public static class UserInfoDto{
-        Boolean marketingAgree;
-        String password;
-        String name;
-        String phoneNum;
-        String nickname;
-        String birth;
-        Integer gender;
-        List<Integer> preferExercises;
+    @Getter @Setter
+    public static class UserInfo{
+        private Boolean marketingAgree;
+        private String phoneNumber;
+        private String name;
+        private String nickname;
+        private String password;
+        private String birthNum;
+        private List<Long> preferExercises;
     }
 }
