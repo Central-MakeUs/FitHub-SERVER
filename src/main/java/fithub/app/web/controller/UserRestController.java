@@ -1,6 +1,9 @@
 package fithub.app.web.controller;
 
+
 import com.fasterxml.jackson.core.JsonProcessingException;
+import fithub.app.converter.ExerciseCategoryConverter;
+
 import fithub.app.converter.UserConverter;
 import fithub.app.converter.common.BaseConverter;
 import fithub.app.service.AppleService;
@@ -9,8 +12,11 @@ import fithub.app.sms.dto.SmsResponseDto;
 import fithub.app.sms.service.SmsService;
 import fithub.app.utils.OAuthResult;
 import fithub.app.utils.ResponseCode;
+import fithub.app.web.dto.requestDto.ExerciseCategoryRequestDto;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.common.BaseDto;
+import fithub.app.web.dto.responseDto.ExerciseCategoryResponseDto;
+import fithub.app.web.dto.responseDto.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -20,6 +26,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
@@ -88,6 +95,7 @@ public class UserRestController {
         return ResponseEntity.ok(BaseConverter.toBaseDto(responseCode, UserConverter.toOauthDto(result)));
     }
 
+
     @GetMapping("/users/exist-nickname")
     public ResponseEntity<BaseDto.BaseResponseDto> getExistNickname(@RequestParam String nickname){
         return null;
@@ -99,6 +107,7 @@ public class UserRestController {
     }
 
     @PostMapping("/users/sign-up")
+
     public ResponseEntity<BaseDto.BaseResponseDto> signUpByPhoneNum(@RequestBody UserRequestDto.UserInfo request){
         return null;
     }

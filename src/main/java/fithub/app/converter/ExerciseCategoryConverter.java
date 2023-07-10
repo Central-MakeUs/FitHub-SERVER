@@ -36,6 +36,7 @@ public class ExerciseCategoryConverter {
                 .build();
     }
 
+
     public static ExerciseCategoryResponseDto.CategoryFullDtoList toCategoryFullDtoList(List<ExerciseCategory> exerciseCategoryList){
         List<ExerciseCategoryResponseDto.CategoryFullDto> categoryFullDtoList =
                 exerciseCategoryList

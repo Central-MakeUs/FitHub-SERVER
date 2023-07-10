@@ -1,5 +1,6 @@
 package fithub.app.web.dto.requestDto;
 
+import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.Setter;
 
