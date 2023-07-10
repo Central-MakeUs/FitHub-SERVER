@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 
 public enum ResponseCode {
 
+    SUCCESS(2000, "성공", null),
+
     AUTO_LOGIN_NEW_FACE(2003, "새로온 사용자 입니다.", null),
     AUTO_LOGIN_INFO_NULL(2002, "회원정보 입력이 필요합니다.", null),
     AUTO_LOGIN_SUCCESS(2001, "로그인 된 사용자 입니다.", null),

@@ -1,9 +1,12 @@
 package fithub.app.web.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import fithub.app.converter.UserConverter;
 import fithub.app.converter.common.BaseConverter;
 import fithub.app.service.AppleService;
 import fithub.app.service.UserService;
+import fithub.app.sms.dto.SmsResponseDto;
+import fithub.app.sms.service.SmsService;
 import fithub.app.utils.OAuthResult;
 import fithub.app.utils.ResponseCode;
 import fithub.app.web.dto.requestDto.UserRequestDto;
@@ -19,8 +22,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestClientException;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 @RestController
 @Validated
@@ -30,6 +38,8 @@ public class UserRestController {
     private final UserService userService;
 
     private final AppleService appleService;
+
+    private final SmsService smsService;
 
     @Operation(summary = "카카오 소셜 로그인", description = "카카오 소셜 로그인 API 입니다.")
     @Parameters({
@@ -96,6 +106,19 @@ public class UserRestController {
     @PostMapping("/users/sign-up/oauth")
     public ResponseEntity<BaseDto.BaseResponseDto> signUpByOAuth(@RequestBody UserRequestDto.UserOAuthInfo request){
         return null;
+    }
+
+    @PostMapping("/users/sms")
+    public ResponseEntity<BaseDto.BaseResponseDto> sendSms(@RequestBody UserRequestDto.SmsRequestDto request) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+        SmsResponseDto data = smsService.sendSms(request.getTargetPhoneNum());
+        return ResponseEntity.ok(BaseConverter.toBaseDto(ResponseCode.SUCCESS, null));
+    }
+
+    @PostMapping("/users/sms/auth")
+    public ResponseEntity<BaseDto.BaseResponseDto> authPhoneNum(@RequestBody UserRequestDto.PhoneNumAuthDto request){
+        SmsResponseDto.AuthNumResultDto authNumResultDto = smsService.authNumber(request.getAuthNum(), request.getPhoneNum());
+        return ResponseEntity.ok(BaseConverter.toBaseDto(authNumResultDto.getResponseCode(), null));
     }
 }
 

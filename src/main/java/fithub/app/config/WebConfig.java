@@ -1,6 +1,6 @@
 package fithub.app.config;
 
-import fithub.app.auth.annotation.AuthUserArgumentResolver;
+import fithub.app.auth.handler.annotation.AuthUserArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
