@@ -25,6 +25,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
@@ -41,6 +43,8 @@ import java.security.NoSuchAlgorithmException;
 @Validated
 @RequiredArgsConstructor
 public class UserRestController {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserRestController.class);
 
     private final UserService userService;
 
@@ -83,7 +87,9 @@ public class UserRestController {
         String socialId;
 
         socialId = appleService.userIdFromApple(identityToken);
-        System.out.println("userId from apple service : " + socialId);
+
+        logger.info("userId from apple service : {}", socialId);
+
         OAuthResult.OAuthResultDto result = userService.kakaoOAuth(socialId);
 
         ResponseCode responseCode;
