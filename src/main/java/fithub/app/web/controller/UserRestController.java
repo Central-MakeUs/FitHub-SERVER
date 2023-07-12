@@ -6,6 +6,8 @@ import fithub.app.converter.ExerciseCategoryConverter;
 
 import fithub.app.converter.UserConverter;
 import fithub.app.converter.common.BaseConverter;
+import fithub.app.domain.ExerciseCategory;
+import fithub.app.domain.User;
 import fithub.app.service.AppleService;
 import fithub.app.service.UserService;
 import fithub.app.sms.dto.SmsResponseDto;
@@ -38,6 +40,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @Validated
@@ -86,7 +90,9 @@ public class UserRestController {
     @PostMapping("/users/login/social/apple")
     public ResponseEntity<BaseDto.BaseResponseDto> appleOauth(@RequestBody UserRequestDto.AppleSocialDto request) throws IOException {
 
+
         logger.info("/login/social/apple 넘겨 받은 body : {}", request.toString());
+
         String identityToken = request.getIdentityToken();
         String socialId;
 
@@ -109,12 +115,28 @@ public class UserRestController {
 
     @GetMapping("/users/exist-nickname")
     public ResponseEntity<BaseDto.BaseResponseDto> getExistNickname(@RequestParam String nickname){
-        return null;
+
+        logger.info("passed nickname from front : {}", nickname);
+
+        ResponseCode responseCode= null;
+
+        Optional<User> user = userService.checkExistNickname(nickname);
+
+        if (user.isPresent())
+            responseCode = ResponseCode.NICKNAME_EXIST;
+        else
+            responseCode = ResponseCode.NICKNAME_OK;
+
+        return ResponseEntity.ok(BaseConverter.toBaseDto(responseCode, null));
     }
 
     @GetMapping("/users/exercise-category")
     public ResponseEntity<BaseDto.BaseResponseDto> getExerciseCategoryList(){
-        return null;
+        List<ExerciseCategory> exerciseList = userService.getExerciseList();
+
+        logger.info("운동 카테고리 리스트 : {}", exerciseList);
+
+        return ResponseEntity.ok(BaseConverter.toBaseDto(ResponseCode.SUCCESS,ExerciseCategoryConverter.toCategoryFullDtoList(exerciseList)));
     }
 
     @PostMapping("/users/sign-up")

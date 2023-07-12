@@ -2,17 +2,21 @@ package fithub.app.service.impl;
 
 import fithub.app.auth.provider.TokenProvider;
 import fithub.app.converter.UserConverter;
+import fithub.app.domain.ExerciseCategory;
 import fithub.app.domain.User;
 import fithub.app.domain.enums.SocialType;
+import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.UserRepository;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
+import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -22,6 +26,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+
+    private final ExerciseCategoryRepository exerciseCategoryRepository;
 
     private final TokenProvider tokenProvider;
 
@@ -62,6 +68,16 @@ public class UserServiceImpl implements UserService {
                 .jwt(jwt)
                 .build();
 
+    }
+
+    @Override
+    public Optional<User> checkExistNickname(String nickname) {
+        return userRepository.findByNickname(nickname);
+    }
+
+    @Override
+    public List<ExerciseCategory> getExerciseList() {
+        return exerciseCategoryRepository.findAll();
     }
 
     public OAuthResult.OAuthResultDto appleOAuth(String socialId){
