@@ -1,9 +1,12 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: ${aws.db.username}
-    password: ${aws.db.password}
-    url: ${aws.db.url}
+#    username: ${aws.db.username}
+#    password: ${aws.db.password}
+#    url: ${aws.db.url}
+    username: root
+    password: fithub!!
+    url: jdbc:mysql://fithub-database.cgymg7va97v3.ap-northeast-2.rds.amazonaws.com:/fithub
   output:
     ansi:
       enabled: always
@@ -59,7 +62,7 @@ jwt:
 #  max-age: 3600
 
 naver-sms:
-    accessKey: ${naver.sms.accesskey}
-    secretKey: ${naver.sms.secret}
-    serviceId: ${naver.sms.serviceid}
-    senderPhone: ${naver.sms.phone}
+    accessKey: XlOTsVfwdfG0gXTjDjJ9
+    secretKey: VMjpzs2jYISyMRWKH8rOaU2aQJCB4cdwpnLqi6Gm
+    serviceId: ncp:sms:kr:311479632653:fithub-join
+    senderPhone: 01090072880
