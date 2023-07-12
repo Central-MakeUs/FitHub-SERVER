@@ -25,9 +25,12 @@ spring:
 
   logging:
     level:
-      org:
-        hibernate:
-          type: trace
+      root: info
+      org.hibernate.type: trace
+    file: /var/log/web.stdout.log
+    pattern:
+      console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+      file: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
 jwt:
   header: Authorization
   secret: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
