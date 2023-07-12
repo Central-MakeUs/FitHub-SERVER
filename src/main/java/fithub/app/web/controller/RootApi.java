@@ -37,7 +37,6 @@ public class RootApi {
 
     @GetMapping("/health")
     public String health() {
-
         logger.info("I'm healthy");
         return "I'm healthy";
     }
