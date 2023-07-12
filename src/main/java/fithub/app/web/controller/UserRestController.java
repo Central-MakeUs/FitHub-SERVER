@@ -87,7 +87,9 @@ public class UserRestController {
         String socialId;
 
         socialId = appleService.userIdFromApple(identityToken);
+
         logger.info("userId from apple service : {}", socialId);
+
         OAuthResult.OAuthResultDto result = userService.kakaoOAuth(socialId);
 
         ResponseCode responseCode;
