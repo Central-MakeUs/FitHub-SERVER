@@ -83,6 +83,8 @@ public class UserRestController {
     })
     @PostMapping("/users/login/social/apple")
     public ResponseEntity<BaseDto.BaseResponseDto> appleOauth(@RequestBody UserRequestDto.AppleSocialDto request) throws IOException {
+
+        logger.info("request identity token : {}", request.getIdentityToken());
         String identityToken = request.getIdentityToken();
         String socialId;
 

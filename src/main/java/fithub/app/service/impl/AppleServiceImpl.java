@@ -11,6 +11,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -28,6 +30,8 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class AppleServiceImpl implements AppleService {
+
+    Logger logger = LoggerFactory.getLogger(AppleServiceImpl.class);
 
     @Override
     public String userIdFromApple(String identityToken) {
@@ -53,6 +57,8 @@ public class AppleServiceImpl implements AppleService {
         }catch (IOException e) {
             throw new AppleOAuthException(ErrorCode.FAILED_TO_VALIDATE_APPLE_LOGIN);
         }
+
+        logger.info("apple available keys : ", result);
 
         JSONObject availableObject = null;
         try {
