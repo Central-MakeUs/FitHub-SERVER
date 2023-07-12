@@ -101,9 +101,14 @@ public class AppleServiceImpl implements AppleService {
             e.printStackTrace();
         }
 
-//        Object appleAlg =  userObject.get("sub");
-//        String userId = appleAlg
-        return "temp";
+        String userId = null;
+        Object appleAlg =  userObject.get("sub");
+        if (appleAlg instanceof String) {
+            userId = (String) appleAlg;
+        } else if (appleAlg != null) {
+            userId = appleAlg.toString();
+        }
+        return userId;
     }
 
     public PublicKey getPublicKey(JSONObject object){
