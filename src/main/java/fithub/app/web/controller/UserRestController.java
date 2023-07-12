@@ -62,6 +62,8 @@ public class UserRestController {
     @PostMapping("/users/login/social/kakao")
     public ResponseEntity<BaseDto.BaseResponseDto> kakaoOauth(@RequestBody UserRequestDto.socialDto request){
 
+        logger.info("/login/social/kakao 넘겨 받은  body : {}",request.toString());
+
         OAuthResult.OAuthResultDto result = userService.kakaoOAuth(request.getSocialId());
 
         ResponseCode responseCode;
@@ -84,7 +86,7 @@ public class UserRestController {
     @PostMapping("/users/login/social/apple")
     public ResponseEntity<BaseDto.BaseResponseDto> appleOauth(@RequestBody UserRequestDto.AppleSocialDto request) throws IOException {
 
-        logger.info("request identity token : {}", request.getIdentityToken());
+        logger.info("/login/social/apple 넘겨 받은 body : {}", request.toString());
         String identityToken = request.getIdentityToken();
         String socialId;
 
