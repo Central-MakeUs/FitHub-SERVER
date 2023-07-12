@@ -54,5 +54,4 @@ public class UserResponseDto {
         private String accessToken;
     }
 
-
 }
