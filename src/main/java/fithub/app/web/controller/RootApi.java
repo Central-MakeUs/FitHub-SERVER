@@ -16,6 +16,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -27,12 +29,16 @@ import javax.servlet.http.HttpServletRequest;
 @RequiredArgsConstructor
 public class RootApi {
 
+    Logger logger = LoggerFactory.getLogger(RootApi.class);
+
     private final UserRepository userRepository;
 
     private final TokenProvider tokenProvider;
 
     @GetMapping("/health")
     public String health() {
+
+        logger.info("I'm healthy");
         return "I'm healthy";
     }
 
