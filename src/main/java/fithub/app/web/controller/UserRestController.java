@@ -91,7 +91,7 @@ public class UserRestController {
     public ResponseEntity<BaseDto.BaseResponseDto> appleOauth(@RequestBody UserRequestDto.AppleSocialDto request) throws IOException {
 
 
-        logger.info("/login/social/apple 넘겨 받은 body : {}", request.toString());
+        logger.info("/login/social/apple 넘겨 받은 body : {}", request.getIdentityToken());
 
         String identityToken = request.getIdentityToken();
         String socialId;
