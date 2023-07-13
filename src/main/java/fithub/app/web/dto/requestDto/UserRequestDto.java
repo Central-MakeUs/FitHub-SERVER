@@ -21,6 +21,18 @@ public class UserRequestDto {
 
     @Getter @Setter
     public static class UserOAuthInfo{
+        @Override
+        public String toString() {
+            return "UserOAuthInfo{" +
+                    "marketingAgree=" + marketingAgree +
+                    ", phoneNumber='" + phoneNumber + '\'' +
+                    ", name='" + name + '\'' +
+                    ", nickname='" + nickname + '\'' +
+                    ", birthNum='" + birthNum + '\'' +
+                    ", preferExercises=" + preferExercises +
+                    '}';
+        }
+
         private Boolean marketingAgree;
         private String phoneNumber;
         private String name;
@@ -31,6 +43,19 @@ public class UserRequestDto {
 
     @Getter @Setter
     public static class UserInfo{
+        @Override
+        public String toString() {
+            return "UserInfo{" +
+                    "marketingAgree=" + marketingAgree +
+                    ", phoneNumber='" + phoneNumber + '\'' +
+                    ", name='" + name + '\'' +
+                    ", nickname='" + nickname + '\'' +
+                    ", password='" + password + '\'' +
+                    ", birthNum='" + birthNum + '\'' +
+                    ", preferExercises=" + preferExercises +
+                    '}';
+        }
+
         private Boolean marketingAgree;
         private String phoneNumber;
         private String name;
@@ -43,10 +68,25 @@ public class UserRequestDto {
     @Getter @Setter
     public static class SmsRequestDto{
         private String targetPhoneNum;
+
+        @Override
+        public String toString() {
+            return "SmsRequestDto{" +
+                    "targetPhoneNum='" + targetPhoneNum + '\'' +
+                    '}';
+        }
     }
 
     @Getter @Setter
     public static class PhoneNumAuthDto{
+        @Override
+        public String toString() {
+            return "PhoneNumAuthDto{" +
+                    "phoneNum='" + phoneNum + '\'' +
+                    ", authNum=" + authNum +
+                    '}';
+        }
+
         private String phoneNum;
         private Integer authNum;
     }

@@ -3,6 +3,7 @@ package fithub.app.service;
 import fithub.app.domain.ExerciseCategory;
 import fithub.app.domain.User;
 import fithub.app.utils.OAuthResult;
+import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 
 import java.util.List;
@@ -13,4 +14,6 @@ public interface UserService {
     Optional<User> checkExistNickname(String nickname);
 
     List<ExerciseCategory> getExerciseList();
+
+    User signUpPhoneNum(UserRequestDto.UserInfo request);
 }

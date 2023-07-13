@@ -9,6 +9,7 @@ import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.UserRepository;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
+import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -78,6 +79,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<ExerciseCategory> getExerciseList() {
         return exerciseCategoryRepository.findAll();
+    }
+
+    @Override
+    public User signUpPhoneNum(UserRequestDto.UserInfo request) {
+        return null;
     }
 
     public OAuthResult.OAuthResultDto appleOAuth(String socialId){
