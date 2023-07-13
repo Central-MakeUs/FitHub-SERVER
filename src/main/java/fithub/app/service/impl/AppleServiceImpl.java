@@ -5,6 +5,8 @@ import fithub.app.exception.handler.AppleOAuthException;
 import fithub.app.service.AppleService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.json.simple.JSONArray;
@@ -22,7 +24,9 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyFactory;
+import java.security.KeyPair;
 import java.security.PublicKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Objects;
@@ -35,16 +39,9 @@ public class AppleServiceImpl implements AppleService {
 
     @Override
     public String userIdFromApple(String identityToken) {
-        /**
-         * 1. apple로 부터 공개키 3개 가져옴
-         * 2. 내가 클라에서 가져온 token String과 비교해서 써야할 공개키 확인 (kid,alg 값 같은 것)
-         * 3. 그 공개키 재료들로 공개키 만들고, 이 공개키로 JWT토큰 부분의 바디 부분의 decode하면 유저 정보
-         */
         StringBuffer result = new StringBuffer();
         try {
-            String appleApiUrl = "https://appleid.apple.com/auth/keys";
-
-            URL url = new URL(appleApiUrl);
+            URL url = new URL("https://appleid.apple.com/auth/keys");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -54,11 +51,9 @@ public class AppleServiceImpl implements AppleService {
             while ((line = br.readLine()) != null) {
                 result.append(line);
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             throw new AppleOAuthException(ErrorCode.FAILED_TO_VALIDATE_APPLE_LOGIN);
         }
-
-        logger.info("apple available keys : {}", result);
 
         JSONObject availableObject = null;
         try {
@@ -72,6 +67,9 @@ public class AppleServiceImpl implements AppleService {
             String header = new String(Base64.getDecoder().decode(decodeArr[0]));
 
             JSONObject headerJson = (JSONObject) parser.parse(header);
+
+            logger.info("identity token의 전자서명 정보 : {}",headerJson);
+
             Object kid = headerJson.get("kid");
             Object alg = headerJson.get("alg");
 
@@ -119,19 +117,22 @@ public class AppleServiceImpl implements AppleService {
         return userId;
     }
 
-    public PublicKey getPublicKey(JSONObject object){
+    public PublicKey getPublicKey(JSONObject object) {
+
+        logger.info("전자서명을 위한 공개키 재료 : {}", object);
+
         String nStr = object.get("n").toString();
         String eStr = object.get("e").toString();
 
-        byte[] nBytes = Base64.getUrlDecoder().decode(nStr.substring(1, nStr.length() - 1));
-        byte[] eBytes = Base64.getUrlDecoder().decode(eStr.substring(1, eStr.length() - 1));
+        byte[] nBytes = Base64.getUrlDecoder().decode(nStr);
+        byte[] eBytes = Base64.getUrlDecoder().decode(eStr);
 
         BigInteger n = new BigInteger(1, nBytes);
         BigInteger e = new BigInteger(1, eBytes);
 
         try {
             RSAPublicKeySpec publicKeySpec = new RSAPublicKeySpec(n, e);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            KeyFactory keyFactory = KeyFactory.getInstance(object.get("kty").toString());
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
             return publicKey;
         } catch (Exception exception) {
