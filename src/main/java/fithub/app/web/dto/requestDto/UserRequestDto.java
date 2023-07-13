@@ -16,6 +16,13 @@ public class UserRequestDto {
 
     @Getter @Setter
     public static class AppleSocialDto{
+        @Override
+        public String toString() {
+            return "AppleSocialDto{" +
+                    "identityToken='" + identityToken + '\'' +
+                    '}';
+        }
+
         private String identityToken;
     }
 

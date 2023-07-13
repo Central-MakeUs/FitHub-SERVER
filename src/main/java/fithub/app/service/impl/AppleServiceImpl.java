@@ -58,7 +58,7 @@ public class AppleServiceImpl implements AppleService {
             throw new AppleOAuthException(ErrorCode.FAILED_TO_VALIDATE_APPLE_LOGIN);
         }
 
-        logger.info("apple available keys : ", result);
+        logger.info("apple available keys : {}", result);
 
         JSONObject availableObject = null;
         try {
@@ -67,6 +67,8 @@ public class AppleServiceImpl implements AppleService {
             JSONArray keys = (JSONArray)apiInfo.get("keys");
 
             String[] decodeArr = identityToken.split("\\.");
+
+            logger.info("decode Arr의 값 : {}", decodeArr);
             String header = new String(Base64.getDecoder().decode(decodeArr[0]));
 
             JSONObject headerJson = (JSONObject) parser.parse(header);
