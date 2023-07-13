@@ -86,6 +86,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
 
+    @Transactional(readOnly = false)
     public OAuthResult.OAuthResultDto appleOAuth(String socialId){
         SocialType socialType = SocialType.APPLE;
 
