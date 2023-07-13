@@ -43,26 +43,15 @@ public class UserRequestDto {
 
     @Getter @Setter
     public static class UserInfo{
-        @Override
-        public String toString() {
-            return "UserInfo{" +
-                    "marketingAgree=" + marketingAgree +
-                    ", phoneNumber='" + phoneNumber + '\'' +
-                    ", name='" + name + '\'' +
-                    ", nickname='" + nickname + '\'' +
-                    ", password='" + password + '\'' +
-                    ", birthNum='" + birthNum + '\'' +
-                    ", preferExercises=" + preferExercises +
-                    '}';
-        }
 
         private Boolean marketingAgree;
         private String phoneNumber;
         private String name;
         private String nickname;
         private String password;
-        private String birthNum;
-        private List<Long> preferExercises;
+        private String birth;
+        private String gender;
+        private List<Integer> preferExercises;
     }
 
     @Getter @Setter

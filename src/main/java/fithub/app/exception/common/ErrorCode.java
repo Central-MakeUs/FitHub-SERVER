@@ -24,7 +24,9 @@ public enum ErrorCode {
 
     PHONE_AUTH_TIMEOUT(HttpStatus.UNAUTHORIZED, 4015, "유효시간이 지났습니다."),
 
-    PHONE_AUTH_NOT_FOUND(HttpStatus.BAD_REQUEST, 4016, "인증문자 발급이 필요합니다.");
+    PHONE_AUTH_NOT_FOUND(HttpStatus.BAD_REQUEST, 4016, "인증문자 발급이 필요합니다."),
+
+    NO_EXERCISE_CATEGORY_EXIST(HttpStatus.BAD_REQUEST, 4017, "선호하는 운동 카테고리가 잘못 되었습니다.");
 
     private final HttpStatus status;
     private final Integer code;
