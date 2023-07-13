@@ -142,6 +142,10 @@ public class UserRestController {
     @PostMapping("/users/sign-up")
 
     public ResponseEntity<BaseDto.BaseResponseDto> signUpByPhoneNum(@RequestBody UserRequestDto.UserInfo request){
+
+        logger.info("넘겨 받은 사용자의 정보 : {}", request.toString());
+
+
         return null;
     }
 

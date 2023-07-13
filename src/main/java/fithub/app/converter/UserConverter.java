@@ -6,6 +6,7 @@ import fithub.app.exception.common.ErrorCode;
 import fithub.app.exception.handler.UserException;
 import fithub.app.repository.UserRepository;
 import fithub.app.utils.OAuthResult;
+import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -31,6 +32,16 @@ public class UserConverter {
                 .socialType(socialType)
                 .isSocial(true)
                 .build();
+    }
+
+    public static User toUserPhoneNum(UserRequestDto.UserInfo request){
+        return User.builder()
+                .marketingAgree(request.getMarketingAgree())
+                .phoneNum(request.getPhoneNumber())
+                .name(request.getName())
+                .nickname(request.getNickname())
+                .build();
+
     }
 
     public static User toUser(Long userId){
