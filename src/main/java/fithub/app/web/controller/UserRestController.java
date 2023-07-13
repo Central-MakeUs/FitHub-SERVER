@@ -146,8 +146,10 @@ public class UserRestController {
 
         logger.info("넘겨 받은 사용자의 정보 : {}", request.toString());
 
+        User user = userService.signUpPhoneNum(request);
 
-        return null;
+        UserResponseDto.JoinUserDto createdUser = UserConverter.toJoinUserDto(user);
+        return ResponseEntity.ok(BaseConverter.toBaseDto(ResponseCode.SUCCESS, createdUser));
     }
 
     @PostMapping("/users/sign-up/oauth")

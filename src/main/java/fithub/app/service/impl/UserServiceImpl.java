@@ -1,17 +1,24 @@
 package fithub.app.service.impl;
 
 import fithub.app.auth.provider.TokenProvider;
+import fithub.app.converter.ExercisePreferenceConverter;
 import fithub.app.converter.UserConverter;
 import fithub.app.domain.ExerciseCategory;
 import fithub.app.domain.User;
 import fithub.app.domain.enums.SocialType;
+import fithub.app.domain.mapping.ExercisePreference;
+import fithub.app.exception.common.ErrorCode;
+import fithub.app.exception.handler.UserException;
 import fithub.app.repository.ExerciseCategoryRepository;
+import fithub.app.repository.ExercisePreferenceRepository;
 import fithub.app.repository.UserRepository;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,9 +33,13 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
+    Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private final UserRepository userRepository;
 
     private final ExerciseCategoryRepository exerciseCategoryRepository;
+
+    private final ExercisePreferenceRepository exercisePreferenceRepository;
 
     private final TokenProvider tokenProvider;
 
@@ -82,8 +93,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public User signUpPhoneNum(UserRequestDto.UserInfo request) {
-        return null;
+        User newUser = UserConverter.toUserPhoneNum(request);
+        User savedUser = userRepository.save(newUser);
+
+        for (int i = 0; i < request.getPreferExercises().size(); i++) {
+            ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises().get(i))
+                    .orElseThrow(()->new UserException(ErrorCode.NO_EXERCISE_CATEGORY_EXIST));
+            ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(savedUser, exerciseCategory);
+            exercisePreferenceRepository.save(exercisePreference);
+        }
+
+        return savedUser;
     }
 
     @Transactional(readOnly = false)
