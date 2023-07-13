@@ -102,6 +102,7 @@ public class AppleServiceImpl implements AppleService {
         String userId = userInfo.get("sub", String.class);
 //        JSONObject userObject = null;
 
+
 //        try {
 //            JSONParser parser = new JSONParser();
 //            userObject = (JSONObject) parser.parse(userInfo.toString());
