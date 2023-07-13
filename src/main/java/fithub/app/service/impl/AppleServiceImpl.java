@@ -97,6 +97,8 @@ public class AppleServiceImpl implements AppleService {
 
         Claims userInfo = Jwts.parserBuilder().setSigningKey(publicKey).build().parseClaimsJws(identityToken).getBody();
 
+        logger.info("파싱된 유저의 정보 : {}", userInfo);
+
         JSONObject userObject = null;
 
         try {
@@ -104,6 +106,7 @@ public class AppleServiceImpl implements AppleService {
             userObject = (JSONObject) parser.parse(userInfo.toString());
         }
         catch (ParseException e) {
+            logger.info("유저 정보 얻는 과정에서의 오류 : {}", e.getMessage());
             e.printStackTrace();
         }
 
