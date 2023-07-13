@@ -100,6 +100,7 @@ public class AppleServiceImpl implements AppleService {
         logger.info("파싱된 유저의 정보 : {}", userInfo);
 
         String userId = userInfo.get("sub", String.class);
+
         return userId;
     }
 
