@@ -109,6 +109,7 @@ public class UserRestController {
         else
             responseCode = ResponseCode.APPLE_OAUTH_JOIN;
 
+        logger.info("애플 소셜로그인의 결과 : {}", responseCode);
         return ResponseEntity.ok(BaseConverter.toBaseDto(responseCode, UserConverter.toOauthDto(result)));
     }
 

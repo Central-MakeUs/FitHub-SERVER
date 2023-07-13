@@ -100,25 +100,6 @@ public class AppleServiceImpl implements AppleService {
         logger.info("파싱된 유저의 정보 : {}", userInfo);
 
         String userId = userInfo.get("sub", String.class);
-//        JSONObject userObject = null;
-
-
-//        try {
-//            JSONParser parser = new JSONParser();
-//            userObject = (JSONObject) parser.parse(userInfo.toString());
-//        }
-//        catch (ParseException e) {
-//            logger.info("유저 정보 얻는 과정에서의 오류 : {}", e.getMessage());
-//            e.printStackTrace();
-//        }
-//
-//        String userId = null;
-//        Object appleAlg =  userObject.get("sub");
-//        if (appleAlg instanceof String) {
-//            userId = (String) appleAlg;
-//        } else if (appleAlg != null) {
-//            userId = appleAlg.toString();
-//        }
         return userId;
     }
 
