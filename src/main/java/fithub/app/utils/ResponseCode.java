@@ -14,6 +14,10 @@ public enum ResponseCode {
 
     KAKAO_OAUTH_JOIN(2005, "회원가입 입니다.",null),
 
+    APPLE_OAUTH_LOGIN(2006, "로그인 입니다.", null),
+
+    APPLE_OAUTH_JOIN(2007, "회원가입 입니다.", null),
+
     NICKNAME_EXIST(2010, "닉네임이 이미 존재합니다.",null),
 
     NICKNAME_OK(2011, "사용 가능한 닉네임 입니다.", null);

@@ -100,14 +100,14 @@ public class UserRestController {
 
         logger.info("userId from apple service : {}", socialId);
 
-        OAuthResult.OAuthResultDto result = userService.kakaoOAuth(socialId);
+        OAuthResult.OAuthResultDto result = userService.appleOAuth(socialId);
 
         ResponseCode responseCode;
 
         if (result.getIsLogin())
-            responseCode = ResponseCode.KAKAO_OAUTH_LOGIN;
+            responseCode = ResponseCode.APPLE_OAUTH_LOGIN;
         else
-            responseCode = ResponseCode.KAKAO_OAUTH_JOIN;
+            responseCode = ResponseCode.APPLE_OAUTH_JOIN;
 
         return ResponseEntity.ok(BaseConverter.toBaseDto(responseCode, UserConverter.toOauthDto(result)));
     }
