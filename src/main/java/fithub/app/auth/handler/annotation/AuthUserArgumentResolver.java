@@ -1,9 +1,9 @@
 package fithub.app.auth.handler.annotation;
 
+import fithub.app.base.Code;
 import fithub.app.converter.UserConverter;
 import fithub.app.domain.User;
-import fithub.app.exception.common.ErrorCode;
-import fithub.app.exception.handler.UserException;
+import fithub.app.base.exception.handler.UserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,7 +37,7 @@ public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
             principal = authentication.getPrincipal();
         }
         if (principal == null || principal.getClass() == String.class) {
-            throw new UserException(ErrorCode.MEMBER_NOT_FOUND);
+            throw new UserException(Code.MEMBER_NOT_FOUND);
         }
 
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) authentication;

@@ -1,4 +1,4 @@
-package fithub.app.exception.common;
+package fithub.app.base.exception.common;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +10,8 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ApiErrorResult {
 
-    private ErrorCode code;
+    private Boolean isSuccess;
+    private Integer code;
     private String message;
     private Object result;
 

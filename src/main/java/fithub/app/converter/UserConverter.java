@@ -1,23 +1,20 @@
 package fithub.app.converter;
 
+import fithub.app.base.Code;
 import fithub.app.domain.User;
 import fithub.app.domain.enums.Gender;
 import fithub.app.domain.enums.SocialType;
-import fithub.app.exception.common.ErrorCode;
-import fithub.app.exception.handler.UserException;
+import fithub.app.base.exception.handler.UserException;
 import fithub.app.repository.UserRepository;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -95,7 +92,7 @@ public class UserConverter {
     }
 
     public static User toUser(Long userId){
-        return staticUserRepository.findById(userId).orElseThrow(()->new UserException(ErrorCode.MEMBER_NOT_FOUND));
+        return staticUserRepository.findById(userId).orElseThrow(()->new UserException(Code.MEMBER_NOT_FOUND));
     }
 
     public static UserResponseDto.OauthDto toOauthDto(OAuthResult.OAuthResultDto result){

@@ -2,10 +2,11 @@ package fithub.app.sms.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import fithub.app.base.Code;
 import fithub.app.converter.PhoneAuthConverter;
 import fithub.app.domain.PhoneAuth;
-import fithub.app.exception.common.ErrorCode;
-import fithub.app.exception.handler.PhoneAuthException;
+
+import fithub.app.base.exception.handler.PhoneAuthException;
 import fithub.app.repository.PhoneAuthRepository;
 import fithub.app.sms.dto.MessageDto;
 import fithub.app.sms.dto.SmsDto;
@@ -91,7 +92,7 @@ public class SmsServiceImpl implements SmsService {
 
     @Override
     @Transactional(readOnly = false)
-    public SmsResponseDto sendSms(String targetNumber) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
+    public Integer sendSms(String targetNumber) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException {
         Long time = System.currentTimeMillis();
 
         HttpHeaders headers = new HttpHeaders();
@@ -148,22 +149,22 @@ public class SmsServiceImpl implements SmsService {
         phoneAuthRepository.deleteByPhoneNum(targetNumber);
         phoneAuthRepository.save(phoneAuth);
 
-        return response;
+        return randomNum;
     }
 
     @Override
     @Transactional(readOnly = false)
     public SmsResponseDto.AuthNumResultDto authNumber(Integer authNum, String phoneNum) {
-        PhoneAuth phoneAuth = phoneAuthRepository.findByPhoneNum(phoneNum).orElseThrow(() -> new PhoneAuthException(ErrorCode.PHONE_AUTH_NOT_FOUND));
+        PhoneAuth phoneAuth = phoneAuthRepository.findByPhoneNum(phoneNum).orElseThrow(() -> new PhoneAuthException(Code.PHONE_AUTH_NOT_FOUND));
 
         if (!phoneAuth.getAuthNum().equals(authNum))
-                throw new PhoneAuthException(ErrorCode.PHONE_AUTH_ERROR);
+                throw new PhoneAuthException(Code.PHONE_AUTH_ERROR);
         else{
             LocalDateTime nowTime = LocalDateTime.now();
 
             long timeCheck = ChronoUnit.MINUTES.between(phoneAuth.getSendDate(), nowTime);
             if (timeCheck >= 5)
-                throw new PhoneAuthException(ErrorCode.PHONE_AUTH_TIMEOUT);
+                throw new PhoneAuthException(Code.PHONE_AUTH_TIMEOUT);
         }
 
         System.out.println(phoneAuth.getPhoneNum());

@@ -13,7 +13,6 @@ public class BaseConverter {
         return BaseDto.BaseResponseDto.builder()
                 .code(responseCode.getCode())
                 .message(responseCode.getMessage())
-                .result(result)
                 .build();
     }
 }
