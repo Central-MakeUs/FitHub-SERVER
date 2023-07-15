@@ -1,21 +1,20 @@
 package fithub.app.service.impl;
 
 import fithub.app.auth.provider.TokenProvider;
+import fithub.app.base.Code;
 import fithub.app.converter.ExercisePreferenceConverter;
 import fithub.app.converter.UserConverter;
 import fithub.app.domain.ExerciseCategory;
 import fithub.app.domain.User;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.domain.mapping.ExercisePreference;
-import fithub.app.exception.common.ErrorCode;
-import fithub.app.exception.handler.UserException;
+import fithub.app.base.exception.handler.UserException;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.ExercisePreferenceRepository;
 import fithub.app.repository.UserRepository;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
-import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +99,7 @@ public class UserServiceImpl implements UserService {
 
         for (int i = 0; i < request.getPreferExercises().size(); i++) {
             ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises().get(i))
-                    .orElseThrow(()->new UserException(ErrorCode.NO_EXERCISE_CATEGORY_EXIST));
+                    .orElseThrow(()->new UserException(Code.NO_EXERCISE_CATEGORY_EXIST));
             ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(savedUser, exerciseCategory);
             exercisePreferenceRepository.save(exercisePreference);
         }

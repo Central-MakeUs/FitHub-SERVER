@@ -1,8 +1,8 @@
 package fithub.app.auth.handler;
 
 import fithub.app.auth.filter.JwtRequestFilter;
-import fithub.app.exception.common.ApiErrorResult;
-import fithub.app.exception.common.ErrorCode;
+import fithub.app.base.Code;
+import fithub.app.base.exception.common.ApiErrorResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.AuthenticationException;
@@ -26,11 +26,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json; charset=UTF-8");
         response.setStatus(401);
         PrintWriter writer = response.getWriter();
-        ErrorCode errorCode = ErrorCode.UNAUTHORIZED;
         ApiErrorResult apiErrorResult = ApiErrorResult.builder()
-                .code(errorCode)
-                .message(errorCode.getMessage())
-                .result(JwtRequestFilter.class.getName())
+                .isSuccess(false)
+                .code(Code.UNAUTHORIZED.getCode())
+                .message(Code.UNAUTHORIZED.getMessage())
+                .result(null)
                 .build();
         try {
             writer.write(apiErrorResult.toString());

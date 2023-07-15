@@ -14,7 +14,7 @@ public interface SmsService {
 
     public String makeSignature(Long time) throws NoSuchAlgorithmException, UnsupportedEncodingException, InvalidKeyException;
 
-    public SmsResponseDto sendSms(String targetNumber) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException;
+    public Integer sendSms(String targetNumber) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException;
 
     public SmsResponseDto.AuthNumResultDto authNumber(Integer authNum, String phoneNum);
 }
