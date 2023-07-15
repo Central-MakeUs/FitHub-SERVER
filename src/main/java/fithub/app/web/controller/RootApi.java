@@ -1,10 +1,10 @@
 package fithub.app.web.controller;
 
 import fithub.app.auth.provider.TokenProvider;
+import fithub.app.base.Code;
 import fithub.app.converter.common.BaseConverter;
 import fithub.app.domain.User;
-import fithub.app.exception.common.ErrorCode;
-import fithub.app.exception.handler.UserException;
+import fithub.app.base.exception.handler.UserException;
 import fithub.app.repository.UserRepository;
 import fithub.app.utils.ResponseCode;
 import fithub.app.web.dto.common.BaseDto;
@@ -60,7 +60,7 @@ public class RootApi {
             String token = authorizationHeader.substring(7);
             System.out.println(token);
             Long userId = tokenProvider.validateAndReturnId(token);
-            User user = userRepository.findById(userId).orElseThrow(()-> new UserException(ErrorCode.MEMBER_NOT_FOUND));
+            User user = userRepository.findById(userId).orElseThrow(()-> new UserException(Code.MEMBER_NOT_FOUND));
 
             if (user.getAge() != null && user.getGender() != null)
                 result = ResponseCode.AUTO_LOGIN_SUCCESS;

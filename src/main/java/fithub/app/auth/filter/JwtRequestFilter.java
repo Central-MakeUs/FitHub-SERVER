@@ -1,8 +1,8 @@
 package fithub.app.auth.filter;
 
 import fithub.app.auth.provider.TokenProvider;
-import fithub.app.exception.common.ErrorCode;
-import fithub.app.exception.handler.JwtAuthenticationException;
+import fithub.app.base.Code;
+import fithub.app.base.exception.handler.JwtAuthenticationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,7 +28,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }else{
-            throw new JwtAuthenticationException(ErrorCode.JWT_TOKEN_NOT_FOUND);
+            throw new JwtAuthenticationException(Code.JWT_TOKEN_NOT_FOUND);
         }
         filterChain.doFilter(httpServletRequest, response);
     }

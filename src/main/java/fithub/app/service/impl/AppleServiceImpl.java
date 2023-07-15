@@ -1,12 +1,10 @@
 package fithub.app.service.impl;
 
-import fithub.app.exception.common.ErrorCode;
-import fithub.app.exception.handler.AppleOAuthException;
+import fithub.app.base.Code;
+import fithub.app.base.exception.handler.AppleOAuthException;
 import fithub.app.service.AppleService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.json.simple.JSONArray;
@@ -24,9 +22,7 @@ import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyFactory;
-import java.security.KeyPair;
 import java.security.PublicKey;
-import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
 import java.util.Base64;
 import java.util.Objects;
@@ -52,7 +48,7 @@ public class AppleServiceImpl implements AppleService {
                 result.append(line);
             }
         } catch (IOException e) {
-            throw new AppleOAuthException(ErrorCode.FAILED_TO_VALIDATE_APPLE_LOGIN);
+            throw new AppleOAuthException(Code.FAILED_TO_VALIDATE_APPLE_LOGIN);
         }
 
         JSONObject availableObject = null;
@@ -85,7 +81,7 @@ public class AppleServiceImpl implements AppleService {
             }
 
             if (ObjectUtils.isEmpty(availableObject)){
-                throw new AppleOAuthException(ErrorCode.FAILED_TO_FIND_AVALIABLE_RSA);
+                throw new AppleOAuthException(Code.FAILED_TO_FIND_AVALIABLE_RSA);
             }
 
         }
@@ -123,7 +119,7 @@ public class AppleServiceImpl implements AppleService {
             PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
             return publicKey;
         } catch (Exception exception) {
-            throw new AppleOAuthException(ErrorCode.FAILED_TO_FIND_AVALIABLE_RSA);
+            throw new AppleOAuthException(Code.FAILED_TO_FIND_AVALIABLE_RSA);
         }
     }
 }

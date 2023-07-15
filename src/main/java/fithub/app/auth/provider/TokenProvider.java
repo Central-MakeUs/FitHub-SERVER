@@ -1,7 +1,7 @@
 package fithub.app.auth.provider;
 
-import fithub.app.exception.common.ErrorCode;
-import fithub.app.exception.handler.JwtAuthenticationException;
+import fithub.app.base.Code;
+import fithub.app.base.exception.handler.JwtAuthenticationException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
@@ -90,14 +90,14 @@ public class TokenProvider implements InitializingBean {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
-            throw new JwtAuthenticationException(ErrorCode.JWT_BAD_REQUEST);
+            throw new JwtAuthenticationException(Code.JWT_BAD_REQUEST);
         }catch (ExpiredJwtException e){
-            if (type == TokenType.ACCESS) throw new JwtAuthenticationException(ErrorCode.JWT_ACCESS_TOKEN_EXPIRED);
-            else throw new JwtAuthenticationException(ErrorCode.JWT_REFRESH_TOKEN_EXPIRED);
+            if (type == TokenType.ACCESS) throw new JwtAuthenticationException(Code.JWT_ACCESS_TOKEN_EXPIRED);
+            else throw new JwtAuthenticationException(Code.JWT_REFRESH_TOKEN_EXPIRED);
         }catch (UnsupportedJwtException e){
-            throw new JwtAuthenticationException(ErrorCode.JWT_UNSUPPORTED_TOKEN);
+            throw new JwtAuthenticationException(Code.JWT_UNSUPPORTED_TOKEN);
         }catch (IllegalArgumentException e){
-            throw new JwtAuthenticationException(ErrorCode.JWT_BAD_REQUEST);
+            throw new JwtAuthenticationException(Code.JWT_BAD_REQUEST);
         }
     }
 
@@ -106,11 +106,11 @@ public class TokenProvider implements InitializingBean {
             Claims body = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
             return Long.valueOf(body.getSubject());
         }catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e){
-            throw new JwtAuthenticationException(ErrorCode.JWT_BAD_REQUEST);
+            throw new JwtAuthenticationException(Code.JWT_BAD_REQUEST);
         }catch (UnsupportedJwtException e){
-            throw new JwtAuthenticationException(ErrorCode.JWT_UNSUPPORTED_TOKEN);
+            throw new JwtAuthenticationException(Code.JWT_UNSUPPORTED_TOKEN);
         }catch (IllegalArgumentException e){
-            throw new JwtAuthenticationException(ErrorCode.JWT_BAD_REQUEST);
+            throw new JwtAuthenticationException(Code.JWT_BAD_REQUEST);
         }
     }
 

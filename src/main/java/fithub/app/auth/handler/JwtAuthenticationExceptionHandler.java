@@ -1,9 +1,9 @@
 package fithub.app.auth.handler;
 
 import fithub.app.auth.filter.JwtRequestFilter;
-import fithub.app.exception.common.ApiErrorResult;
-import fithub.app.exception.common.ErrorCode;
-import fithub.app.exception.handler.JwtAuthenticationException;
+import fithub.app.base.Code;
+import fithub.app.base.exception.common.ApiErrorResult;
+import fithub.app.base.exception.handler.JwtAuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -25,12 +25,13 @@ public class JwtAuthenticationExceptionHandler extends OncePerRequestFilter {
 
             PrintWriter writer = response.getWriter();
             String errorCodeName = authException.getMessage();
-            ErrorCode errorCode = ErrorCode.valueOf(errorCodeName);
+            Code code = Code.valueOf(errorCodeName);
 
             ApiErrorResult apiErrorResult = ApiErrorResult.builder()
-                    .code(errorCode)
-                    .message(errorCode.getMessage())
-                    .result(JwtRequestFilter.class.getName())
+                    .isSuccess(false)
+                    .code(code.getCode())
+                    .message(code.getMessage())
+                    .result(null)
                     .build();
 
             writer.write(apiErrorResult.toString());
