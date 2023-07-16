@@ -167,6 +167,7 @@ public class UserRestController {
 
         User user = userService.signUpPhoneNum(request);
 
+        System.out.println(user.getPhoneNum());
         UserResponseDto.JoinUserDto createdUser = UserConverter.toJoinUserDto(user);
         return ResponseDto.of(createdUser);
     }
@@ -200,7 +201,7 @@ public class UserRestController {
     @PostMapping("/users/sms")
     public ResponseDto<Integer> sendSms(@RequestBody UserRequestDto.SmsRequestDto request) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException
     {
-
+        userService.findByPhoneNumJoin(request.getTargetPhoneNum());
         Integer data = smsService.sendSms(request.getTargetPhoneNum());
         return ResponseDto.of(data);
     }

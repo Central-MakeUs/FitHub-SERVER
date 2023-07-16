@@ -44,6 +44,7 @@ public class UserResponseDto {
     public static class JoinUserDto{
         private Long userId;
         private String nickname;
+        private String accessToken;
     }
 
     @Builder

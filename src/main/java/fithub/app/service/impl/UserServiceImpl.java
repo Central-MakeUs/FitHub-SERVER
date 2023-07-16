@@ -116,6 +116,12 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    public void findByPhoneNumJoin(String phoNum){
+        Optional<User> byPhoneNum = userRepository.findByPhoneNum(phoNum);
+        if(byPhoneNum.isPresent())
+            throw new UserException(Code.EXIST_PHONE_USER);
+    }
+
     @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
