@@ -27,6 +27,11 @@ spring:
     level:
       root: info
       org.hibernate.type: trace
+
+  servlet:
+    multipart:
+      maxFileSize: 20MB
+      maxRequestSize: 30MB
 jwt:
   header: Authorization
   secret: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
@@ -63,3 +68,20 @@ naver-sms:
     secretKey: ${NAVER_SMS_SECRET}
     serviceId: ${NAVER_SMS_SERVICEID}
     senderPhone: ${NAVER_SMS_PHONE}
+
+cloud:
+  aws:
+    s3:
+      bucket: field-mate
+      folder:
+        fithub-article: fithub-article
+        fithub-record : fithub-record
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+#    cloudFront:
+#      distributionDomain: https://d3j1uqx77q4q2.cloudfront.net
