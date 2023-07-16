@@ -17,4 +17,6 @@ public interface SmsService {
     public Integer sendSms(String targetNumber) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException;
 
     public SmsResponseDto.AuthNumResultDto authNumber(Integer authNum, String phoneNum);
+
+    public Boolean isExistNum(Integer phoneNum);
 }
