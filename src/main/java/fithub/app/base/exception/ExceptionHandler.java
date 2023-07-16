@@ -28,7 +28,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     @org.springframework.web.bind.annotation.ExceptionHandler
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
         e.printStackTrace();
-        return handleExceptionInternal(e, Code.INTERNAL_ERROR, request);
+        return handleExceptionInternalFalse(e, Code.INTERNAL_ERROR, HttpHeaders.EMPTY, Code.INTERNAL_ERROR.getHttpStatus(),request);
     }
 
     @Override
@@ -45,6 +45,18 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, Code errorCode,
+                                                           HttpHeaders headers, HttpStatus status, WebRequest request) {
+        ResponseDto<Object> body = ResponseDto.of(true,errorCode, errorCode.getMessage(e));
+        return super.handleExceptionInternal(
+                e,
+                body,
+                headers,
+                status,
+                request
+        );
+    }
+
+    private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, Code errorCode,
                                                            HttpHeaders headers, HttpStatus status, WebRequest request) {
         ResponseDto<Object> body = ResponseDto.of(false,errorCode, errorCode.getMessage(e));
         return super.handleExceptionInternal(
