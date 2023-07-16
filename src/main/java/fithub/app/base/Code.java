@@ -61,7 +61,10 @@ public enum Code {
 
     EXIST_PHONE_USER(HttpStatus.BAD_REQUEST,4018, "이미 가입 된 회원입니다."),
 
-    NO_PHONE_USER(HttpStatus.BAD_REQUEST,4019, "해당 계정이 없습니다.");
+    NO_PHONE_USER(HttpStatus.BAD_REQUEST,4019, "해당 계정이 없습니다."),
+
+    PASSWORD_ERROR(HttpStatus.BAD_REQUEST,4020, "비밀번호가 틀렸습니다.");
+
 
 
     private final HttpStatus httpStatus;

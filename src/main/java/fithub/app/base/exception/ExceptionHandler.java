@@ -27,9 +27,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     public ResponseEntity<Object> exception(Exception e, WebRequest request) {
-        System.out.println(e);
-        System.out.println(e.getStackTrace());
-        System.out.println(e.getCause());
+        e.printStackTrace();
         return handleExceptionInternal(e, Code.INTERNAL_ERROR, request);
     }
 
