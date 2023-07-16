@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +40,8 @@ public class UserServiceImpl implements UserService {
     private final ExerciseCategoryRepository exerciseCategoryRepository;
 
     private final ExercisePreferenceRepository exercisePreferenceRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     private final TokenProvider tokenProvider;
 
@@ -105,6 +108,21 @@ public class UserServiceImpl implements UserService {
         }
 
         return savedUser;
+    }
+
+    @Override
+    public User findByPhoneNum(String phoneNum) {
+        User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(()-> new UserException(Code.NO_PHONE_USER));
+        return user;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public User updatePassword(String phoneNum,String password) {
+        User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
+        String encodedPassword = passwordEncoder.encode(password);
+        User updatedUser = user.setPassword(encodedPassword);
+        return updatedUser;
     }
 
     @Transactional(readOnly = false)

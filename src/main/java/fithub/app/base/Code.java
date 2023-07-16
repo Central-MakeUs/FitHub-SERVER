@@ -56,7 +56,12 @@ public enum Code {
 
     PHONE_AUTH_NOT_FOUND(HttpStatus.BAD_REQUEST, 4016, "인증문자 발급이 필요합니다."),
 
-    NO_EXERCISE_CATEGORY_EXIST(HttpStatus.BAD_REQUEST, 4017, "선호하는 운동 카테고리가 잘못 되었습니다.");
+    NO_EXERCISE_CATEGORY_EXIST(HttpStatus.BAD_REQUEST, 4017, "선호하는 운동 카테고리가 잘못 되었습니다."),
+
+
+    EXIST_PHONE_USER(HttpStatus.BAD_REQUEST,4018, "이미 가입 된 회원입니다."),
+
+    NO_PHONE_USER(HttpStatus.BAD_REQUEST,4019, "해당 계정이 없습니다.");
 
 
     private final HttpStatus httpStatus;
