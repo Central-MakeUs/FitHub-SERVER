@@ -175,6 +175,11 @@ public class SmsServiceImpl implements SmsService {
                 .build();
     }
 
+    @Override
+    public Boolean isExistNum(Integer phoneNum) {
+        return null;
+    }
+
     public Integer RandomNumberGenerator(){
         int min = 100000;
         int max = 999999;
