@@ -88,7 +88,7 @@ public class UserRequestDto {
     }
 
     @Getter @Setter
-    public class FindPassDto{
+    public static class FindPassDto{
         @Override
         public String toString() {
             return "FindPassDto{" +
@@ -100,14 +100,16 @@ public class UserRequestDto {
     }
 
     @Getter @Setter
-    public class ChangePassDto{
+    public static class ChangePassDto{
         @Override
         public String toString() {
             return "ChangePassDto{" +
-                    "newPassword='" + newPassword + '\'' +
+                    "targetPhoneNum='" + targetPhoneNum + '\'' +
+                    ", newPassword='" + newPassword + '\'' +
                     '}';
         }
 
+        private String targetPhoneNum;
         private String newPassword;
     }
 }

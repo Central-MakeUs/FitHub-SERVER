@@ -73,4 +73,9 @@ public class User extends BaseEntity {
         this.socialType = socialType;
         return this;
     }
+
+    public User setPassword(String password){
+        this.password = password;
+        return this;
+    }
 }
