@@ -130,4 +130,10 @@ public class UserConverter {
                 .newPass(newPass)
                 .build();
     }
+
+    public static UserResponseDto.LoginDto toLoginDto(String jwt){
+        return UserResponseDto.LoginDto.builder()
+                .accessToken(jwt)
+                .build();
+    }
 }

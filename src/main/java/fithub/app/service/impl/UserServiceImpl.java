@@ -123,6 +123,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String login(User user, String password) {
+        System.out.println(password);
+        String jwt = null;
+        if(!passwordEncoder.matches(password, user.getPassword()))
+            throw new UserException(Code.PASSWORD_ERROR);
+        else
+            jwt = tokenProvider.createAccessToken(user.getId(), user.getPhoneNum(), Arrays.asList(new SimpleGrantedAuthority("USER")));
+        return jwt;
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));

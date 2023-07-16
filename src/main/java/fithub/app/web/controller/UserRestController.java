@@ -234,5 +234,19 @@ public class UserRestController {
         User user = userService.updatePassword(request.getTargetPhoneNum(), request.getNewPassword());
         return ResponseDto.of(UserConverter.toPassChangeDto(request.getNewPassword()));
     }
-}
 
+    @Operation(summary = "로그인 API", description = "로그인 API입니다. 비밀번호를 주세요")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4019", description = "BAD_REQUEST : 가입한 회원이 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @PostMapping("/users/sign-in")
+    public ResponseDto<UserResponseDto.LoginDto> login(@RequestBody UserRequestDto.LoginDto request){
+        User user = userService.findByPhoneNum(request.getTargetPhoneNum());
+        String jwt = userService.login(user,request.getPassword());
+        logger.info("로그인 토큰 : {}", jwt);
+
+        return ResponseDto.of(UserConverter.toLoginDto(jwt));
+    }
+}

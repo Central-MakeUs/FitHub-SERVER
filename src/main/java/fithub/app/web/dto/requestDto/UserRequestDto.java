@@ -112,4 +112,10 @@ public class UserRequestDto {
         private String targetPhoneNum;
         private String newPassword;
     }
+
+    @Getter @Setter
+    public static class LoginDto{
+        private String targetPhoneNum;
+        private String password;
+    }
 }
