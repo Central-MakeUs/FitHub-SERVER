@@ -1,7 +1,7 @@
 package fithub.app.base.exception;
 
 import fithub.app.base.Code;
-import fithub.app.base.ErrorResponseDto;
+import fithub.app.base.ResponseDto;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -45,7 +45,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, Code errorCode,
                                                            HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ErrorResponseDto body = ErrorResponseDto.of(errorCode, errorCode.getMessage(e));
+        ResponseDto<Object> body = ResponseDto.of(false,errorCode, errorCode.getMessage(e));
         return super.handleExceptionInternal(
                 e,
                 body,

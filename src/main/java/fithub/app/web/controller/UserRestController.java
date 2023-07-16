@@ -3,8 +3,7 @@ package fithub.app.web.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import fithub.app.base.Code;
-import fithub.app.base.DataResponseDto;
-import fithub.app.base.ErrorResponseDto;
+import fithub.app.base.ResponseDto;
 import fithub.app.converter.ExerciseCategoryConverter;
 
 import fithub.app.converter.UserConverter;
@@ -64,10 +63,10 @@ public class UserRestController {
     @ApiResponses({
             @ApiResponse(responseCode = "2004", description = "OK : 정상응답, 로그인 프로세스"),
             @ApiResponse(responseCode = "2005", description = "OK : 정상응답, 회원가입 프로세스"),
-            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ErrorResponseDto.class)))
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @PostMapping("/users/login/social/kakao")
-    public DataResponseDto<OAuthResult.OAuthResultDto> kakaoOauth(@RequestBody UserRequestDto.socialDto request){
+    public ResponseDto<OAuthResult.OAuthResultDto> kakaoOauth(@RequestBody UserRequestDto.socialDto request){
 
         logger.info("/login/social/kakao 넘겨 받은  body : {}",request.toString());
 
@@ -80,18 +79,18 @@ public class UserRestController {
         else
             responseCode = Code.KAKAO_OAUTH_JOIN;
 
-        return DataResponseDto.of(result, responseCode);
+        return ResponseDto.of(responseCode, result);
     }
 
     @Operation(summary = "애플 소셜 로그인", description = "애플 소셜 로그인 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2004", description = "OK : 정상응답, 로그인 프로세스"),
             @ApiResponse(responseCode = "2005", description = "OK : 정상응답, 회원가입 프로세스"),
-            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ErrorResponseDto.class)))
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
 
     })
     @PostMapping("/users/login/social/apple")
-    public DataResponseDto<OAuthResult.OAuthResultDto> appleOauth(@RequestBody UserRequestDto.AppleSocialDto request) throws IOException {
+    public ResponseDto<OAuthResult.OAuthResultDto> appleOauth(@RequestBody UserRequestDto.AppleSocialDto request) throws IOException {
 
 
         logger.info("/login/social/apple 넘겨 받은 body : {}", request.getIdentityToken());
@@ -113,7 +112,7 @@ public class UserRestController {
             responseCode = Code.APPLE_OAUTH_JOIN;
 
         logger.info("애플 소셜로그인의 결과 : {}", responseCode);
-        return DataResponseDto.of(result, responseCode);
+        return ResponseDto.of(responseCode, result);
     }
 
 
@@ -122,9 +121,9 @@ public class UserRestController {
     @ApiResponses({
             @ApiResponse(responseCode = "2010", description = "OK : 정상응답, 닉네임이 이미 사용중인 경우!"),
             @ApiResponse(responseCode = "2011", description = "OK : 정상응답, 닉네임 사용이 가능함!"),
-            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ErrorResponseDto.class)))
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
-    public DataResponseDto<String> getExistNickname(
+    public ResponseDto<String> getExistNickname(
             @ApiParam (value = "검사를 원하는 닉네임", readOnly = true) @RequestParam String nickname
     ){
 
@@ -139,7 +138,7 @@ public class UserRestController {
         else
             responseCode = Code.NICKNAME_OK;
 
-        return DataResponseDto.of(nickname, responseCode);
+        return ResponseDto.of(responseCode, nickname);
     }
 
     @Operation(summary = "운동 카테고리 리스트 API", description = "회원가입 시 선호하는 카테고리를 선택할 때 목록을 받아오기 위해 사용됩니다.")
@@ -147,28 +146,28 @@ public class UserRestController {
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답")
     })
     @GetMapping("/users/exercise-category")
-    public ResponseEntity<BaseDto.BaseResponseDto> getExerciseCategoryList(){
+    public ResponseDto<List<ExerciseCategory>> getExerciseCategoryList(){
         List<ExerciseCategory> exerciseList = userService.getExerciseList();
 
         logger.info("운동 카테고리 리스트 : {}", exerciseList);
 
-        return ResponseEntity.ok(BaseConverter.toBaseDto(ResponseCode.SUCCESS,ExerciseCategoryConverter.toCategoryFullDtoList(exerciseList)));
+        return ResponseDto.of(exerciseList);
     }
 
     @PostMapping("/users/sign-up")
     @Operation(summary = "핸드폰 번호를 이용한 회원가입 완료 API", description = "핸드폰 번호를 이용한 회원가입 시 사용됩니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 가입 한 사용자의 DB 상 id, nickname이 담긴 result 반환"),
-            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ErrorResponseDto.class)))
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
-    public DataResponseDto<UserResponseDto.JoinUserDto> signUpByPhoneNum(@RequestBody UserRequestDto.UserInfo request){
+    public ResponseDto<UserResponseDto.JoinUserDto> signUpByPhoneNum(@RequestBody UserRequestDto.UserInfo request){
 
         logger.info("넘겨 받은 사용자의 정보 : {}", request.toString());
 
         User user = userService.signUpPhoneNum(request);
 
         UserResponseDto.JoinUserDto createdUser = UserConverter.toJoinUserDto(user);
-        return DataResponseDto.of(createdUser, Code.OK);
+        return ResponseDto.of(createdUser);
     }
 
     @Operation(summary = "소셜로그인 회원정보 최종입력 API", description = "소셜로그인으로 가입 시 회원정보를 최종으로 기입하기 위해 사용됩니다, 토요일에 작업할게용")
@@ -180,28 +179,39 @@ public class UserRestController {
     @Operation(summary = "핸드폰으로 전송된 인증 번호 검증 API", description = "body에 사용자의 핸드폰 번호와 인증 번호 2개를 주세요!")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 인증 성공"),
-            @ApiResponse(responseCode = "4014", description = "UNAUTHORIZED 인증 번호가 틀린 경우", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-                @ApiResponse(responseCode = "4015", description = "UNAUTHORIZED 유효시간이 지난 경우", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-            @ApiResponse(responseCode = "4016", description = "BAD REQUEST 인증번호를 받은 번호가 없는 경우", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ErrorResponseDto.class)))
+            @ApiResponse(responseCode = "4014", description = "UNAUTHORIZED 인증 번호가 틀린 경우", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+                @ApiResponse(responseCode = "4015", description = "UNAUTHORIZED 유효시간이 지난 경우", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4016", description = "BAD REQUEST 인증번호를 받은 번호가 없는 경우", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
 
     })
     @PostMapping("/users/sms/auth")
-    public DataResponseDto<SmsResponseDto.AuthNumResultDto> authPhoneNum(@RequestBody UserRequestDto.PhoneNumAuthDto request){
+    public ResponseDto<SmsResponseDto.AuthNumResultDto> authPhoneNum(@RequestBody UserRequestDto.PhoneNumAuthDto request){
         SmsResponseDto.AuthNumResultDto authNumResultDto = smsService.authNumber(request.getAuthNum(), request.getPhoneNum());
-        return DataResponseDto.of(authNumResultDto,Code.OK);
+        return ResponseDto.of(authNumResultDto);
     }
 
     @Operation(summary = "핸드폰 인증번호 생성 API", description = "사용자의 번호를 body에 넘겨 줘 인증번호가 문자로 송신되게 합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
-            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ErrorResponseDto.class)))
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @PostMapping("/users/sms")
-    public DataResponseDto<Integer> sendSms(@RequestBody UserRequestDto.SmsRequestDto request) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException
+    public ResponseDto<Integer> sendSms(@RequestBody UserRequestDto.SmsRequestDto request) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException
     {
+
         Integer data = smsService.sendSms(request.getTargetPhoneNum());
-        return DataResponseDto.of(data, Code.OK);
+        return ResponseDto.of(data);
+    }
+
+    @PostMapping("/users/password")
+    public ResponseDto<Integer> findPass(){
+        return null;
+    }
+
+    @PatchMapping("/users/password")
+    public ResponseDto<UserResponseDto.PassChangeDto> changePass(){
+        return null;
     }
 }
 

@@ -54,4 +54,12 @@ public class UserResponseDto {
         private String accessToken;
     }
 
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class PassChangeDto{
+        private String newPass;
+    }
+
 }

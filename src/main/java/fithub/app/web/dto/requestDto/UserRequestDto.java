@@ -86,4 +86,28 @@ public class UserRequestDto {
         private String phoneNum;
         private Integer authNum;
     }
+
+    @Getter @Setter
+    public class FindPassDto{
+        @Override
+        public String toString() {
+            return "FindPassDto{" +
+                    "targetPhoneNum='" + targetPhoneNum + '\'' +
+                    '}';
+        }
+
+        private String targetPhoneNum;
+    }
+
+    @Getter @Setter
+    public class ChangePassDto{
+        @Override
+        public String toString() {
+            return "ChangePassDto{" +
+                    "newPassword='" + newPassword + '\'' +
+                    '}';
+        }
+
+        private String newPassword;
+    }
 }
