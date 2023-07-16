@@ -18,4 +18,8 @@ public interface UserService {
     List<ExerciseCategory> getExerciseList();
 
     User signUpPhoneNum(UserRequestDto.UserInfo request);
+
+    User findByPhoneNum(String phoneNum);
+
+    User updatePassword(String phoneNum,String password);
 }

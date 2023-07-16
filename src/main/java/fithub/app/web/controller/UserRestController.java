@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
@@ -204,14 +205,33 @@ public class UserRestController {
         return ResponseDto.of(data);
     }
 
+    @Operation(summary = "비밀번호 찾기 단계 핸드폰 인증 API",description = "비밀번호를 찾기 전 핸드폰 인증을 하는 단계입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4019", description = "BAD_REQUEST : 가입한 회원이 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
     @PostMapping("/users/password")
-    public ResponseDto<Integer> findPass(){
-        return null;
+    public ResponseDto<Integer> findPass(@RequestBody UserRequestDto.FindPassDto request) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException
+    {
+
+        logger.info("/users/password 클라이언트가 준 정보 : {}", request.toString());
+
+        User user = userService.findByPhoneNum(request.getTargetPhoneNum());
+        Integer data = smsService.sendSms(user.getPhoneNum());
+        return ResponseDto.of(data);
     }
 
+    @Operation(summary = "비밀번호 변경 API",description = "유저 식별을 위해 앞서 입력한 핸드폰 번호와 새 비밀번호를 주세요.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4019", description = "BAD_REQUEST : 가입한 회원이 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
     @PatchMapping("/users/password")
-    public ResponseDto<UserResponseDto.PassChangeDto> changePass(){
-        return null;
+    public ResponseDto<UserResponseDto.PassChangeDto> changePass(@RequestBody UserRequestDto.ChangePassDto request){
+        User user = userService.updatePassword(request.getTargetPhoneNum(), request.getNewPassword());
+        return ResponseDto.of(UserConverter.toPassChangeDto(request.getNewPassword()));
     }
 }
 

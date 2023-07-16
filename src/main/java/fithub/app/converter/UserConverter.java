@@ -115,4 +115,10 @@ public class UserConverter {
                 .nickname(user.getNickname())
                 .build();
     }
+
+    public static UserResponseDto.PassChangeDto toPassChangeDto(String newPass){
+        return UserResponseDto.PassChangeDto.builder()
+                .newPass(newPass)
+                .build();
+    }
 }
