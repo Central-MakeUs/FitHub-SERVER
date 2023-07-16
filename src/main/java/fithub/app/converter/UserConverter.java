@@ -1,5 +1,6 @@
 package fithub.app.converter;
 
+import fithub.app.auth.provider.TokenProvider;
 import fithub.app.base.Code;
 import fithub.app.domain.User;
 import fithub.app.domain.enums.Gender;
@@ -10,6 +11,7 @@ import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 
 @Component
 @RequiredArgsConstructor
@@ -26,6 +29,10 @@ public class UserConverter {
 
     private static UserRepository staticUserRepository;
 
+    private final TokenProvider tokenProvider;
+
+    private static TokenProvider staticTokenProvider;
+
     private final PasswordEncoder passwordEncoder;
 
     private static PasswordEncoder staticPasswordEncoder;
@@ -34,6 +41,7 @@ public class UserConverter {
     public void init() {
         this.staticUserRepository = this.userRepository;
         this.staticPasswordEncoder = this.passwordEncoder;
+        this.staticTokenProvider = this.tokenProvider;
     }
 
     public static User toCreateOAuthUser(String socialId, SocialType socialType){
@@ -113,12 +121,19 @@ public class UserConverter {
         return UserResponseDto.JoinUserDto.builder()
                 .userId(user.getId())
                 .nickname(user.getNickname())
+                .accessToken(staticTokenProvider.createAccessToken(user.getId(), user.getPhoneNum(), Arrays.asList(new SimpleGrantedAuthority("USER"))))
                 .build();
     }
 
     public static UserResponseDto.PassChangeDto toPassChangeDto(String newPass){
         return UserResponseDto.PassChangeDto.builder()
                 .newPass(newPass)
+                .build();
+    }
+
+    public static UserResponseDto.LoginDto toLoginDto(String jwt){
+        return UserResponseDto.LoginDto.builder()
+                .accessToken(jwt)
                 .build();
     }
 }

@@ -22,4 +22,8 @@ public interface UserService {
     User findByPhoneNum(String phoneNum);
 
     User updatePassword(String phoneNum,String password);
+
+    public void findByPhoneNumJoin(String phoNum);
+
+    public String login(User user, String password);
 }

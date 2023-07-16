@@ -116,6 +116,23 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    public void findByPhoneNumJoin(String phoNum){
+        Optional<User> byPhoneNum = userRepository.findByPhoneNum(phoNum);
+        if(byPhoneNum.isPresent())
+            throw new UserException(Code.EXIST_PHONE_USER);
+    }
+
+    @Override
+    public String login(User user, String password) {
+        System.out.println(password);
+        String jwt = null;
+        if(!passwordEncoder.matches(password, user.getPassword()))
+            throw new UserException(Code.PASSWORD_ERROR);
+        else
+            jwt = tokenProvider.createAccessToken(user.getId(), user.getPhoneNum(), Arrays.asList(new SimpleGrantedAuthority("USER")));
+        return jwt;
+    }
+
     @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
