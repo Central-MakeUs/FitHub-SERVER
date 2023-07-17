@@ -40,7 +40,7 @@ public class ArticleRestController {
     @Operation(summary = "게시글 상세조회 API", description = "게시글의 id를 통해 상세조회하는 API 입니다. 댓글 정보는 api를 하나 더 호출해주세요!")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 가입 한 사용자의 DB 상 id, nickname이 담긴 result 반환"),
-            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다."),
+            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
@@ -103,7 +103,7 @@ public class ArticleRestController {
     }
 
     @PostMapping("/articles/{articleId}/likes")
-    public ResponseEntity<ArticleResponseDto.ArticleLikeDto> likeArticle(@PathVariable Long id, @AuthUser User user){
+    public ResponseEntity<ArticleResponseDto.ArticleLikeDto> likeArticle(@PathVariable(name = "articleId") @ExistArticle Long articleId, @AuthUser User user){
         return null;
     }
 

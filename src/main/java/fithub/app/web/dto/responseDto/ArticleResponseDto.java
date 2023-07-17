@@ -21,6 +21,8 @@ public class ArticleResponseDto {
         PictureResponseDto.PictureDtoList articlePictureList;
         LocalDateTime createdAt;
         HashTagResponseDto.HashtagDtoList Hashtags;
+        Long likes;
+        Long scraps;
         Boolean isLiked;
         Boolean isScraped;
     }

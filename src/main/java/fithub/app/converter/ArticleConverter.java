@@ -115,6 +115,8 @@ public class ArticleConverter {
                 .articlePictureList(PictureConverter.toPictureDtoList(article.getArticleImageList()))
                 .createdAt(article.getCreatedAt())
                 .Hashtags(HashTagConverter.toHashtagDtoList(article.getArticleHashTagList()))
+                .likes(article.getLikes())
+                .scraps(article.getSaves())
                 .isLiked(isLiked)
                 .isScraped(isScraped)
                 .build();

@@ -34,7 +34,10 @@ public class Article extends BaseEntity {
     private Long reported;
 
     @Column(columnDefinition = "BIGINT DEFAULT 0")
-    private Long saved;
+    private Long saves;
+
+    @Column(columnDefinition = "BIGINT DEFAULT 0")
+    private Long likes;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<ArticleImage> articleImageList = new ArrayList<>();
