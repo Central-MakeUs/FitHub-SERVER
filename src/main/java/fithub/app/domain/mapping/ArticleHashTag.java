@@ -26,4 +26,14 @@ public class ArticleHashTag extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
+
+    public void setArticle(Article article){
+        this.article = article;
+        article.getArticleHashTagList().add(this);
+    }
+
+    public void setHashTag(HashTag hashTag){
+        this.hashTag = hashTag;
+        hashTag.getArticleHashTagList().add(this);
+    }
 }
