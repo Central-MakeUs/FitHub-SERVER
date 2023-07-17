@@ -4,6 +4,7 @@ import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 
 public class UserRequestDto {
@@ -32,20 +33,24 @@ public class UserRequestDto {
         public String toString() {
             return "UserOAuthInfo{" +
                     "marketingAgree=" + marketingAgree +
-                    ", phoneNumber='" + phoneNumber + '\'' +
                     ", name='" + name + '\'' +
                     ", nickname='" + nickname + '\'' +
-                    ", birthNum='" + birthNum + '\'' +
+                    ", birth='" + birth + '\'' +
+                    ", gender='" + gender + '\'' +
                     ", preferExercises=" + preferExercises +
                     '}';
         }
 
         private Boolean marketingAgree;
-        private String phoneNumber;
+        @NotBlank
         private String name;
+        @NotBlank
         private String nickname;
-        private String birthNum;
-        private List<Long> preferExercises;
+        @NotBlank
+        private String birth;
+        @NotBlank
+        private String gender;
+        private List<Integer> preferExercises;
     }
 
     @Getter @Setter
