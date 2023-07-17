@@ -3,7 +3,7 @@ package fithub.app.converter;
 import fithub.app.domain.Article;
 import fithub.app.domain.ArticleImage;
 import fithub.app.domain.Uuid;
-import fithub.app.repository.ArticleImageRepository;
+import fithub.app.repository.ArticleRepositories.ArticleImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

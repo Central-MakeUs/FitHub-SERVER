@@ -1,6 +1,7 @@
 package fithub.app.converter;
 
 import fithub.app.domain.HashTag;
+import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.repository.HashTagRepository;
 import fithub.app.web.dto.responseDto.HashTagResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -38,10 +39,10 @@ public class HashTagConverter {
                 .build();
     }
 
-    public static HashTagResponseDto.HashtagDtoList toHashtagDtoList(List<HashTag> hashTagList){
+    public static HashTagResponseDto.HashtagDtoList toHashtagDtoList(List<ArticleHashTag> hashTagList){
         List<HashTagResponseDto.HashtagDto> hashtagDtoList =
                 hashTagList.stream()
-                        .map(hashTag -> toHashtagDto(hashTag))
+                        .map(hashTag -> toHashtagDto(hashTag.getHashTag()))
                         .collect(Collectors.toList());
 
         return HashTagResponseDto.HashtagDtoList.builder()
