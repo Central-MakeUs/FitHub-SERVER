@@ -135,6 +135,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = false)
+    public User socialInfoComplete(UserRequestDto.UserOAuthInfo request, User user) {
+        User updatedUser =  UserConverter.toSocialUser(request, user);
+        for (int i = 0; i < request.getPreferExercises().size(); i++) {
+            ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises().get(i))
+                    .orElseThrow(()->new UserException(Code.NO_EXERCISE_CATEGORY_EXIST));
+            ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(updatedUser, exerciseCategory);
+            exercisePreferenceRepository.save(exercisePreference);
+        }
+
+        return updatedUser;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
         String encodedPassword = passwordEncoder.encode(password);

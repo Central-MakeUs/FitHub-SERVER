@@ -1,4 +1,4 @@
-//package fithub.app.auth.dto;
+    //package fithub.app.auth.dto;
 //
 //import fithub.app.domain.User;
 //import fithub.app.domain.enums.SocialType;
