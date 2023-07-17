@@ -1,9 +1,12 @@
 package fithub.app.domain;
 
 import fithub.app.domain.common.BaseEntity;
+import fithub.app.domain.mapping.ArticleHashTag;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -33,6 +36,12 @@ public class Article extends BaseEntity {
     @Column(columnDefinition = "BIGINT DEFAULT 0")
     private Long saved;
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<ArticleImage> articleImageList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<ArticleHashTag> articleHashTagList = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -40,4 +49,13 @@ public class Article extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category")
     private ExerciseCategory exerciseCategory;
+
+    public void setUser(User user){
+        this.user = user;
+        user.getArticleList().add(this);
+    }
+
+    public void setArticleHashTagList(List<ArticleHashTag> articleHashTagList){
+        this.articleHashTagList = articleHashTagList;
+    }
 }

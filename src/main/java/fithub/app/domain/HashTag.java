@@ -2,9 +2,12 @@ package fithub.app.domain;
 
 
 import fithub.app.domain.common.BaseEntity;
+import fithub.app.domain.mapping.ArticleHashTag;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -22,4 +25,7 @@ public class HashTag extends BaseEntity {
 
     @Column(columnDefinition = "VARCHAR(20)", unique = true, nullable = false)
     private String name;
+
+    @OneToMany(mappedBy = "hashTag", cascade = CascadeType.ALL)
+    private List<ArticleHashTag> articleHashTagList = new ArrayList<>();
 }
