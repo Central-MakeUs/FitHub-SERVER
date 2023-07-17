@@ -1,4 +1,4 @@
-package fithub.app.repository;
+package fithub.app.repository.ArticleRepositories;
 
 import fithub.app.domain.User;
 import fithub.app.domain.enums.SocialType;

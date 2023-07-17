@@ -9,4 +9,10 @@ import java.io.IOException;
 public interface ArticleService {
 
     Article create(ArticleRequestDto.CreateArticleDto request, User user, Integer categoryId)throws IOException;
+
+    Article getArticle(Long ArticleId);
+
+    public Boolean getIsSaved(Article article, User user);
+
+    public Boolean getIsLiked(Article article, User user);
 }

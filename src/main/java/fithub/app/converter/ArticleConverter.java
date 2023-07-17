@@ -1,11 +1,9 @@
 package fithub.app.converter;
 
 import fithub.app.aws.s3.AmazonS3Manager;
-import fithub.app.base.Code;
-import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.domain.*;
 import fithub.app.domain.mapping.ArticleHashTag;
-import fithub.app.repository.ArticleRepository;
+import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
@@ -20,9 +18,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
 @Component
@@ -109,7 +104,7 @@ public class ArticleConverter {
                 }).collect(Collectors.toList());
     }
 
-    public static ArticleResponseDto.ArticleSpecDto toArticleSpecDto(Article article, List<ArticleImage> articleImages, List<HashTag> hashTagList,
+    public static ArticleResponseDto.ArticleSpecDto toArticleSpecDto(Article article,
                                                                      Boolean isLiked, Boolean isScraped){
         return ArticleResponseDto.ArticleSpecDto.builder()
                 .articleId(article.getId())
@@ -117,9 +112,9 @@ public class ArticleConverter {
                 .userInfo(UserConverter.toArticleUserDto(article.getUser()))
                 .title(article.getTitle())
                 .contents(article.getContents())
-                .articlePictureList(PictureConverter.toPictureDtoList(articleImages))
+                .articlePictureList(PictureConverter.toPictureDtoList(article.getArticleImageList()))
                 .createdAt(article.getCreatedAt())
-                .Hashtags(HashTagConverter.toHashtagDtoList(hashTagList))
+                .Hashtags(HashTagConverter.toHashtagDtoList(article.getArticleHashTagList()))
                 .isLiked(isLiked)
                 .isScraped(isScraped)
                 .build();

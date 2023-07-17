@@ -67,7 +67,9 @@ public enum Code {
 
 
     // article error
-    CATEGORY_ERROR(HttpStatus.BAD_REQUEST,4030, "카테고리가 잘못 되었습니다.");
+    CATEGORY_ERROR(HttpStatus.BAD_REQUEST,4030, "카테고리가 잘못 되었습니다."),
+
+    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, 4031, "게시글이 존재하지 않습니다.");
 
 
     private final HttpStatus httpStatus;

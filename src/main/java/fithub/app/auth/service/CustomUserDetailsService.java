@@ -2,7 +2,7 @@
 //
 //import fithub.app.auth.dto.OAuthAttributes;
 //import fithub.app.domain.User;
-//import fithub.app.repository.UserRepository;
+//import fithub.app.repository.ArticleRepositories.UserRepository;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.security.core.GrantedAuthority;
 //import org.springframework.security.core.authority.SimpleGrantedAuthority;
