@@ -1,6 +1,6 @@
 package fithub.app.converter;
 
-import fithub.app.domain.ArticleImages;
+import fithub.app.domain.ArticleImage;
 import fithub.app.web.dto.responseDto.PictureResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,14 +12,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PictureConverter {
 
-    public static PictureResponseDto.PictureDto toPictureDto(ArticleImages articleImages){
+    public static PictureResponseDto.PictureDto toPictureDto(ArticleImage articleImage){
         return PictureResponseDto.PictureDto.builder()
-                .pictureId(articleImages.getId())
-                .pictureUrl(articleImages.getImageUrl())
+                .pictureId(articleImage.getId())
+                .pictureUrl(articleImage.getImageUrl())
                 .build();
     }
 
-    public static PictureResponseDto.PictureDtoList toPictureDtoList(List<ArticleImages> imageList){
+    public static PictureResponseDto.PictureDtoList toPictureDtoList(List<ArticleImage> imageList){
         List<PictureResponseDto.PictureDto> pictureDtoList =
                 imageList.stream()
                         .map(image -> toPictureDto(image))

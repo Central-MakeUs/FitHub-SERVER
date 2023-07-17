@@ -29,6 +29,7 @@ public class AmazonS3Manager{
 
 
     public String uploadFile(String KeyName, MultipartFile file) throws IOException {
+        System.out.println(KeyName);
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentLength(file.getSize());
         amazonS3.putObject(new PutObjectRequest(amazonConfig.getBucket(), KeyName,file.getInputStream(), metadata));

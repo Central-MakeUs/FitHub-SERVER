@@ -63,8 +63,11 @@ public enum Code {
 
     NO_PHONE_USER(HttpStatus.BAD_REQUEST,4019, "해당 계정이 없습니다."),
 
-    PASSWORD_ERROR(HttpStatus.BAD_REQUEST,4020, "비밀번호가 틀렸습니다.");
+    PASSWORD_ERROR(HttpStatus.BAD_REQUEST,4020, "비밀번호가 틀렸습니다."),
 
+
+    // article error
+    CATEGORY_ERROR(HttpStatus.BAD_REQUEST,4030, "카테고리가 잘못 되었습니다.");
 
 
     private final HttpStatus httpStatus;

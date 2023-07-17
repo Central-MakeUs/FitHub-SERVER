@@ -9,6 +9,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -62,6 +64,9 @@ public class User extends BaseEntity {
     private Long reported;
 
     private String socialId;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Article> articleList = new ArrayList<>();
 
     public User update(String name){
         this.name = name;

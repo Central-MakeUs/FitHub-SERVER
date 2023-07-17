@@ -32,6 +32,7 @@ spring:
     multipart:
       maxFileSize: 20MB
       maxRequestSize: 30MB
+      enabled: true
 jwt:
   header: Authorization
   secret: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
@@ -72,7 +73,7 @@ naver-sms:
 cloud:
   aws:
     s3:
-      bucket: field-mate
+      bucket: cmc-fithub
       folder:
         fithub-article: fithub-article
         fithub-record : fithub-record
