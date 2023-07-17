@@ -25,19 +25,19 @@ public class RecordConverter {
         staticRecordRepository = this.recordRepository;
     }
 
-    public RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, List<HashTag> hashTagList, Boolean isLiked, Boolean isScraped){
-        return RecordResponseDto.RecordSpecDto.builder()
-                .recordId(record.getId())
-                .recordCategory(ExerciseCategoryConverter.toCategoryDto(record.getExerciseCategory()))
-                .userInfo(UserConverter.toArticleUserDto(record.getUser()))
-                .contents(record.getContents())
-                .pictureUrl(record.getImageUrl())
-                .createdAt(record.getCreatedAt())
-                .Hashtags(HashTagConverter.toHashtagDtoList(hashTagList))
-                .isLiked(isLiked)
-                .isScraped(isScraped)
-                .build();
-    }
+//    public RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, List<HashTag> hashTagList, Boolean isLiked, Boolean isScraped){
+//        return RecordResponseDto.RecordSpecDto.builder()
+//                .recordId(record.getId())
+//                .recordCategory(ExerciseCategoryConverter.toCategoryDto(record.getExerciseCategory()))
+//                .userInfo(UserConverter.toArticleUserDto(record.getUser()))
+//                .contents(record.getContents())
+//                .pictureUrl(record.getImageUrl())
+//                .createdAt(record.getCreatedAt())
+//                .Hashtags(HashTagConverter.toHashtagDtoList(hashTagList))
+//                .isLiked(isLiked)
+//                .isScraped(isScraped)
+//                .build();
+//    }
 
     public RecordResponseDto.recordDto toRecordDto(Record record){
         return RecordResponseDto.recordDto.builder()
