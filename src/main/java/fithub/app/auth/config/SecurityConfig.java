@@ -43,7 +43,12 @@ public class SecurityConfig {
                         "/v3/api-docs",
                         "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/docs/**", "/users/**");
+                        "/docs/**", "/users/sms", "/users/sms/auth",
+                                "/users/sign-up","/users/sign-in"
+                        ,"/users/password","/users/login/social/kakao"
+                        ,"/users/login/social/apple","/users/exist-nickname",
+                        "/users/exercise-category"
+                );
     }
 
     @Bean

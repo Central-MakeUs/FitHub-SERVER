@@ -2,6 +2,7 @@ package fithub.app.web.controller;
 
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.base.Code;
 import fithub.app.base.ResponseDto;
 import fithub.app.converter.ExerciseCategoryConverter;
@@ -159,6 +160,7 @@ public class UserRestController {
     @Operation(summary = "핸드폰 번호를 이용한 회원가입 완료 API", description = "핸드폰 번호를 이용한 회원가입 시 사용됩니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 가입 한 사용자의 DB 상 id, nickname이 담긴 result 반환"),
+            @ApiResponse(responseCode = "4017", description = "BAD_REQUEST : 운동 카테고리가 잘못 됨"),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     public ResponseDto<UserResponseDto.JoinUserDto> signUpByPhoneNum(@RequestBody UserRequestDto.UserInfo request){
@@ -173,9 +175,21 @@ public class UserRestController {
     }
 
     @Operation(summary = "소셜로그인 회원정보 최종입력 API", description = "소셜로그인으로 가입 시 회원정보를 최종으로 기입하기 위해 사용됩니다, 토요일에 작업할게용")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 가입 한 사용자의 DB 상 id, nickname이 담긴 result 반환"),
+            @ApiResponse(responseCode = "4017", description = "BAD_REQUEST : 운동 카테고리가 잘못 됨"),
+            @ApiResponse(responseCode = "4013", description = "UNAUTHORIZED : 토큰에 해당하는 사용자가 존재하지 않음"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true)
+    })
     @PatchMapping("/users/sign-up/oauth")
-    public ResponseEntity<BaseDto.BaseResponseDto> signUpByOAuth(@RequestBody UserRequestDto.UserOAuthInfo request){
-        return null;
+    public ResponseDto<UserResponseDto.SocialInfoDto> signUpByOAuth(@RequestBody UserRequestDto.UserOAuthInfo request, @AuthUser User user){
+        logger.info("넘겨받은 사용자의 정보 : {}", request.toString());
+        User updatedUser = userService.socialInfoComplete(request, user);
+        logger.info("로그인 된 사용자의 정보 : {}", user.toString());
+        return ResponseDto.of(UserConverter.toSocialInfoDto(updatedUser));
     }
 
     @Operation(summary = "핸드폰으로 전송된 인증 번호 검증 API", description = "body에 사용자의 핸드폰 번호와 인증 번호 2개를 주세요!")
