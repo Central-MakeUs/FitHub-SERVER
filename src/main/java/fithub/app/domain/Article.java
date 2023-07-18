@@ -61,4 +61,13 @@ public class Article extends BaseEntity {
     public void setArticleHashTagList(List<ArticleHashTag> articleHashTagList){
         this.articleHashTagList = articleHashTagList;
     }
+
+    public Article likeToggle(Boolean flag){
+        if (flag)
+            this.likes += 1;
+        else
+            this.likes -= 1;
+
+        return this;
+    }
 }

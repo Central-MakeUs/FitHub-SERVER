@@ -94,7 +94,7 @@ public class ArticleResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ArticleLikeDto{
         Long articleId;
-        Long userId;
+        Long ArticleLikes;
     }
 
 

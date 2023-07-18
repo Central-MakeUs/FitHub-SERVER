@@ -34,5 +34,4 @@ public class UserExercise extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grade")
     private Grade grade;
-
 }

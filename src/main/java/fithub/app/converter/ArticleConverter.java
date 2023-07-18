@@ -181,10 +181,10 @@ public class ArticleConverter {
                 .build();
     }
 
-    public ArticleResponseDto.ArticleLikeDto toArticleLikeDto(Article article, User user){
+    public static ArticleResponseDto.ArticleLikeDto toArticleLikeDto(Article article){
         return ArticleResponseDto.ArticleLikeDto.builder()
                 .articleId(article.getId())
-                .userId(user.getId())
+                .ArticleLikes(article.getLikes())
                 .build();
     }
 

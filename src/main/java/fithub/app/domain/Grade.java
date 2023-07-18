@@ -16,6 +16,8 @@ public class Grade extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private Integer level;
+
     @Column(columnDefinition = "BIGINT DEFAULT 0")
     private Long users;
 
