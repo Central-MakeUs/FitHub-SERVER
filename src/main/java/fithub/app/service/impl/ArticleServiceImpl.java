@@ -77,6 +77,7 @@ public class ArticleServiceImpl implements ArticleService {
         Article updatedArticle;
 
         if(articleLike.isPresent()){
+            articleLike.get().getUser().getArticleLikesList().remove(articleLike.get());
             articleLikesRepository.delete(articleLike.get());
             updatedArticle = article.likeToggle(false);
         }else{
@@ -85,6 +86,7 @@ public class ArticleServiceImpl implements ArticleService {
                     .article(updatedArticle)
                     .user(user)
                     .build();
+            articleLikes.setUser(user);
             articleLikesRepository.save(articleLikes);
         }
 
