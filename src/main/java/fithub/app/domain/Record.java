@@ -4,6 +4,8 @@ package fithub.app.domain;
 import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.mapping.RecordHashTag;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -12,6 +14,8 @@ import java.util.List;
 @Builder
 @Getter
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Record extends BaseEntity {
@@ -23,7 +27,7 @@ public class Record extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(30)")
     private String contents;
 
-    @Column(columnDefinition = "INT DEFAULT 0")
+    @Column(columnDefinition = "BIGINT DEFAULT 0")
     private Long likes;
 
     private String imageUrl;
