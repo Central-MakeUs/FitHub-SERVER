@@ -65,12 +65,14 @@ public enum Code {
 
     PASSWORD_ERROR(HttpStatus.BAD_REQUEST,4020, "비밀번호가 틀렸습니다."),
 
-
-    // article error
+    // category error
     CATEGORY_ERROR(HttpStatus.BAD_REQUEST,4030, "카테고리가 잘못 되었습니다."),
 
-    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, 4031, "게시글이 존재하지 않습니다.");
+    // article error
+    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, 4031, "게시글이 존재하지 않습니다."),
 
+    // record error
+    RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, 4041, "운동 인증이 존재하지 않습니다");
 
     private final HttpStatus httpStatus;
     private final Integer code;

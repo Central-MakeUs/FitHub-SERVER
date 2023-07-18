@@ -22,7 +22,6 @@ public class RecordResponseDto {
         HashTagResponseDto.HashtagDtoList Hashtags;
         Long likes;
         Boolean isLiked;
-        Boolean isScraped;
     }
 
     @Builder
