@@ -28,6 +28,9 @@ public class ArticleRequestDto {
         @NotBlank
         String contents;
 
+        @NotBlank
+        String exerciseTag;
+
         @Size(min = 0, max = 4)
         List<String> tagList;
 
