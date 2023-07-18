@@ -117,8 +117,18 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleLikeDto(article));
     }
 
+    @Operation(summary = "게시글 저장/취소",description = "저장을 한 적이 있다면 취소, 없다면 저장하기 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 새로 바뀐 저장 갯수 응답에 포함"),
+            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true)
+    })
     @PostMapping("/articles/{articleId}/scrap")
-    public ResponseEntity<ArticleResponseDto.ArticleScrapDto> scrapArticle(@PathVariable Long id, @AuthUser User user){
-        return null;
+    public ResponseDto<ArticleResponseDto.ArticleSaveDto> scrapArticle(@PathVariable("articleId") @ExistArticle Long articleId, @AuthUser User user){
+        Article article = articleService.toggleArticleSave(articleId, user);
+        return ResponseDto.of(ArticleConverter.toArticleSaveDtoDto(article));
     }
 }
