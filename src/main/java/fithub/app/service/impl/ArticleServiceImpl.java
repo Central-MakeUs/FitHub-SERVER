@@ -67,4 +67,27 @@ public class ArticleServiceImpl implements ArticleService {
         Optional<ArticleLikes> isLiked = articleLikesRepository.findByArticleAndUser(article, user);
         return isLiked.isPresent();
     }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Article toggleArticleLike(Long articleId, User user) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new ArticleException(Code.ARTICLE_NOT_FOUND));
+        Optional<ArticleLikes> articleLike = articleLikesRepository.findByArticleAndUser(article, user);
+
+        Article updatedArticle;
+
+        if(articleLike.isPresent()){
+            articleLikesRepository.delete(articleLike.get());
+            updatedArticle = article.likeToggle(false);
+        }else{
+            updatedArticle = article.likeToggle(true);
+            ArticleLikes articleLikes = ArticleLikes.builder()
+                    .article(updatedArticle)
+                    .user(user)
+                    .build();
+            articleLikesRepository.save(articleLikes);
+        }
+
+        return updatedArticle;
+    }
 }

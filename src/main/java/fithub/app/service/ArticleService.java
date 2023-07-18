@@ -15,4 +15,6 @@ public interface ArticleService {
     public Boolean getIsSaved(Article article, User user);
 
     public Boolean getIsLiked(Article article, User user);
+
+    public Article toggleArticleLike(Long articleId, User user);
 }

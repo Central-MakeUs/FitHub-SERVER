@@ -5,6 +5,8 @@ import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.enums.Gender;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.domain.enums.Status;
+import fithub.app.domain.mapping.ArticleLikes;
+import fithub.app.domain.mapping.SavedArticle;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import lombok.*;
 
@@ -19,28 +21,6 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", phoneNum='" + phoneNum + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", profileUrl='" + profileUrl + '\'' +
-                ", name='" + name + '\'' +
-                ", gender=" + gender +
-                ", age=" + age +
-                ", isSocial=" + isSocial +
-                ", socialType=" + socialType +
-                ", password='" + password + '\'' +
-                ", marketingAgree=" + marketingAgree +
-                ", status=" + status +
-                ", inactiveDate=" + inactiveDate +
-                ", reported=" + reported +
-                ", socialId='" + socialId + '\'' +
-                ", articleList=" + articleList +
-                '}';
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -90,6 +70,19 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Article> articleList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ArticleLikes> articleLikesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<SavedArticle> savedArticleList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserExercise> userExerciseList = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "main_exercise")
+    private UserExercise mainExercise;
 
     public User update(String name){
         this.name = name;
