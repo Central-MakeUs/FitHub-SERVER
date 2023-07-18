@@ -2,6 +2,7 @@ package fithub.app.converter;
 
 import fithub.app.domain.HashTag;
 import fithub.app.domain.mapping.ArticleHashTag;
+import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.repository.HashTagRepository;
 import fithub.app.web.dto.responseDto.HashTagResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class HashTagConverter {
     }
 
     public static HashTag newHashTag(String tag){
-        HashTag newTag = HashTag.builder().name('#' + tag).articleHashTagList(new ArrayList<>()).
+        HashTag newTag = HashTag.builder().name('#' + tag).articleHashTagList(new ArrayList<>()).recordHashTagList(new ArrayList<>()).
                 build();
         HashTag savedHashTag = staticHashTagRepository.save(newTag);
         return savedHashTag;
@@ -40,6 +41,18 @@ public class HashTagConverter {
     }
 
     public static HashTagResponseDto.HashtagDtoList toHashtagDtoList(List<ArticleHashTag> hashTagList){
+        List<HashTagResponseDto.HashtagDto> hashtagDtoList =
+                hashTagList.stream()
+                        .map(hashTag -> toHashtagDto(hashTag.getHashTag()))
+                        .collect(Collectors.toList());
+
+        return HashTagResponseDto.HashtagDtoList.builder()
+                .hashtags(hashtagDtoList)
+                .size(hashtagDtoList.size())
+                .build();
+    }
+
+    public static HashTagResponseDto.HashtagDtoList toHashtagDtoListRecord(List<RecordHashTag> hashTagList){
         List<HashTagResponseDto.HashtagDto> hashtagDtoList =
                 hashTagList.stream()
                         .map(hashTag -> toHashtagDto(hashTag.getHashTag()))

@@ -5,7 +5,7 @@ import fithub.app.base.Code;
 import fithub.app.converter.common.BaseConverter;
 import fithub.app.domain.User;
 import fithub.app.base.exception.handler.UserException;
-import fithub.app.repository.ArticleRepositories.UserRepository;
+import fithub.app.repository.UserRepository;
 import fithub.app.utils.ResponseCode;
 import fithub.app.web.dto.common.BaseDto;
 import io.swagger.v3.oas.annotations.Operation;

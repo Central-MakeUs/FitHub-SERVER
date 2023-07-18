@@ -1,15 +1,23 @@
 package fithub.app.converter;
 
-import fithub.app.domain.HashTag;
-import fithub.app.domain.Record;
-import fithub.app.domain.User;
-import fithub.app.repository.RecordRepository;
+import fithub.app.aws.s3.AmazonS3Manager;
+import fithub.app.domain.*;
+import fithub.app.domain.mapping.ArticleHashTag;
+import fithub.app.domain.mapping.RecordHashTag;
+import fithub.app.repository.ExerciseCategoryRepository;
+import fithub.app.repository.RecordRepositories.RecordRepository;
+import fithub.app.web.dto.requestDto.RecordRequestDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,27 +25,87 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RecordConverter {
 
+    Logger logger = LoggerFactory.getLogger(RecordConverter.class);
+
     private final RecordRepository recordRepository;
+
+    private final ExerciseCategoryRepository exerciseCategoryRepository;
+
+    private final AmazonS3Manager amazonS3Manager;
+
     private static RecordRepository staticRecordRepository;
+
+    private static ExerciseCategoryRepository staticExerciseCategoryRepository;
+
+    private static AmazonS3Manager staticAmazonS3Manager;
+
+    private static Logger staticLogger;
 
     @PostConstruct
     public void init() {
         staticRecordRepository = this.recordRepository;
+        staticExerciseCategoryRepository = this.exerciseCategoryRepository;
+        staticAmazonS3Manager = this.amazonS3Manager;
+        staticLogger = this.logger;
     }
 
-//    public RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, List<HashTag> hashTagList, Boolean isLiked, Boolean isScraped){
-//        return RecordResponseDto.RecordSpecDto.builder()
-//                .recordId(record.getId())
-//                .recordCategory(ExerciseCategoryConverter.toCategoryDto(record.getExerciseCategory()))
-//                .userInfo(UserConverter.toArticleUserDto(record.getUser()))
-//                .contents(record.getContents())
-//                .pictureUrl(record.getImageUrl())
-//                .createdAt(record.getCreatedAt())
-//                .Hashtags(HashTagConverter.toHashtagDtoList(hashTagList))
-//                .isLiked(isLiked)
-//                .isScraped(isScraped)
-//                .build();
-//    }
+    public static Record toRecord(RecordRequestDto.CreateRecordDto request, User user, List<HashTag> hashTagList, Integer categoryId) throws IOException
+    {
+        ExerciseCategory exerciseCategory = staticExerciseCategoryRepository.findById(categoryId).get();
+        Record record = Record.builder()
+                .exerciseCategory(exerciseCategory)
+                .contents(request.getContents())
+                .user(user)
+                .recordHashTagList(new ArrayList<>())
+                .build();
+
+        staticLogger.info("인증 생성 완료");
+        record.setRecordHashTagList(toRecordHashTagList(hashTagList, record));
+        record.setUser(user);
+
+        //사진 업로드
+        MultipartFile recordImage = request.getImage();
+
+        String imageUrl = null;
+        if(recordImage != null)
+            imageUrl = uploadRecordImage(recordImage, record);
+        record.setImage(imageUrl);
+        return record;
+    }
+
+    public static String uploadRecordImage(MultipartFile recordImage, Record record) throws IOException
+    {
+        Uuid uuid = staticAmazonS3Manager.createUUID();
+        String KeyName = staticAmazonS3Manager.generateRecordKeyName(uuid, recordImage.getOriginalFilename());
+        String fileUrl = staticAmazonS3Manager.uploadFile(KeyName, recordImage);
+        staticLogger.info("S3에 업로드 한 파일의 url : {}", fileUrl);
+        return fileUrl;
+    }
+
+    private static List<RecordHashTag> toRecordHashTagList(List<HashTag> hashTagList, Record record){
+        return hashTagList.stream()
+                .map(hashTag -> {
+                    RecordHashTag recordHashTag = RecordHashTag.builder().build();
+                    recordHashTag.setRecord(record);
+                    recordHashTag.setHashTag(hashTag);
+                    return recordHashTag;
+                }).collect(Collectors.toList());
+    }
+
+    public RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, Boolean isLiked, Boolean isScraped){
+        return RecordResponseDto.RecordSpecDto.builder()
+                .recordId(record.getId())
+                .recordCategory(ExerciseCategoryConverter.toCategoryDto(record.getExerciseCategory()))
+                .userInfo(UserConverter.toRecordUserDto(record.getUser()))
+                .contents(record.getContents())
+                .pictureImage(record.getImageUrl())
+                .createdAt(record.getCreatedAt())
+                .Hashtags(HashTagConverter.toHashtagDtoListRecord(record.getRecordHashTagList()))
+                .likes(record.getLikes())
+                .isLiked(isLiked)
+                .isScraped(isScraped)
+                .build();
+    }
 
     public RecordResponseDto.recordDto toRecordDto(Record record){
         return RecordResponseDto.recordDto.builder()
@@ -61,7 +129,7 @@ public class RecordConverter {
                 .build();
     }
 
-    public RecordResponseDto.recordCreateDto toRecordCreateDto (Record record){
+    public static RecordResponseDto.recordCreateDto toRecordCreateDto (Record record){
         return RecordResponseDto.recordCreateDto.builder()
                 .recordId(record.getId())
                 .ownerId(record.getUser().getId())

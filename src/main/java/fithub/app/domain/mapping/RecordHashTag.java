@@ -24,4 +24,20 @@ public class RecordHashTag {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id")
     private Record record;
+
+    public void setRecord(Record record){
+        if (this.record != null) {
+            this.record.getRecordHashTagList().remove(this);
+        }
+        this.record = record;
+        record.getRecordHashTagList().add(this);
+    }
+
+    public void setHashTag(HashTag hashTag){
+        if (this.hashTag != null) {
+            this.hashTag.getRecordHashTagList().remove(this);
+        }
+        this.hashTag = hashTag;
+        hashTag.getRecordHashTagList().add(this);
+    }
 }

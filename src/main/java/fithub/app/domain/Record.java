@@ -2,9 +2,12 @@ package fithub.app.domain;
 
 
 import fithub.app.domain.common.BaseEntity;
+import fithub.app.domain.mapping.RecordHashTag;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @Getter
@@ -18,7 +21,7 @@ public class Record extends BaseEntity {
     private Long id;
 
     @Column(columnDefinition = "VARCHAR(30)")
-    private String Contents;
+    private String contents;
 
     @Column(columnDefinition = "INT DEFAULT 0")
     private Long likes;
@@ -41,4 +44,33 @@ public class Record extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category")
     private ExerciseCategory exerciseCategory;
+
+    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
+    private List<RecordHashTag> recordHashTagList = new ArrayList<>();
+
+    public Record setImage(String imageUrl){
+        this.imageUrl = imageUrl;
+        return this;
+    }
+
+    public void setRecordHashTagList(List<RecordHashTag> recordHashTagList){
+        this.recordHashTagList = recordHashTagList;
+    }
+
+    public void setUser(User user){
+        if (this.user != null) {
+            this.user.getRecordList().remove(this);
+        }
+        this.user = user;
+        user.getRecordList().add(this);
+    }
+
+    public Record likeToggle(Boolean flag){
+        if (flag)
+            this.likes += 1;
+        else
+            this.likes -= 1;
+
+        return this;
+    }
 }

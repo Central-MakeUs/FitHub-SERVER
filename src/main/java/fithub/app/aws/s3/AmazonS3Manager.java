@@ -50,6 +50,10 @@ public class AmazonS3Manager{
         return amazonConfig.getFithubArticle() + '/' + uuid.getUuid() + '_' + originalFilename;
     }
 
+    public String generateRecordKeyName(Uuid uuid, String originalFilename) {
+        return amazonConfig.getFithubRecord() + '/' + uuid.getUuid() + '_' + originalFilename;
+    }
+
     // 중복된 UUID가 있다면 중복이 없을때까지 재귀적으로 동작
     public Uuid createUUID() {
         Uuid savedUuid = null;
