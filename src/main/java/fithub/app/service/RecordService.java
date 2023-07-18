@@ -8,9 +8,11 @@ import java.io.IOException;
 
 public interface RecordService {
 
-    public Record create(RecordRequestDto.CreateRecordDto request, User user, Integer categoryId) throws IOException;
+    Record create(RecordRequestDto.CreateRecordDto request, User user, Integer categoryId) throws IOException;
 
-    public Record getRecord(Long recordId);
+    Record getRecord(Long recordId);
 
     Boolean getIsLiked(Record record, User user);
+
+    Record toggleRecordLike(Long recordId, User user);
 }

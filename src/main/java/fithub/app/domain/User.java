@@ -6,6 +6,7 @@ import fithub.app.domain.enums.Gender;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.domain.enums.Status;
 import fithub.app.domain.mapping.ArticleLikes;
+import fithub.app.domain.mapping.RecordLikes;
 import fithub.app.domain.mapping.SavedArticle;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import lombok.*;
@@ -82,6 +83,9 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserExercise> userExerciseList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<RecordLikes> recordLikesList = new ArrayList<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "main_exercise")

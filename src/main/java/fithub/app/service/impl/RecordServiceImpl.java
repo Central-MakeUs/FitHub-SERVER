@@ -7,6 +7,7 @@ import fithub.app.converter.RecordConverter;
 import fithub.app.domain.HashTag;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
+import fithub.app.domain.mapping.ArticleLikes;
 import fithub.app.domain.mapping.RecordLikes;
 import fithub.app.repository.HashTagRepository;
 import fithub.app.repository.RecordRepositories.RecordLikesRepository;
@@ -59,5 +60,28 @@ public class RecordServiceImpl implements RecordService {
         return isLiked.isPresent();
     }
 
+    @Override
+    @Transactional(readOnly = false)
+    public Record toggleRecordLike(Long recordId, User user) {
+        Record record = recordRepository.findById(recordId).orElseThrow(() -> new RecordException(Code.RECORD_NOT_FOUND));
+        Optional<RecordLikes> recordLike = recordLikesRepository.findByRecordAndUser(record, user);
 
+        Record updatedRecord = null;
+
+        if(recordLike.isPresent()){
+            recordLike.get().getUser().getRecordLikesList().remove(recordLike.get());
+            recordLikesRepository.delete(recordLike.get());
+            updatedRecord = record.likeToggle(false);
+        }else{
+            updatedRecord = record.likeToggle(true);
+            RecordLikes recordLikes = RecordLikes.builder()
+                    .record(record)
+                    .user(user)
+                    .build();
+            recordLikes.setUser(user);
+            recordLikesRepository.save(recordLikes);
+        }
+
+        return updatedRecord;
+    }
 }

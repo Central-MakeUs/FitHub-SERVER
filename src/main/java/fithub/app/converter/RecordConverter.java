@@ -162,10 +162,10 @@ public class RecordConverter {
                 .build();
     }
 
-    public RecordResponseDto.recordLikeDto toRecordLikeDto(Record record, User user){
+    public static RecordResponseDto.recordLikeDto toRecordLikeDto(Record record){
         return RecordResponseDto.recordLikeDto.builder()
                 .recordId(record.getId())
-                .userId(user.getId())
+                .newLikes(record.getLikes())
                 .build();
     }
 

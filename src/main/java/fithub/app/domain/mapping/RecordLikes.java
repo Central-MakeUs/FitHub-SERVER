@@ -18,13 +18,19 @@ public class RecordLikes extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id")
     private Record record;
 
+    public void setUser(User user){
+        if(this.user != null)
+            user.getRecordLikesList().remove(this);
+        this.user = user;
+        user.getRecordLikesList().add(this);
+    }
 
 }
