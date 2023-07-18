@@ -70,4 +70,13 @@ public class Article extends BaseEntity {
 
         return this;
     }
+
+    public Article saveToggle(Boolean flag){
+        if (flag)
+            this.saves += 1;
+        else
+            this.saves -= 1;
+
+        return this;
+    }
 }

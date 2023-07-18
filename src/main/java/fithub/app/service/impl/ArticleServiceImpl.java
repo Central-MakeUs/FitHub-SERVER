@@ -92,4 +92,28 @@ public class ArticleServiceImpl implements ArticleService {
 
         return updatedArticle;
     }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Article toggleArticleSave(Long articleId, User user) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new ArticleException(Code.ARTICLE_NOT_FOUND));
+        Optional<SavedArticle> savedArticle = savedArticleRepository.findByArticleAndUser(article, user);
+
+        Article updatedArticle;
+        if(savedArticle.isPresent()){
+            savedArticle.get().getUser().getArticleLikesList().remove(savedArticle.get());
+            savedArticleRepository.delete(savedArticle.get());
+            updatedArticle = article.saveToggle(false);
+        }else{
+            updatedArticle = article.saveToggle(true);
+            SavedArticle newSavedArticle = SavedArticle.builder()
+                    .article(article)
+                    .user(user)
+                    .build();
+            newSavedArticle.setUser(user);
+            savedArticleRepository.save(newSavedArticle);
+        }
+
+        return updatedArticle;
+    }
 }
