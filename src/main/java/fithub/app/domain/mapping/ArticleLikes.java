@@ -25,4 +25,12 @@ public class ArticleLikes extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
+
+    public void setUser(User user){
+        if (this.user != null) {
+            this.user.getArticleLikesList().remove(this);
+        }
+        this.user = user;
+        user.getArticleLikesList().add(this);
+    }
 }

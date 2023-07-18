@@ -28,11 +28,17 @@ public class ArticleHashTag extends BaseEntity {
     private Article article;
 
     public void setArticle(Article article){
+        if (this.article != null) {
+            this.article.getArticleHashTagList().remove(this);
+        }
         this.article = article;
         article.getArticleHashTagList().add(this);
     }
 
     public void setHashTag(HashTag hashTag){
+        if (this.hashTag != null) {
+            this.hashTag.getArticleHashTagList().remove(this);
+        }
         this.hashTag = hashTag;
         hashTag.getArticleHashTagList().add(this);
     }
