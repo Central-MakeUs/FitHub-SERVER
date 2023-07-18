@@ -146,8 +146,8 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDto.ArticleUserDto toArticleUserDto(User user){
-        return UserResponseDto.ArticleUserDto.builder()
+    public static UserResponseDto.CommunityUserInfo toCommunityUserInfo(User user){
+        return UserResponseDto.CommunityUserInfo.builder()
                 .ownerId(user.getId())
                 .ProfileUrl(user.getProfileUrl())
                 .nickname(user.getNickname())
@@ -155,14 +155,14 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDto.RecordUserDto toRecordUserDto(User user){
-        return UserResponseDto.RecordUserDto.builder()
-                .ownerId(user.getId())
-                .ProfileUrl(user.getProfileUrl())
-                .nickname(user.getNickname())
-                .mainExerciseInfo(UserExerciseConverter.toUserExerciseDto(user))
-                .build();
-    }
+//    public static UserResponseDto.RecordUserDto toRecordUserDto(User user){
+//        return UserResponseDto.RecordUserDto.builder()
+//                .ownerId(user.getId())
+//                .ProfileUrl(user.getProfileUrl())
+//                .nickname(user.getNickname())
+//                .mainExerciseInfo(UserExerciseConverter.toUserExerciseDto(user))
+//                .build();
+//    }
 
     public static UserResponseDto.JoinUserDto toJoinUserDto(User user){
         return UserResponseDto.JoinUserDto.builder()

@@ -38,14 +38,15 @@ public class RecordRestController {
 
     private final RecordService recordService;
 
-    @Operation(summary = "운동인증 상세조회 API", description = "운동인증 상세조회 API 입니다.")
+    @Operation(summary = "운동인증 상세조회 API ✔️", description = "운동인증 상세조회 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
-            @Parameter(name = "user", hidden = true)
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "recordId", description = "조회하려는 인증글의 Id(목록 조회 시 서버가 줄거임)")
     })
     @GetMapping("/records/{recordId}/spec")
     public ResponseDto<RecordResponseDto.RecordSpecDto> recordSpec(@PathVariable(name = "recordId") @ExistRecord Long recordId, @AuthUser User user){
@@ -55,34 +56,45 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordSpecDto(record, isLiked));
     }
 
-    @GetMapping("/records")
-    public ResponseEntity<RecordResponseDto.recordDtoList> recordTimeList(@RequestParam Long last){
-        return null;
-    }
-
-    @GetMapping("/records/likes")
-    public ResponseEntity<RecordResponseDto.recordDtoList> recordLikesList(@RequestParam Long last){
-        return null;
-    }
-
-    @GetMapping("/records/{categoryId}")
-    public ResponseEntity<RecordResponseDto.recordDtoList> recordCategoryTimeList(@PathVariable Long categoryId, @RequestParam Long last){
-        return null;
-    }
-
-    @GetMapping("/records/{categoryId}/likes")
-    public ResponseEntity<RecordResponseDto.recordDtoList> recordCategoryLikesList(@PathVariable Long categoryId, @RequestParam Long last){
-        return null;
-    }
-
-    @Operation(summary = "운동인증 작성 API", description = "운동인증 작성 API 입니다.")
+    @Operation(summary = "운동 인증 목록 조회 API - 최신순", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
-            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
-            @Parameter(name = "user", hidden = true)
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "categoryId", description = "운동 카테고리, 0이면 전체 조회"),
+            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤",required = false)
+    })
+    @GetMapping("/records/{categoryId}")
+    public ResponseEntity<RecordResponseDto.recordDtoList> recordTimeList(@RequestParam(name = "last",required = false) Long last, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
+        return null;
+    }
+
+    @Operation(summary = "운동 인증 목록 조회 API - 인기순", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "categoryId", description = "운동 카테고리, 0이면 전체 조회"),
+            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false)
+    })
+    @GetMapping("/records/{categoryId}likes")
+    public ResponseEntity<RecordResponseDto.recordDtoList> recordLikesList(@RequestParam(name = "last",required = false) Long last, @PathVariable(name = "categoryId") @ExistCategory In categoryId, @AuthUser User user){
+        return null;
+    }
+
+    @Operation(summary = "운동인증 작성 API ✔️ - 홈 페이지 작업 후 수정 필요", description = "운동인증 작성 API 입니다. 작성이 되는지 확인만 해주세요, 인증해서 레벨 오르는건 아직 구현 X")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "categoryId", description = "운동 카테고리"),
     })
     @PostMapping(value = "/records/{categoryId}",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseDto<RecordResponseDto.recordCreateDto> createRecord(@PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @ModelAttribute @Valid RecordRequestDto.CreateRecordDto request, @AuthUser User user) throws IOException
@@ -94,38 +106,68 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordCreateDto(record));
     }
 
-    @PatchMapping("/record/{id}")
-    public ResponseEntity<RecordResponseDto.recordUpdateDto> updateRecord(@PathVariable Long id, @RequestBody RecordRequestDto.updateRecordDto request, @AuthUser User user){
+    @Operation(summary = "운동인증 수정 API", description = "운동인증 수정 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4042", description = "FORBIDDEN : 다른 사람의 운동인증", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "recordId", description = "운동 인증 아이디"),
+    })
+    @PatchMapping(value = "/record/{recordId}",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseEntity<RecordResponseDto.recordUpdateDto> updateRecord(@PathVariable(name = "recordId") Long recordId, @ModelAttribute RecordRequestDto.updateRecordDto request, @AuthUser User user){
         return null;
     }
 
-    @DeleteMapping("/record/{id}")
-    public ResponseEntity<RecordResponseDto.recordDeleteDto> deleteRecord(@PathVariable Long id, @AuthUser User user){
+
+    @Operation(summary = "운동인증 삭제 API", description = "운동인증 삭제 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4042", description = "FORBIDDEN : 다른 사람의 운동인증", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "recordId", description = "운동 인증 아이디"),
+    })
+    @DeleteMapping("/record/{recordId}")
+    public ResponseEntity<RecordResponseDto.recordDeleteDto> deleteRecord(@PathVariable(name = "recordId") Long recordId, @AuthUser User user){
         return null;
     }
 
+    @Operation(summary = "운동인증 한번에 여러개 삭제 API", description = "운동인증 한번에 여러개 삭제 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4042", description = "FORBIDDEN : 다른 사람의 운동인증이 하나 라도 있을 때", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
     @DeleteMapping("/records")
     public ResponseEntity<RecordResponseDto.recordDeleteDtoList> deleteListRecord(@RequestBody RecordRequestDto.deleteListRecordDto request, @AuthUser User user){
         return null;
     }
 
-    @Operation(summary = "운동인증 좋아요 누르기/취소",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")
+    @Operation(summary = "운동인증 좋아요 누르기/취소 ✔️",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 새로 바뀐 좋아요 갯수 응답에 포함"),
             @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
-            @Parameter(name = "user", hidden = true)
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "recordId", description = "운동 인증 아이디"),
     })
     @PostMapping("/records/{recordId}/likes")
     public ResponseDto<RecordResponseDto.recordLikeDto> likeRecord(@PathVariable(name = "recordId") @ExistRecord Long recordId, @AuthUser User user){
         Record record = recordService.toggleRecordLike(recordId, user);
         return ResponseDto.of(RecordConverter.toRecordLikeDto(record));
     }
-
-//    @PostMapping("/record/{id}/scrap")
-//    public ResponseEntity<RecordResponseDto.recordScrapDto> scrapRecord(@PathVariable Long id, @AuthUser User user){
-//        return null;
-//    }
 }

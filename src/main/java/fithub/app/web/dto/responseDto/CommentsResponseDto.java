@@ -13,7 +13,7 @@ public class CommentsResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CommentsDto{
         Long commentId;
-        UserResponseDto.ArticleUserDto userInfo;
+        UserResponseDto.CommunityUserInfo userInfo;
         String contents;
         Long likes;
         LocalDateTime createdAt;
@@ -61,6 +61,6 @@ public class CommentsResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CommentLikeDto{
         Long commentId;
-        Long userId;
+        Long newLikes;
     }
 }

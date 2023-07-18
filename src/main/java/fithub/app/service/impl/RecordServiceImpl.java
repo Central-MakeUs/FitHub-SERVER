@@ -40,7 +40,7 @@ public class RecordServiceImpl implements RecordService {
     {
         String exerciseTag = request.getExerciseTag();
         HashTag exerciseHash = hashTagRepository.findByName('#' + exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
-        List<HashTag> hashTagList = request.getTagList().stream()
+        List<HashTag> hashTagList = request.getHashTagList().stream()
                 .map(tag -> hashTagRepository.findByName('#' + tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
                 .collect(Collectors.toList());
 
