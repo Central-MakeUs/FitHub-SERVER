@@ -92,7 +92,7 @@ public class RecordConverter {
                 }).collect(Collectors.toList());
     }
 
-    public RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, Boolean isLiked, Boolean isScraped){
+    public static RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, Boolean isLiked){
         return RecordResponseDto.RecordSpecDto.builder()
                 .recordId(record.getId())
                 .recordCategory(ExerciseCategoryConverter.toCategoryDto(record.getExerciseCategory()))
@@ -103,7 +103,6 @@ public class RecordConverter {
                 .Hashtags(HashTagConverter.toHashtagDtoListRecord(record.getRecordHashTagList()))
                 .likes(record.getLikes())
                 .isLiked(isLiked)
-                .isScraped(isScraped)
                 .build();
     }
 

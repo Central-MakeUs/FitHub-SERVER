@@ -7,6 +7,7 @@ import fithub.app.domain.Record;
 import fithub.app.domain.User;
 import fithub.app.service.RecordService;
 import fithub.app.validation.annotation.ExistCategory;
+import fithub.app.validation.annotation.ExistRecord;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
 import io.swagger.models.auth.In;
@@ -37,10 +38,21 @@ public class RecordRestController {
 
     private final RecordService recordService;
 
+    @Operation(summary = "운동인증 상세조회 API", description = "운동인증 상세조회 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true)
+    })
+    @GetMapping("/records/{recordId}/spec")
+    public ResponseDto<RecordResponseDto.RecordSpecDto> recordSpec(@PathVariable(name = "recordId") @ExistRecord Long recordId, @AuthUser User user){
 
-    @GetMapping("/record/{id}")
-    public ResponseEntity<RecordResponseDto.recordDto> recordSpec(@PathVariable Long id){
-        return null;
+        Record record = recordService.getRecord(recordId);
+        Boolean isLiked = recordService.getIsLiked(record, user);
+        return ResponseDto.of(RecordConverter.toRecordSpecDto(record, isLiked));
     }
 
     @GetMapping("/records")
