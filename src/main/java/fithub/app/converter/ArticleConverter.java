@@ -184,14 +184,14 @@ public class ArticleConverter {
     public static ArticleResponseDto.ArticleLikeDto toArticleLikeDto(Article article){
         return ArticleResponseDto.ArticleLikeDto.builder()
                 .articleId(article.getId())
-                .ArticleLikes(article.getLikes())
+                .articleLikes(article.getLikes())
                 .build();
     }
 
-    public ArticleResponseDto.ArticleScrapDto toArticleScrapDto(Article article, User user){
-        return ArticleResponseDto.ArticleScrapDto.builder()
+    public static ArticleResponseDto.ArticleSaveDto toArticleSaveDtoDto(Article article){
+        return ArticleResponseDto.ArticleSaveDto.builder()
                 .articleId(article.getId())
-                .userId(user.getId())
+                .articleSaves(article.getSaves())
                 .build();
     }
 }
