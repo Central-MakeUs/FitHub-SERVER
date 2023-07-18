@@ -26,7 +26,7 @@ public class HashTagConverter {
     }
 
     public static HashTag newHashTag(String tag){
-        HashTag newTag = HashTag.builder().name(tag).articleHashTagList(new ArrayList<>()).
+        HashTag newTag = HashTag.builder().name('#' + tag).articleHashTagList(new ArrayList<>()).
                 build();
         HashTag savedHashTag = staticHashTagRepository.save(newTag);
         return savedHashTag;

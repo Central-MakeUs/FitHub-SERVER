@@ -151,6 +151,7 @@ public class UserConverter {
                 .ownerId(user.getId())
                 .ProfileUrl(user.getProfileUrl())
                 .nickname(user.getNickname())
+                .mainExerciseInfo(UserExerciseConverter.toUserExerciseDto(user))
                 .build();
     }
 

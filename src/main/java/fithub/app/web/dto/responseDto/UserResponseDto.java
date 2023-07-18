@@ -1,5 +1,6 @@
 package fithub.app.web.dto.responseDto;
 
+import fithub.app.domain.UserExercise;
 import lombok.*;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class UserResponseDto {
         Long ownerId;
         String ProfileUrl;
         String nickname;
+        UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
     }
 
     @Builder

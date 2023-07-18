@@ -39,8 +39,8 @@ public class ArticleRestController {
 
     @Operation(summary = "게시글 상세조회 API", description = "게시글의 id를 통해 상세조회하는 API 입니다. 댓글 정보는 api를 하나 더 호출해주세요!")
     @ApiResponses({
-            @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 가입 한 사용자의 DB 상 id, nickname이 담긴 result 반환"),
-            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다."),
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 응답이 복잡하니 주의!"),
+            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
@@ -80,7 +80,7 @@ public class ArticleRestController {
             @Parameter(name = "user", hidden = true)
     })
     @PostMapping(value = "/articles/{categoryId}",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseDto<ArticleResponseDto.ArticleCreateDto> createArticle(@ModelAttribute @Valid ArticleRequestDto.CreateArticleDto request, @PathVariable @ExistCategory Integer categoryId, @AuthUser User user) throws IOException {
+    public ResponseDto<ArticleResponseDto.ArticleCreateDto> createArticle(@ModelAttribute ArticleRequestDto.CreateArticleDto request, @PathVariable @ExistCategory Integer categoryId, @AuthUser User user) throws IOException {
 
         logger.info("사용자가 건네준 정보 : {}", request.toString());
         Article article = articleService.create(request, user, categoryId);
@@ -102,9 +102,19 @@ public class ArticleRestController {
         return null;
     }
 
+    @Operation(summary = "게시글 좋아요 누르기/취소",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 새로 바뀐 좋아요 갯수 응답에 포함"),
+            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true)
+    })
     @PostMapping("/articles/{articleId}/likes")
-    public ResponseEntity<ArticleResponseDto.ArticleLikeDto> likeArticle(@PathVariable Long id, @AuthUser User user){
-        return null;
+    public ResponseDto<ArticleResponseDto.ArticleLikeDto> likeArticle(@PathVariable(name = "articleId") @ExistArticle Long articleId, @AuthUser User user){
+        Article article = articleService.toggleArticleLike(articleId, user);
+        return ResponseDto.of(ArticleConverter.toArticleLikeDto(article));
     }
 
     @PostMapping("/articles/{articleId}/scrap")

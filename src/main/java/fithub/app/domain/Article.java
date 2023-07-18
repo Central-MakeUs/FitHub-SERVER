@@ -34,7 +34,10 @@ public class Article extends BaseEntity {
     private Long reported;
 
     @Column(columnDefinition = "BIGINT DEFAULT 0")
-    private Long saved;
+    private Long saves;
+
+    @Column(columnDefinition = "BIGINT DEFAULT 0")
+    private Long likes;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<ArticleImage> articleImageList = new ArrayList<>();
@@ -57,5 +60,14 @@ public class Article extends BaseEntity {
 
     public void setArticleHashTagList(List<ArticleHashTag> articleHashTagList){
         this.articleHashTagList = articleHashTagList;
+    }
+
+    public Article likeToggle(Boolean flag){
+        if (flag)
+            this.likes += 1;
+        else
+            this.likes -= 1;
+
+        return this;
     }
 }
