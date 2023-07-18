@@ -88,7 +88,7 @@ public class RecordResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class recordLikeDto{
         Long recordId;
-        Long userId;
+        Long newLikes;
     }
 
     @Builder

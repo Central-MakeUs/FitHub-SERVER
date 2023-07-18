@@ -109,13 +109,23 @@ public class RecordRestController {
         return null;
     }
 
-    @PostMapping("/record/{id}/likes")
-    public ResponseEntity<RecordResponseDto.recordLikeDto> likeRecord(@PathVariable Long id, @AuthUser User user){
-        return null;
+    @Operation(summary = "운동인증 좋아요 누르기/취소",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 새로 바뀐 좋아요 갯수 응답에 포함"),
+            @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true)
+    })
+    @PostMapping("/records/{recordId}/likes")
+    public ResponseDto<RecordResponseDto.recordLikeDto> likeRecord(@PathVariable(name = "recordId") @ExistRecord Long recordId, @AuthUser User user){
+        Record record = recordService.toggleRecordLike(recordId, user);
+        return ResponseDto.of(RecordConverter.toRecordLikeDto(record));
     }
 
-    @PostMapping("/record/{id}/scrap")
-    public ResponseEntity<RecordResponseDto.recordScrapDto> scrapRecord(@PathVariable Long id, @AuthUser User user){
-        return null;
-    }
+//    @PostMapping("/record/{id}/scrap")
+//    public ResponseEntity<RecordResponseDto.recordScrapDto> scrapRecord(@PathVariable Long id, @AuthUser User user){
+//        return null;
+//    }
 }
