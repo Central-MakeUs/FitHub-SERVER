@@ -13,12 +13,13 @@ public class RecordRequestDto {
     @Getter
     @Setter
     public static class CreateRecordDto{
+
         @Override
         public String toString() {
             return "CreateRecordDto{" +
                     "contents='" + contents + '\'' +
-                    ", tagList=" + tagList +
                     ", exerciseTag='" + exerciseTag + '\'' +
+                    ", hashTagList=" + hashTagList +
                     ", image=" + image +
                     '}';
         }
@@ -26,23 +27,33 @@ public class RecordRequestDto {
         @NotBlank
         String contents;
 
-        @Size(min = 0, max = 4)
-        List<String> tagList;
-
         @NotBlank
         String exerciseTag;
+
+        @Size(min = 0, max = 4)
+        List<String> hashTagList;
 
         MultipartFile image;
     }
 
     @Getter @Setter
     public static class updateRecordDto{
-        String title;
+        @NotBlank
         String contents;
+        @NotBlank
+        Integer category;
+        @NotBlank
+        String exerciseTag;
+        @Size(min = 0, max = 4)
+        List<String> hashTagList;
+
+        MultipartFile newImage;
+
+        String remainImageUrl;
     }
 
     @Getter @Setter
     public static class deleteListRecordDto{
-        Long[] recordIdList;
+        List<Long> recordIdList;
     }
 }

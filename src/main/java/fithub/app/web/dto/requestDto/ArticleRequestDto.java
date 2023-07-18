@@ -40,12 +40,29 @@ public class ArticleRequestDto {
 
     @Getter @Setter
     public static class UpdateArticleDto{
+        @NotBlank
         String title;
+        @NotBlank
         String contents;
+
+        @NotBlank
+        Integer category;
+
+        @NotBlank
+        String exerciseTag;
+
+        @Size(min = 0, max = 4)
+        List<String> hashTagList;
+
+        @Size(min = 0, max = 10)
+        List<MultipartFile> newPictureList = new ArrayList<>();
+
+        List<String> remainPictureUrlList = new ArrayList<>();
+
     }
 
     @Getter @Setter
     public static class DeleteListArticleDto{
-        Long[] articleIdList;
+        List<Long> articleIdList;
     }
 }

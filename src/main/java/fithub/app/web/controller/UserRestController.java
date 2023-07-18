@@ -5,10 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.base.Code;
 import fithub.app.base.ResponseDto;
-import fithub.app.converter.ExerciseCategoryConverter;
 
 import fithub.app.converter.UserConverter;
-import fithub.app.converter.common.BaseConverter;
 import fithub.app.domain.ExerciseCategory;
 import fithub.app.domain.User;
 import fithub.app.service.AppleService;
@@ -16,9 +14,7 @@ import fithub.app.service.UserService;
 import fithub.app.sms.dto.SmsResponseDto;
 import fithub.app.sms.service.SmsService;
 import fithub.app.utils.OAuthResult;
-import fithub.app.utils.ResponseCode;
 import fithub.app.web.dto.requestDto.UserRequestDto;
-import fithub.app.web.dto.common.BaseDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,8 +27,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
@@ -58,7 +52,7 @@ public class UserRestController {
 
     private final SmsService smsService;
 
-    @Operation(summary = "카카오 소셜 로그인", description = "카카오 소셜 로그인 API 입니다.")
+    @Operation(summary = "카카오 소셜 로그인 ✔️", description = "카카오 소셜 로그인 API 입니다.")
     @Parameters({
             @Parameter(name = "member", hidden = true)
     })
@@ -84,7 +78,7 @@ public class UserRestController {
         return ResponseDto.of(responseCode, result);
     }
 
-    @Operation(summary = "애플 소셜 로그인", description = "애플 소셜 로그인 API 입니다.")
+    @Operation(summary = "애플 소셜 로그인 ✔️", description = "애플 소셜 로그인 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2004", description = "OK : 정상응답, 로그인 프로세스"),
             @ApiResponse(responseCode = "2005", description = "OK : 정상응답, 회원가입 프로세스"),
@@ -118,7 +112,7 @@ public class UserRestController {
     }
 
 
-    @Operation(summary = "닉네임 중복 검사", description = "닉네임 중복검사 API 입니다.")
+    @Operation(summary = "닉네임 중복 검사 ✔️", description = "닉네임 중복검사 API 입니다.")
     @GetMapping("/users/exist-nickname")
     @ApiResponses({
             @ApiResponse(responseCode = "2010", description = "OK : 정상응답, 닉네임이 이미 사용중인 경우!"),
@@ -143,7 +137,7 @@ public class UserRestController {
         return ResponseDto.of(responseCode, nickname);
     }
 
-    @Operation(summary = "운동 카테고리 리스트 API", description = "회원가입 시 선호하는 카테고리를 선택할 때 목록을 받아오기 위해 사용됩니다.")
+    @Operation(summary = "운동 카테고리 리스트 API ✔️", description = "회원가입 시 선호하는 카테고리를 선택할 때 목록을 받아오기 위해 사용됩니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답")
     })
@@ -157,7 +151,7 @@ public class UserRestController {
     }
 
     @PostMapping("/users/sign-up")
-    @Operation(summary = "핸드폰 번호를 이용한 회원가입 완료 API", description = "핸드폰 번호를 이용한 회원가입 시 사용됩니다.")
+    @Operation(summary = "핸드폰 번호를 이용한 회원가입 완료 API ✔️", description = "핸드폰 번호를 이용한 회원가입 시 사용됩니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 가입 한 사용자의 DB 상 id, nickname이 담긴 result 반환"),
             @ApiResponse(responseCode = "4017", description = "BAD_REQUEST : 운동 카테고리가 잘못 됨"),
@@ -174,7 +168,7 @@ public class UserRestController {
         return ResponseDto.of(createdUser);
     }
 
-    @Operation(summary = "소셜로그인 회원정보 최종입력 API", description = "소셜로그인으로 가입 시 회원정보를 최종으로 기입하기 위해 사용됩니다, 토요일에 작업할게용")
+    @Operation(summary = "소셜로그인 회원정보 최종입력 API ✔️", description = "소셜로그인으로 가입 시 회원정보를 최종으로 기입하기 위해 사용됩니다, 토요일에 작업할게용")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 가입 한 사용자의 DB 상 id, nickname이 담긴 result 반환"),
             @ApiResponse(responseCode = "4017", description = "BAD_REQUEST : 운동 카테고리가 잘못 됨"),
@@ -192,7 +186,7 @@ public class UserRestController {
         return ResponseDto.of(UserConverter.toSocialInfoDto(updatedUser));
     }
 
-    @Operation(summary = "핸드폰으로 전송된 인증 번호 검증 API", description = "body에 사용자의 핸드폰 번호와 인증 번호 2개를 주세요!")
+    @Operation(summary = "핸드폰으로 전송된 인증 번호 검증 API ✔️", description = "body에 사용자의 핸드폰 번호와 인증 번호 2개를 주세요!")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 인증 성공"),
             @ApiResponse(responseCode = "4014", description = "UNAUTHORIZED 인증 번호가 틀린 경우", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -207,7 +201,7 @@ public class UserRestController {
         return ResponseDto.of(authNumResultDto);
     }
 
-    @Operation(summary = "핸드폰 인증번호 생성 API", description = "사용자의 번호를 body에 넘겨 줘 인증번호가 문자로 송신되게 합니다.")
+    @Operation(summary = "핸드폰 인증번호 생성 API ✔️", description = "사용자의 번호를 body에 넘겨 줘 인증번호가 문자로 송신되게 합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
@@ -220,7 +214,7 @@ public class UserRestController {
         return ResponseDto.of(data);
     }
 
-    @Operation(summary = "비밀번호 찾기 단계 핸드폰 인증 API",description = "비밀번호를 찾기 전 핸드폰 인증을 하는 단계입니다.")
+    @Operation(summary = "비밀번호 찾기 단계 핸드폰 인증 API ✔️",description = "비밀번호를 찾기 전 핸드폰 인증을 하는 단계입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4019", description = "BAD_REQUEST : 가입한 회원이 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -237,7 +231,7 @@ public class UserRestController {
         return ResponseDto.of(data);
     }
 
-    @Operation(summary = "비밀번호 변경 API",description = "유저 식별을 위해 앞서 입력한 핸드폰 번호와 새 비밀번호를 주세요.")
+    @Operation(summary = "비밀번호 변경 API ✔️",description = "유저 식별을 위해 앞서 입력한 핸드폰 번호와 새 비밀번호를 주세요.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4019", description = "BAD_REQUEST : 가입한 회원이 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -249,7 +243,7 @@ public class UserRestController {
         return ResponseDto.of(UserConverter.toPassChangeDto(request.getNewPassword()));
     }
 
-    @Operation(summary = "로그인 API", description = "로그인 API입니다. 비밀번호를 주세요")
+    @Operation(summary = "로그인 API ✔️", description = "로그인 API입니다. 비밀번호를 주세요")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4019", description = "BAD_REQUEST : 가입한 회원이 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),

@@ -109,7 +109,7 @@ public class ArticleConverter {
         return ArticleResponseDto.ArticleSpecDto.builder()
                 .articleId(article.getId())
                 .articleCategory(ExerciseCategoryConverter.toCategoryDto(article.getExerciseCategory()))
-                .userInfo(UserConverter.toArticleUserDto(article.getUser()))
+                .userInfo(UserConverter.toCommunityUserInfo(article.getUser()))
                 .title(article.getTitle())
                 .contents(article.getContents())
                 .articlePictureList(PictureConverter.toPictureDtoList(article.getArticleImageList()))
@@ -122,28 +122,28 @@ public class ArticleConverter {
                 .build();
     }
 
-    public static ArticleResponseDto.ArticleDto toArticleDto(Article article){
-        return ArticleResponseDto.ArticleDto.builder()
-                .articleId(article.getId())
-                .articleCategory(ExerciseCategoryConverter.toCategoryDto(article.getExerciseCategory()))
-                .title(article.getTitle())
-                .comments(article.getComments())
-                .views(article.getViews())
-                .createdAt(article.getCreatedAt())
-                .build();
-    }
+//    public static ArticleResponseDto.ArticleDto toArticleDto(Article article){
+//        return ArticleResponseDto.ArticleDto.builder()
+//                .articleId(article.getId())
+//                .articleCategory(ExerciseCategoryConverter.toCategoryDto(article.getExerciseCategory()))
+//                .title(article.getTitle())
+//                .comments(article.getComments())
+//                .views(article.getViews())
+//                .createdAt(article.getCreatedAt())
+//                .build();
+//    }
 
-    ArticleResponseDto.ArticleDtoList toArticleDtoList(List<Article> articleList){
-        List<ArticleResponseDto.ArticleDto> articleDtoList =
-                articleList.stream()
-                        .map(article -> toArticleDto(article))
-                        .collect(Collectors.toList());
-
-        return ArticleResponseDto.ArticleDtoList.builder()
-                .articleList(articleDtoList)
-                .size(articleDtoList.size())
-                .build();
-    }
+//    ArticleResponseDto.ArticleDtoList toArticleDtoList(List<Article> articleList){
+//        List<ArticleResponseDto.ArticleDto> articleDtoList =
+//                articleList.stream()
+//                        .map(article -> toArticleDto(article))
+//                        .collect(Collectors.toList());
+//
+//        return ArticleResponseDto.ArticleDtoList.builder()
+//                .articleList(articleDtoList)
+//                .size(articleDtoList.size())
+//                .build();
+//    }
 
     public static ArticleResponseDto.ArticleCreateDto toArticleCreateDto(Article article){
         return ArticleResponseDto.ArticleCreateDto.builder()

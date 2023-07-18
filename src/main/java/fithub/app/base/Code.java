@@ -70,9 +70,17 @@ public enum Code {
 
     // article error
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, 4031, "게시글이 존재하지 않습니다."),
+    ARTICLE_FORBIDDEN(HttpStatus.FORBIDDEN, 4032, "다른 사람의 게시글"),
 
     // record error
-    RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, 4041, "운동 인증이 존재하지 않습니다");
+    RECORD_NOT_FOUND(HttpStatus.NOT_FOUND, 4041, "운동 인증이 존재하지 않습니다"),
+    RECORD_FORBIDDEN(HttpStatus.FORBIDDEN, 4042, "다른 사람의 운동 인증"),
+
+    //comments error
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, 4051, "댓글이 존재하지 않습니다."),
+    COMMENTS_FORBIDDEN(HttpStatus.FORBIDDEN, 4052, "다른 사람의 댓글 입니다."),
+    COMMENTS_BAD_REQUEST(HttpStatus.BAD_REQUEST, 4053, "url에 type을 확인해주세요.");
+
 
     private final HttpStatus httpStatus;
     private final Integer code;
