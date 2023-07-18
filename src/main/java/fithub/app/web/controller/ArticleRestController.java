@@ -76,6 +76,11 @@ public class ArticleRestController {
     }
 
     @Operation(summary = "게시글 추가 API", description = "게시글 추가 API 입니다. 사진 여러 장을 한번에 보내 주세요")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
     @Parameters({
             @Parameter(name = "user", hidden = true)
     })

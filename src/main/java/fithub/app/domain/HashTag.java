@@ -3,6 +3,7 @@ package fithub.app.domain;
 
 import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.mapping.ArticleHashTag;
+import fithub.app.domain.mapping.RecordHashTag;
 import lombok.*;
 
 import javax.persistence.*;
@@ -28,4 +29,7 @@ public class HashTag extends BaseEntity {
 
     @OneToMany(mappedBy = "hashTag", cascade = CascadeType.ALL)
     private List<ArticleHashTag> articleHashTagList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "hashTag", cascade = CascadeType.ALL)
+    private List<RecordHashTag> recordHashTagList = new ArrayList<>();
 }

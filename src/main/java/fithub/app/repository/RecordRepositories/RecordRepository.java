@@ -1,4 +1,4 @@
-package fithub.app.repository;
+package fithub.app.repository.RecordRepositories;
 
 import fithub.app.domain.Record;
 import org.springframework.data.jpa.repository.JpaRepository;

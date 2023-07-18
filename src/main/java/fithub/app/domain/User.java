@@ -72,6 +72,9 @@ public class User extends BaseEntity {
     private List<Article> articleList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Record> recordList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<ArticleLikes> articleLikesList = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
