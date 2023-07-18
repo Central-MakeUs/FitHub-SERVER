@@ -11,7 +11,7 @@ import fithub.app.domain.mapping.ExercisePreference;
 import fithub.app.base.exception.handler.UserException;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.ExercisePreferenceRepository;
-import fithub.app.repository.ArticleRepositories.UserRepository;
+import fithub.app.repository.UserRepository;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;

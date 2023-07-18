@@ -6,7 +6,7 @@ import fithub.app.domain.User;
 import fithub.app.domain.enums.Gender;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.base.exception.handler.UserException;
-import fithub.app.repository.ArticleRepositories.UserRepository;
+import fithub.app.repository.UserRepository;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
@@ -148,6 +148,15 @@ public class UserConverter {
 
     public static UserResponseDto.ArticleUserDto toArticleUserDto(User user){
         return UserResponseDto.ArticleUserDto.builder()
+                .ownerId(user.getId())
+                .ProfileUrl(user.getProfileUrl())
+                .nickname(user.getNickname())
+                .mainExerciseInfo(UserExerciseConverter.toUserExerciseDto(user))
+                .build();
+    }
+
+    public static UserResponseDto.RecordUserDto toRecordUserDto(User user){
+        return UserResponseDto.RecordUserDto.builder()
                 .ownerId(user.getId())
                 .ProfileUrl(user.getProfileUrl())
                 .nickname(user.getNickname())

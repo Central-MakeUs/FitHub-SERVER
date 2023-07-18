@@ -34,6 +34,17 @@ public class UserResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class RecordUserDto{
+        Long ownerId;
+        String ProfileUrl;
+        String nickname;
+        UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class UserListDto{
         private List<UserDto> userList;
         private Integer size;

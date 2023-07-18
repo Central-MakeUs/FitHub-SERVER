@@ -15,11 +15,12 @@ public class RecordResponseDto {
     public static class RecordSpecDto{
         Long recordId;
         ExerciseCategoryResponseDto.CategoryDto recordCategory;
-        UserResponseDto.ArticleUserDto userInfo;
+        UserResponseDto.RecordUserDto userInfo;
         String contents;
-        String pictureUrl;
+        String pictureImage;
         LocalDateTime createdAt;
         HashTagResponseDto.HashtagDtoList Hashtags;
+        Long likes;
         Boolean isLiked;
         Boolean isScraped;
     }
