@@ -31,7 +31,7 @@ public class TokenProvider implements InitializingBean {
 
     private final String AUTHORITIES_KEY;
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
+        public static final String AUTHORIZATION_HEADER = "Authorization";
 
     private final String secret;
 

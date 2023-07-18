@@ -33,6 +33,9 @@ public class Record extends BaseEntity {
     private String imageUrl;
 
     @Column(columnDefinition = "BIGINT DEFAULT 0")
+    private Long comments;
+
+    @Column(columnDefinition = "BIGINT DEFAULT 0")
     private Long dailyLikes;
 
     @Column(columnDefinition = "BIGINT DEFAULT 0")

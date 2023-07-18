@@ -27,7 +27,7 @@ public class CommentsConverter {
     public CommentsResponseDto.CommentsDto toCommentsDto(Comments comments) {
         return CommentsResponseDto.CommentsDto.builder()
                 .commentId(comments.getId())
-                .userInfo(UserConverter.toArticleUserDto(comments.getUser()))
+                .userInfo(UserConverter.toCommunityUserInfo(comments.getUser()))
                 .contents(comments.getContents())
                 .likes(comments.getLikes())
                 .createdAt(comments.getCreatedAt())
@@ -68,10 +68,10 @@ public class CommentsConverter {
                 .build();
     }
 
-    public CommentsResponseDto.CommentLikeDto toCommentLikeDto(Comments comments, User user){
+    public CommentsResponseDto.CommentLikeDto toCommentLikeDto(Comments comments){
         return CommentsResponseDto.CommentLikeDto.builder()
                 .commentId(comments.getId())
-                .userId(user.getId())
+                .newLikes(comments.getLikes())
                 .build();
     }
 }

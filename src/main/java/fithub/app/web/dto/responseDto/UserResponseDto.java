@@ -1,6 +1,8 @@
 package fithub.app.web.dto.responseDto;
 
 import fithub.app.domain.UserExercise;
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.util.List;
@@ -17,28 +19,6 @@ public class UserResponseDto {
         private String name;
         private String nickname;
         private String profileUrl;
-    }
-
-    @Builder
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class ArticleUserDto{
-        Long ownerId;
-        String ProfileUrl;
-        String nickname;
-        UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
-    }
-
-    @Builder
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class RecordUserDto{
-        Long ownerId;
-        String ProfileUrl;
-        String nickname;
-        UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
     }
 
     @Builder
@@ -91,5 +71,16 @@ public class UserResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class LoginDto{
         private String accessToken;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class CommunityUserInfo{
+        Long ownerId;
+        String ProfileUrl;
+        String nickname;
+        UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
     }
 }

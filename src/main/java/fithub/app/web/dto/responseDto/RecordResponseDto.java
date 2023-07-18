@@ -1,5 +1,7 @@
 package fithub.app.web.dto.responseDto;
 
+import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -15,7 +17,7 @@ public class RecordResponseDto {
     public static class RecordSpecDto{
         Long recordId;
         ExerciseCategoryResponseDto.CategoryDto recordCategory;
-        UserResponseDto.RecordUserDto userInfo;
+        UserResponseDto.CommunityUserInfo userInfo;
         String contents;
         String pictureImage;
         LocalDateTime createdAt;
@@ -29,10 +31,18 @@ public class RecordResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class recordDto{
+        @Schema(description = "인증 글의 아이디")
         Long recordId;
-        ExerciseCategoryResponseDto.CategoryDto recordCategory;
+        UserResponseDto.CommunityUserInfo userInfo;
+        @Schema(description = "사진 url")
         String pictureUrl;
+        @Schema(description = "운동 태그")
+        String exerciseTag;
+        @Schema(description = "좋아요 갯수")
         Long likes;
+        @Schema(description = "댓글 갯수")
+        Long comments;
+        @Schema(description = "작성 시간")
         LocalDateTime createdAt;
     }
 
@@ -89,24 +99,5 @@ public class RecordResponseDto {
     public static class recordLikeDto{
         Long recordId;
         Long newLikes;
-    }
-
-    @Builder
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class recordScrapDto{
-        Long recordId;
-        Long userId;
-    }
-
-
-    @Builder
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class recordPictureUploadDto{
-        Long articleId;
-        String pictureUrl;
     }
 }
