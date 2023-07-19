@@ -40,6 +40,20 @@ public class ArticleRequestDto {
 
     @Getter @Setter
     public static class UpdateArticleDto{
+
+        @Override
+        public String toString() {
+            return "UpdateArticleDto{" +
+                    "title='" + title + '\'' +
+                    ", contents='" + contents + '\'' +
+                    ", category=" + category +
+                    ", exerciseTag='" + exerciseTag + '\'' +
+                    ", hashTagList=" + hashTagList +
+                    ", newPictureList=" + newPictureList +
+                    ", remainPictureUrlList=" + remainPictureUrlList +
+                    '}';
+        }
+
         @NotBlank
         String title;
         @NotBlank

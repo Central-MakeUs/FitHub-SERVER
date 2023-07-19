@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -105,7 +106,7 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleCreateDto(article));
     }
 
-    @Operation(summary = "게시글 수정 API", description = "게시글 수정 API 입니다.")
+    @Operation(summary = "게시글 수정 API ✔️", description = "게시글 수정 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -117,11 +118,15 @@ public class ArticleRestController {
             @Parameter(name = "articleId", description = "게시글 아이디")
     })
     @PatchMapping(value = "/articles/{articleId}",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<ArticleResponseDto.ArticleUpdateDto> updateArticle(@PathVariable Long id ,@ModelAttribute ArticleRequestDto.UpdateArticleDto request, @AuthUser User user){
-        return null;
+    public ResponseDto<ArticleResponseDto.ArticleUpdateDto> updateArticle(@PathVariable(name = "articleId") Long articleId ,@ModelAttribute ArticleRequestDto.UpdateArticleDto request, @AuthUser User user)throws IOException
+    {
+
+        logger.info("사용자가 건네준 정보 : {}", request.toString());
+        Article updatedArticle = articleService.updateArticle(articleId, request, user);
+        return ResponseDto.of(ArticleConverter.toArticleUpdateDto(updatedArticle));
     }
 
-    @Operation(summary = "게시글 삭제 API", description = "게시글 삭제 API 입니다.")
+    @Operation(summary = "게시글 삭제 API ✔️", description = "게시글 삭제 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -133,11 +138,12 @@ public class ArticleRestController {
             @Parameter(name = "articleId", description = "게시글 아이디")
     })
     @DeleteMapping("/articles/{articleId}")
-    public ResponseEntity<ArticleResponseDto.ArticleDeleteDto> deleteArticle(@PathVariable Long id, @AuthUser User user){
-        return null;
+    public ResponseDto<ArticleResponseDto.ArticleDeleteDto> deleteArticle(@PathVariable(name = "articleId") Long articleId, @AuthUser User user){
+        articleService.deleteArticleSingle(articleId, user);
+        return ResponseDto.of(ArticleConverter.toArticleDeleteDto(articleId));
     }
 
-    @Operation(summary = "게시글 여러개 삭제 API", description = "게시글 여러개 삭제 API 입니다.")
+    @Operation(summary = "게시글 여러개 삭제 API - 마이 페이지에서 사용됨", description = "게시글 여러개 삭제 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),

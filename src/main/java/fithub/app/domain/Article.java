@@ -2,6 +2,7 @@ package fithub.app.domain;
 
 import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.mapping.ArticleHashTag;
+import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -82,5 +83,11 @@ public class Article extends BaseEntity {
             this.saves -= 1;
 
         return this;
+    }
+
+    public void update(ArticleRequestDto.UpdateArticleDto request, ExerciseCategory exerciseCategory){
+        this.title = request.getTitle();
+        this.contents = request.getContents();
+        this.exerciseCategory = exerciseCategory;
     }
 }
