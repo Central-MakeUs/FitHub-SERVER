@@ -12,11 +12,15 @@ public interface ArticleService {
 
     Article getArticle(Long ArticleId);
 
-    public Boolean getIsSaved(Article article, User user);
+    Boolean getIsSaved(Article article, User user);
 
-    public Boolean getIsLiked(Article article, User user);
+    Boolean getIsLiked(Article article, User user);
 
-    public Article toggleArticleLike(Long articleId, User user);
+    Article toggleArticleLike(Long articleId, User user);
 
-    public Article toggleArticleSave(Long articleId, User user);
+    Article toggleArticleSave(Long articleId, User user);
+
+    Article updateArticle(Long articleId, ArticleRequestDto.UpdateArticleDto request, User user)throws IOException;
+
+    void deleteArticleSingle(Long articleId, User user);
 }
