@@ -184,4 +184,15 @@ public class ArticleServiceImpl implements ArticleService {
 
         return ArticleConverter.toUpdateArticle(article,request,hashTagList);
     }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteArticleSingle(Long articleId, User user) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new ArticleException(Code.ARTICLE_NOT_FOUND));
+
+        if(!article.getUser().getId().equals(user.getId()))
+            throw new ArticleException(Code.ARTICLE_FORBIDDEN);
+
+        articleRepository.delete(article);
+    }
 }

@@ -181,7 +181,7 @@ public class ArticleConverter {
                 .build();
     }
 
-    public ArticleResponseDto.ArticleDeleteDto toArticleDeleteDto(Long id){
+    public static ArticleResponseDto.ArticleDeleteDto toArticleDeleteDto(Long id){
         return ArticleResponseDto.ArticleDeleteDto.builder()
                 .articleId(id)
                 .deletedAt(LocalDateTime.now())

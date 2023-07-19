@@ -21,4 +21,6 @@ public interface ArticleService {
     Article toggleArticleSave(Long articleId, User user);
 
     Article updateArticle(Long articleId, ArticleRequestDto.UpdateArticleDto request, User user)throws IOException;
+
+    void deleteArticleSingle(Long articleId, User user);
 }
