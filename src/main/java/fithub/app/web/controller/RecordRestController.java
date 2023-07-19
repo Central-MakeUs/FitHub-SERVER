@@ -106,7 +106,7 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordCreateDto(record));
     }
 
-    @Operation(summary = "운동인증 수정 API", description = "운동인증 수정 API 입니다.")
+    @Operation(summary = "운동인증 수정 API ✔️", description = "운동인증 수정 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -126,7 +126,7 @@ public class RecordRestController {
     }
 
 
-    @Operation(summary = "운동인증 삭제 API", description = "운동인증 삭제 API 입니다.")
+    @Operation(summary = "운동인증 삭제 API✔️", description = "운동인증 삭제 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -138,8 +138,9 @@ public class RecordRestController {
             @Parameter(name = "recordId", description = "운동 인증 아이디"),
     })
     @DeleteMapping("/record/{recordId}")
-    public ResponseEntity<RecordResponseDto.recordDeleteDto> deleteRecord(@PathVariable(name = "recordId") Long recordId, @AuthUser User user){
-        return null;
+    public ResponseDto<RecordResponseDto.recordDeleteDto> deleteRecord(@PathVariable(name = "recordId") Long recordId, @AuthUser User user){
+        recordService.deleteRecordSingle(recordId,user);
+        return ResponseDto.of(RecordConverter.toRecordDeleteDto(recordId));
     }
 
     @Operation(summary = "운동인증 한번에 여러개 삭제 API - 마이 페이지에서 사용됨", description = "운동인증 한번에 여러개 삭제 API 입니다.")

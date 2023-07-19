@@ -139,4 +139,31 @@ public class RecordServiceImpl implements RecordService {
 
         return RecordConverter.toUpdateRecord(record,request,hashTagList);
     }
+
+    @Override
+    public void deleteRecordSingle(Long recordId, User user) {
+        Record record = recordRepository.findById(recordId).orElseThrow(() -> new RecordException(Code.RECORD_NOT_FOUND));
+
+        if(!record.getUser().getId().equals(user.getId()))
+            throw new RecordException(Code.RECORD_FORBIDDEN);
+        String imageUrl = record.getImageUrl();
+        String Keyname = ArticleConverter.toKeyName(imageUrl);
+        amazonS3Manager.deleteFile(Keyname.substring(1));
+
+        List<RecordHashTag> recordHashTagList = record.getRecordHashTagList();
+
+        for(int i = 0; i < recordHashTagList.size(); i++) {
+            RecordHashTag articleHashTag = recordHashTagList.get(i);
+            record.getRecordHashTagList().remove(articleHashTag);
+            recordHashTagRepository.delete(articleHashTag);
+        }
+
+        if(recordHashTagList.size() > 0) {
+            RecordHashTag last = recordHashTagList.get(0);
+            recordHashTagList.remove(last);
+            recordHashTagRepository.delete(last);
+        }
+
+        recordRepository.delete(record);
+    }
 }

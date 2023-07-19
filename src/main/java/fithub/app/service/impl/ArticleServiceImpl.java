@@ -195,6 +195,14 @@ public class ArticleServiceImpl implements ArticleService {
         if(!article.getUser().getId().equals(user.getId()))
             throw new ArticleException(Code.ARTICLE_FORBIDDEN);
 
+        List<ArticleImage> articleImageList = article.getArticleImageList();
+
+        for(int i = 0; i < articleImageList.size(); i++) {
+            String s = articleImageList.get(i).getImageUrl();
+            String Keyname = ArticleConverter.toKeyName(s);
+            amazonS3Manager.deleteFile(Keyname.substring(1));
+        }
+
         articleRepository.delete(article);
     }
 }

@@ -158,7 +158,7 @@ public class RecordConverter {
                 .build();
     }
 
-    public RecordResponseDto.recordDeleteDto toRecordDeleteDto(Long id){
+    public static RecordResponseDto.recordDeleteDto toRecordDeleteDto(Long id){
         return RecordResponseDto.recordDeleteDto.builder()
                 .recordId(id)
                 .deletedAt(LocalDateTime.now())

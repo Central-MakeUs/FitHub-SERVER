@@ -17,4 +17,6 @@ public interface RecordService {
     Record toggleRecordLike(Long recordId, User user);
 
     Record updateRecord(RecordRequestDto.updateRecordDto request, Long recordId, User user) throws IOException;
+
+    void deleteRecordSingle(Long recordId, User user);
 }
