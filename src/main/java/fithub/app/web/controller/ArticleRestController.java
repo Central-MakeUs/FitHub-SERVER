@@ -22,6 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -117,8 +118,12 @@ public class ArticleRestController {
             @Parameter(name = "articleId", description = "게시글 아이디")
     })
     @PatchMapping(value = "/articles/{articleId}",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<ArticleResponseDto.ArticleUpdateDto> updateArticle(@PathVariable Long id ,@ModelAttribute ArticleRequestDto.UpdateArticleDto request, @AuthUser User user){
-        return null;
+    public ResponseDto<ArticleResponseDto.ArticleUpdateDto> updateArticle(@PathVariable(name = "articleId") Long articleId ,@ModelAttribute ArticleRequestDto.UpdateArticleDto request, @AuthUser User user)throws IOException
+    {
+
+        logger.info("사용자가 건네준 정보 : {}", request.toString());
+        Article updatedArticle = articleService.updateArticle(articleId, request, user);
+        return ResponseDto.of(ArticleConverter.toArticleUpdateDto(updatedArticle));
     }
 
     @Operation(summary = "게시글 삭제 API", description = "게시글 삭제 API 입니다.")

@@ -47,11 +47,11 @@ public class AmazonS3Manager{
     }
 
     public String generateArticleKeyName(Uuid uuid, String originalFilename) {
-        return amazonConfig.getFithubArticle() + '/' + uuid.getUuid() + '_' + originalFilename;
+        return amazonConfig.getFithubArticle() + '/' + uuid.getUuid();
     }
 
     public String generateRecordKeyName(Uuid uuid, String originalFilename) {
-        return amazonConfig.getFithubRecord() + '/' + uuid.getUuid() + '_' + originalFilename;
+        return amazonConfig.getFithubRecord() + '/' + uuid.getUuid();
     }
 
     // 중복된 UUID가 있다면 중복이 없을때까지 재귀적으로 동작

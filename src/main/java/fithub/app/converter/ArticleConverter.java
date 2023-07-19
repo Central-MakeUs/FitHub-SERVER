@@ -1,6 +1,8 @@
 package fithub.app.converter;
 
 import fithub.app.aws.s3.AmazonS3Manager;
+import fithub.app.base.Code;
+import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.domain.*;
 import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
@@ -18,6 +20,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Component
@@ -36,6 +40,8 @@ public class ArticleConverter {
     private static AmazonS3Manager staticAmazonS3Manager;
 
     private static Logger staticLogger;
+
+    private static String pattern = "https://cmc-fithub\\.s3\\.ap-northeast-2\\.amazonaws\\.com(.*)";
 
 
     @PostConstruct
@@ -64,6 +70,19 @@ public class ArticleConverter {
 
         // 사진 업로드 하기
         List<MultipartFile> articleImageList= request.getPictureList();
+        if(articleImageList != null && !articleImageList.isEmpty()){
+            createAndMapArticleImage(articleImageList,article);
+        }
+        return article;
+    }
+
+    public static Article toUpdateArticle(Article article,ArticleRequestDto.UpdateArticleDto request, List<HashTag> hashTagList) throws IOException
+    {
+        ExerciseCategory exerciseCategory = staticExerciseCategoryRepository.findById(request.getCategory()).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
+        article.update(request, exerciseCategory);
+        article.setArticleHashTagList(toArticleHashTagList(hashTagList, article));
+
+        List<MultipartFile> articleImageList = request.getNewPictureList();
         if(articleImageList != null && !articleImageList.isEmpty()){
             createAndMapArticleImage(articleImageList,article);
         }
@@ -112,6 +131,7 @@ public class ArticleConverter {
                 .userInfo(UserConverter.toCommunityUserInfo(article.getUser()))
                 .title(article.getTitle())
                 .contents(article.getContents())
+                .comments(article.getComments())
                 .articlePictureList(PictureConverter.toPictureDtoList(article.getArticleImageList()))
                 .createdAt(article.getCreatedAt())
                 .Hashtags(HashTagConverter.toHashtagDtoList(article.getArticleHashTagList()))
@@ -154,7 +174,7 @@ public class ArticleConverter {
                 .build();
     }
 
-    public ArticleResponseDto.ArticleUpdateDto toArticleUpdateDto(Article article){
+    public static ArticleResponseDto.ArticleUpdateDto toArticleUpdateDto(Article article){
         return ArticleResponseDto.ArticleUpdateDto.builder()
                 .articleId(article.getId())
                 .updatedAt(article.getUpdatedAt())
@@ -193,5 +213,17 @@ public class ArticleConverter {
                 .articleId(article.getId())
                 .articleSaves(article.getSaves())
                 .build();
+    }
+
+    public static String toKeyName(String imageUrl) {
+        String input = imageUrl;
+
+        Pattern regex = Pattern.compile(pattern);
+        Matcher matcher = regex.matcher(input);
+        String extractedString = null;
+        if (matcher.find())
+            extractedString = matcher.group(1);
+
+        return extractedString;
     }
 }
