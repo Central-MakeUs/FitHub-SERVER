@@ -169,9 +169,11 @@ public class ArticleServiceImpl implements ArticleService {
             articleHashTagRepository.delete(articleHashTag);
         }
 
-        ArticleHashTag last = articleHashTagList.get(0);
-        articleHashTagList.remove(last);
-        articleHashTagRepository.delete(last);
+        if (articleHashTagList.size() > 0) {
+            ArticleHashTag last = articleHashTagList.get(0);
+            articleHashTagList.remove(last);
+            articleHashTagRepository.delete(last);
+        }
 
         String exerciseTag =  request.getExerciseTag();
         HashTag exercisehashTag = hashTagRepository.findByName('#' + exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));

@@ -1,20 +1,26 @@
 package fithub.app.service.impl;
 
+import fithub.app.aws.s3.AmazonS3Manager;
 import fithub.app.base.Code;
+import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.base.exception.handler.RecordException;
+import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.HashTagConverter;
 import fithub.app.converter.RecordConverter;
-import fithub.app.domain.HashTag;
-import fithub.app.domain.Record;
-import fithub.app.domain.User;
+import fithub.app.domain.*;
+import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ArticleLikes;
+import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.domain.mapping.RecordLikes;
 import fithub.app.repository.HashTagRepository;
+import fithub.app.repository.RecordRepositories.RecordHashTagRepository;
 import fithub.app.repository.RecordRepositories.RecordLikesRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.service.RecordService;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,11 +34,17 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 public class RecordServiceImpl implements RecordService {
 
+    Logger logger = LoggerFactory.getLogger(RecordServiceImpl.class);
+
     private final RecordRepository recordRepository;
 
     private final RecordLikesRepository recordLikesRepository;
 
     private final HashTagRepository hashTagRepository;
+
+    private final RecordHashTagRepository recordHashTagRepository;
+
+    private final AmazonS3Manager amazonS3Manager;
 
     @Override
     @Transactional(readOnly = false)
@@ -83,5 +95,48 @@ public class RecordServiceImpl implements RecordService {
         }
 
         return updatedRecord;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Record updateRecord(RecordRequestDto.updateRecordDto request, Long recordId, User user) throws IOException {
+        Record record = recordRepository.findById(recordId).orElseThrow(() -> new RecordException(Code.RECORD_NOT_FOUND));
+
+        if(!record.getUser().getId().equals(user.getId()))
+            throw new RecordException(Code.RECORD_FORBIDDEN);
+
+        String imageUrl = record.getImageUrl();
+
+
+        if(request.getRemainImageUrl() == null){
+            String Keyname = ArticleConverter.toKeyName(imageUrl);
+            amazonS3Manager.deleteFile(Keyname.substring(1));
+        }
+
+        // 필요 없어진 사진은 지웠으니 이제 게시글과 연결된 해시태그 재 설정
+        List<RecordHashTag> recordHashTagList = record.getRecordHashTagList();
+
+        for(int i = 0; i < recordHashTagList.size(); i++) {
+            RecordHashTag articleHashTag = recordHashTagList.get(i);
+            record.getRecordHashTagList().remove(articleHashTag);
+            recordHashTagRepository.delete(articleHashTag);
+        }
+
+        if(recordHashTagList.size() > 0) {
+            RecordHashTag last = recordHashTagList.get(0);
+            recordHashTagList.remove(last);
+            recordHashTagRepository.delete(last);
+        }
+
+        String exerciseTag =  request.getExerciseTag();
+        HashTag exercisehashTag = hashTagRepository.findByName('#' + exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
+
+        List<HashTag> hashTagList = request.getHashTagList().stream()
+                .map(tag -> hashTagRepository.findByName('#' + tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
+                .collect(Collectors.toList());
+
+        hashTagList.add(exercisehashTag);
+
+        return RecordConverter.toUpdateRecord(record,request,hashTagList);
     }
 }

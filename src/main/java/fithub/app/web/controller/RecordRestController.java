@@ -119,8 +119,10 @@ public class RecordRestController {
             @Parameter(name = "recordId", description = "운동 인증 아이디"),
     })
     @PatchMapping(value = "/record/{recordId}",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<RecordResponseDto.recordUpdateDto> updateRecord(@PathVariable(name = "recordId") Long recordId, @ModelAttribute RecordRequestDto.updateRecordDto request, @AuthUser User user){
-        return null;
+    public ResponseDto<RecordResponseDto.recordUpdateDto> updateRecord(@PathVariable(name = "recordId") Long recordId, @ModelAttribute RecordRequestDto.updateRecordDto request, @AuthUser User user) throws IOException
+    {
+        Record record = recordService.updateRecord(request, recordId, user);
+        return ResponseDto.of(RecordConverter.toRecordUpdateDto(record));
     }
 
 

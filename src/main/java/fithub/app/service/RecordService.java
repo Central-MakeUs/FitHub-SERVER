@@ -15,4 +15,6 @@ public interface RecordService {
     Boolean getIsLiked(Record record, User user);
 
     Record toggleRecordLike(Long recordId, User user);
+
+    Record updateRecord(RecordRequestDto.updateRecordDto request, Long recordId, User user) throws IOException;
 }
