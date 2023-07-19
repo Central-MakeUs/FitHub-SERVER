@@ -3,6 +3,7 @@ package fithub.app.domain;
 
 import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.mapping.RecordHashTag;
+import fithub.app.web.dto.requestDto.RecordRequestDto;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -79,5 +80,10 @@ public class Record extends BaseEntity {
             this.likes -= 1;
 
         return this;
+    }
+
+    public void update(RecordRequestDto.updateRecordDto request, ExerciseCategory exerciseCategory){
+        this.contents = request.getContents();
+        this.exerciseCategory = exerciseCategory;
     }
 }

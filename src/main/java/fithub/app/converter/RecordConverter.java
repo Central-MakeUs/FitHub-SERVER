@@ -1,6 +1,8 @@
 package fithub.app.converter;
 
 import fithub.app.aws.s3.AmazonS3Manager;
+import fithub.app.base.Code;
+import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.domain.*;
 import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.RecordHashTag;
@@ -73,6 +75,19 @@ public class RecordConverter {
         return record;
     }
 
+    public static Record toUpdateRecord(Record record, RecordRequestDto.updateRecordDto request, List<HashTag> hashTagList) throws IOException{
+        ExerciseCategory exerciseCategory = staticExerciseCategoryRepository.findById(request.getCategory()).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
+        record.update(request, exerciseCategory);
+
+        MultipartFile recordImage = request.getNewImage();
+        record.setRecordHashTagList(toRecordHashTagList(hashTagList, record));
+        String imageUrl = null;
+        if(recordImage != null)
+            imageUrl = uploadRecordImage(recordImage, record);
+        record.setImage(imageUrl);
+        return record;
+    }
+
     public static String uploadRecordImage(MultipartFile recordImage, Record record) throws IOException
     {
         Uuid uuid = staticAmazonS3Manager.createUUID();
@@ -136,14 +151,14 @@ public class RecordConverter {
                 .build();
     }
 
-    public RecordResponseDto.recordUpdateDto toRecordUpdateDto(Record record){
+    public static RecordResponseDto.recordUpdateDto toRecordUpdateDto(Record record){
         return RecordResponseDto.recordUpdateDto.builder()
                 .recordId(record.getId())
                 .updatedAt(record.getUpdatedAt())
                 .build();
     }
 
-    public RecordResponseDto.recordDeleteDto toRecordDeleteDto(Long id){
+    public static RecordResponseDto.recordDeleteDto toRecordDeleteDto(Long id){
         return RecordResponseDto.recordDeleteDto.builder()
                 .recordId(id)
                 .deletedAt(LocalDateTime.now())
