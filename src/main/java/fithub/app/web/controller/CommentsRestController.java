@@ -19,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,7 +32,7 @@ public class CommentsRestController {
 
     Logger logger = LoggerFactory.getLogger(CommentsRestController.class);
 
-    @Operation(summary = "댓글 조회 API", description = "댓글 조회 API 입니다. 게시글/운동 인증을 type으로 구분하며 상세 조회 시 이 API 까지 2개 조회!, last로 페이징도 있습니다.")
+    @Operation(summary = "댓글 조회 API ✔️", description = "댓글 조회 API 입니다. 게시글/운동 인증을 type으로 구분하며 상세 조회 시 이 API 까지 2개 조회!, last로 페이징도 있습니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 존재하지 않음, 없는 게시글의 댓글 조회 시도.", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -47,10 +48,11 @@ public class CommentsRestController {
     })
     @GetMapping("/{type}/{id}/comments")
     public ResponseDto<CommentsResponseDto.CommentsDtoList>articleCommentList(@RequestParam(name = "last", required = false) Long last,@PathVariable(name = "type") String type,@PathVariable(name = "id") @ExistArticle Long id){
-        return null;
+        Page<Comments> comments = type.equals("articles") ? commentsService.findOnArticle(id, last) : commentsService.findOnRecord(id, last);
+        return ResponseDto.of(CommentsConverter.toCommentsDtoList(comments.toList()));
     }
 
-    @Operation(summary = "댓글 작성 API", description = "댓글 작성 API 입니다.")
+    @Operation(summary = "댓글 작성 API ✔️", description = "댓글 작성 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 존재하지 않음, 없는 게시글의 댓글 작성 시도.", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),

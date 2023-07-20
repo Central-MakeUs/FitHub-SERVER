@@ -4,8 +4,12 @@ import fithub.app.domain.Comments;
 import fithub.app.domain.User;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface CommentsService {
+
+    Page<Comments> findOnArticle(Long id, Long last);
+    Page<Comments> findOnRecord(Long id, Long last);
 
     Comments createOnArticle (CommentsRequestDto.CreateCommentDto request, Long id, User user);
     Comments createOnRecord (CommentsRequestDto.CreateCommentDto request, Long id, User user);
