@@ -2,7 +2,10 @@ package fithub.app.web.controller;
 
 import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.base.ResponseDto;
+import fithub.app.converter.CommentsConverter;
+import fithub.app.domain.Comments;
 import fithub.app.domain.User;
+import fithub.app.service.CommentsService;
 import fithub.app.validation.annotation.ExistArticle;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import fithub.app.web.dto.responseDto.CommentsResponseDto;
@@ -13,11 +16,20 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.http.ResponseEntity;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+@Validated
 @RestController
+@RequiredArgsConstructor
 public class CommentsRestController {
+
+    private final CommentsService commentsService;
+
+    Logger logger = LoggerFactory.getLogger(CommentsRestController.class);
 
     @Operation(summary = "댓글 조회 API", description = "댓글 조회 API 입니다. 게시글/운동 인증을 type으로 구분하며 상세 조회 시 이 API 까지 2개 조회!, last로 페이징도 있습니다.")
     @ApiResponses({
@@ -53,7 +65,8 @@ public class CommentsRestController {
     })
     @PostMapping("/{type}/{id}/comments")
     public ResponseDto<CommentsResponseDto.CreateCommentDto> createCommentArticle(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id,@RequestBody CommentsRequestDto.CreateCommentDto request, @AuthUser User user){
-        return null;
+        Comments newComments = type.equals("articles") ? commentsService.createOnArticle(request,id, user) : commentsService.createOnRecord(request, id, user);
+        return ResponseDto.of(CommentsConverter.toCreateCommentDto(newComments));
     }
 
     @Operation(summary = "댓글 수정 API", description = "댓글 수정 API 입니다.")

@@ -50,6 +50,9 @@ public class Article extends BaseEntity {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<ArticleHashTag> articleHashTagList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Comments> commentsList = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -89,5 +92,9 @@ public class Article extends BaseEntity {
         this.title = request.getTitle();
         this.contents = request.getContents();
         this.exerciseCategory = exerciseCategory;
+    }
+
+    public void countComments(){
+        this.comments += 1;
     }
 }

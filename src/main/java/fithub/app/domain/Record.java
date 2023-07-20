@@ -56,6 +56,9 @@ public class Record extends BaseEntity {
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
     private List<RecordHashTag> recordHashTagList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
+    private List<Comments> commentsList = new ArrayList<>();
+
     public Record setImage(String imageUrl){
         this.imageUrl = imageUrl;
         return this;
@@ -85,5 +88,9 @@ public class Record extends BaseEntity {
     public void update(RecordRequestDto.updateRecordDto request, ExerciseCategory exerciseCategory){
         this.contents = request.getContents();
         this.exerciseCategory = exerciseCategory;
+    }
+
+    public void countComments(){
+        this.comments += 1;
     }
 }
