@@ -121,27 +121,26 @@ public class RecordConverter {
                 .build();
     }
 
-//    public RecordResponseDto.recordDto toRecordDto(Record record){
-//        return RecordResponseDto.recordDto.builder()
-//                .recordId(record.getId())
-//                .recordCategory(ExerciseCategoryConverter.toCategoryDto(record.getExerciseCategory()))
-//                .pictureUrl(record.getImageUrl())
-//                .likes(record.getLikes())
-//                .createdAt(record.getCreatedAt())
-//                .build();
-//    }
+    public static RecordResponseDto.recordDto toRecordDto(Record record){
+        return RecordResponseDto.recordDto.builder()
+                .recordId(record.getId())
+                .pictureUrl(record.getImageUrl())
+                .likes(record.getLikes())
+                .createdAt(record.getCreatedAt())
+                .build();
+    }
 
-//    public RecordResponseDto.recordDtoList toRecordDtoList(List<Record> recordList){
-//        List<RecordResponseDto.recordDto> recordDtoList =
-//                recordList.stream()
-//                        .map(record -> toRecordDto(record))
-//                        .collect(Collectors.toList());
-//
-//        return RecordResponseDto.recordDtoList.builder()
-//                .recordList(recordDtoList)
-//                .size(recordList.size())
-//                .build();
-//    }
+    public static RecordResponseDto.recordDtoList toRecordDtoList(List<Record> recordList){
+        List<RecordResponseDto.recordDto> recordDtoList =
+                recordList.stream()
+                        .map(record -> toRecordDto(record))
+                        .collect(Collectors.toList());
+
+        return RecordResponseDto.recordDtoList.builder()
+                .recordList(recordDtoList)
+                .size(recordList.size())
+                .build();
+    }
 
     public static RecordResponseDto.recordCreateDto toRecordCreateDto (Record record){
         return RecordResponseDto.recordCreateDto.builder()
