@@ -12,6 +12,7 @@ import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ArticleLikes;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.domain.mapping.RecordLikes;
+import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.HashTagRepository;
 import fithub.app.repository.RecordRepositories.RecordHashTagRepository;
 import fithub.app.repository.RecordRepositories.RecordLikesRepository;
@@ -21,6 +22,9 @@ import fithub.app.web.dto.requestDto.RecordRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +49,11 @@ public class RecordServiceImpl implements RecordService {
     private final RecordHashTagRepository recordHashTagRepository;
 
     private final AmazonS3Manager amazonS3Manager;
+
+    private final ExerciseCategoryRepository exerciseCategoryRepository;
+
+    @Value("${paging.size}")
+    Integer size;
 
     @Override
     @Transactional(readOnly = false)
@@ -165,5 +174,69 @@ public class RecordServiceImpl implements RecordService {
         }
 
         recordRepository.delete(record);
+    }
+
+    @Override
+    public Page<Record> findRecordPagingCategoryAndCreatedAt(User user, Integer categoryId, Long last) {
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
+
+        Page<Record> findRecord = null;
+
+        if(last == null)
+            last = 0L;
+        Optional<Record> lastRecord = recordRepository.findById(last);
+
+        if (lastRecord.isPresent())
+            findRecord = recordRepository.findByCreatedAtLessThanAndExerciseCategoryOrderByCreatedAtDesc(lastRecord.get().getCreatedAt(), exerciseCategory, PageRequest.of(0, size));
+        else
+            findRecord = recordRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,PageRequest.of(0, size));
+        return findRecord;
+    }
+
+    @Override
+    public Page<Record> findRecordPagingCreatedAt(User user, Long last) {
+        Page<Record> findRecord = null;
+
+        if(last == null)
+            last = 0L;
+        Optional<Record> lastRecord = recordRepository.findById(last);
+
+        if(lastRecord.isPresent())
+            findRecord = recordRepository.findByCreatedAtLessThanOrderByCreatedAtDesc(lastRecord.get().getCreatedAt(),PageRequest.of(0, size));
+        else
+            findRecord = recordRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, size));
+        return findRecord;
+    }
+
+    @Override
+    public Page<Record> findRecordPagingCategoryAndLikes(User user, Integer categoryId, Long last) {
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
+
+        Page<Record> findRecord = null;
+
+        if(last == null)
+            last = 0L;
+        Optional<Record> lastRecord = recordRepository.findById(last);
+
+        if (lastRecord.isPresent())
+            findRecord = recordRepository.findByLikesLessThanAndExerciseCategoryOrderByLikesDesc(lastRecord.get().getLikes(), exerciseCategory, PageRequest.of(0, size));
+        else
+            findRecord = recordRepository.findAllByExerciseCategoryOrderByLikesDesc(exerciseCategory,PageRequest.of(0, size));
+        return findRecord;
+    }
+
+    @Override
+    public Page<Record> findRecordPagingLikes(User user, Long last) {
+        Page<Record> findRecord = null;
+
+        if(last == null)
+            last = 0L;
+        Optional<Record> lastRecord = recordRepository.findById(last);
+
+        if(lastRecord.isPresent())
+            findRecord = recordRepository.findByLikesLessThanOrderByLikesDesc(lastRecord.get().getLikes(),PageRequest.of(0, size));
+        else
+            findRecord = recordRepository.findAllByOrderByLikesDesc(PageRequest.of(0, size));
+        return findRecord;
     }
 }
