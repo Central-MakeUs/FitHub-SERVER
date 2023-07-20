@@ -59,7 +59,7 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordSpecDto(record, isLiked));
     }
 
-    @Operation(summary = "운동 인증 목록 조회 API - 최신순", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
+    @Operation(summary = "운동 인증 목록 조회 API - 최신순 ✔️", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
@@ -79,7 +79,7 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList()));
     }
 
-    @Operation(summary = "운동 인증 목록 조회 API - 인기순", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
+    @Operation(summary = "운동 인증 목록 조회 API - 인기순 ✔️", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
