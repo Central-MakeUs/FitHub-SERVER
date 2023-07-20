@@ -34,18 +34,15 @@ public class ArticleResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ArticleDto{
-        @Schema(description = "인증 글의 아이디")
-        Long recordId;
+        Long articleId;
         UserResponseDto.CommunityUserInfo userInfo;
-        @Schema(description = "사진 url")
+        ExerciseCategoryResponseDto.CategoryDto articleCategory;
+        String title;
+        String contents;
         String pictureUrl;
-        @Schema(description = "운동 태그")
         String exerciseTag;
-        @Schema(description = "좋아요 갯수")
         Long likes;
-        @Schema(description = "댓글 갯수")
         Long comments;
-        @Schema(description = "작성 시간")
         LocalDateTime createdAt;
     }
 
