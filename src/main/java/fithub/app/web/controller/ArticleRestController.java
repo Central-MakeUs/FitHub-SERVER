@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +57,7 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleSpecDto(article,isLiked,isSaved));
     }
 
-    @Operation(summary = "게시글 목록 조회 API - 최신순", description = "categoryId가 0이면 전체조회, last로 페이징")
+    @Operation(summary = "게시글 목록 조회 API - 최신순 ✔️", description = "categoryId가 0이면 전체조회, last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -68,11 +69,16 @@ public class ArticleRestController {
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/articles/{categoryId}")
-    public ResponseEntity<ArticleResponseDto.ArticleDtoList> articleTimeList(@RequestParam(name = "last", required = false) Long last,@RequestParam(name = "categoryId") @ExistCategory Long categoryId, @AuthUser User user){
-        return null;
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> articleTimeList(@RequestParam(name = "last", required = false) Long last,@PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
+        Page<Article> articles = null;
+        if (categoryId != 0)
+            articles = articleService.findArticlePagingCategoryAndCreatedAt(user, categoryId, last);
+        else
+            articles = articleService.findArticlePagingCreatedAt(user,last);
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList()));
     }
 
-    @Operation(summary = "게시글 목록 조회 API - 인기순", description = "categoryId가 0이면 전체조회, last로 페이징")
+    @Operation(summary = "게시글 목록 조회 API - 인기순 ✔️", description = "categoryId가 0이면 전체조회, last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -84,8 +90,14 @@ public class ArticleRestController {
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/articles/{categoryId}/likes")
-    public ResponseEntity<ArticleResponseDto.ArticleDtoList> articleLikesList(@RequestParam(name = "last", required = false) Long last, @RequestParam(name = "categoryId") @ExistCategory Long categoryId, @AuthUser User user){
-        return null;
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> articleLikesList(@RequestParam(name = "last", required = false) Long last, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
+        Page<Article> articles = null;
+        if (categoryId != 0)
+            articles = articleService.findArticlePagingCategoryAndLikes(user,categoryId,last);
+        else
+            articles = articleService.findArticlePagingLikes(user,last);
+
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList()));
     }
 
     @Operation(summary = "게시글 추가 API ✔️", description = "게시글 추가 API 입니다. 사진 여러 장을 한번에 보내 주세요")

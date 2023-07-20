@@ -5,20 +5,22 @@ import fithub.app.base.Code;
 import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.HashTagConverter;
-import fithub.app.domain.Article;
-import fithub.app.domain.ArticleImage;
-import fithub.app.domain.HashTag;
-import fithub.app.domain.User;
+import fithub.app.domain.*;
 import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ArticleLikes;
 import fithub.app.domain.mapping.SavedArticle;
 import fithub.app.repository.ArticleRepositories.*;
+import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.HashTagRepository;
 import fithub.app.service.ArticleService;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +51,11 @@ public class ArticleServiceImpl implements ArticleService {
     private final ArticleHashTagRepository articleHashTagRepository;
 
     private final AmazonS3Manager amazonS3Manager;
+
+    @Value("${paging.size}")
+    Integer size;
+
+    private final ExerciseCategoryRepository exerciseCategoryRepository;
 
     @Override
     @Transactional(readOnly = false)
@@ -205,4 +212,71 @@ public class ArticleServiceImpl implements ArticleService {
 
         articleRepository.delete(article);
     }
+
+    @Override
+    public Page<Article> findArticlePagingCategoryAndCreatedAt(User user, Integer categoryId, Long last) {
+
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
+
+        Page<Article> findArticle = null;
+
+        if(last == null)
+            last = 0L;
+        Optional<Article> lastArticle = articleRepository.findById(last);
+
+        if (lastArticle.isPresent())
+            findArticle = articleRepository.findByCreatedAtLessThanAndExerciseCategoryOrderByCreatedAtDesc(lastArticle.get().getCreatedAt(), exerciseCategory, PageRequest.of(0, size));
+        else
+            findArticle = articleRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,PageRequest.of(0, size));
+        return findArticle;
+    }
+
+    @Override
+    public Page<Article> findArticlePagingCreatedAt(User user, Long last) {
+        Page<Article> findArticle = null;
+
+        if(last == null)
+            last = 0L;
+        Optional<Article> lastArticle = articleRepository.findById(last);
+
+        if(lastArticle.isPresent())
+            findArticle = articleRepository.findByCreatedAtLessThanOrderByCreatedAtDesc(lastArticle.get().getCreatedAt(),PageRequest.of(0, size));
+        else
+            findArticle = articleRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, size));
+        return findArticle;
+    }
+
+    @Override
+    public Page<Article> findArticlePagingCategoryAndLikes(User user, Integer categoryId, Long last) {
+
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
+
+        Page<Article> findArticle = null;
+
+        if(last == null)
+            last = 0L;
+        Optional<Article> lastArticle = articleRepository.findById(last);
+
+        if (lastArticle.isPresent())
+            findArticle = articleRepository.findByLikesLessThanAndExerciseCategoryOrderByLikesDesc(lastArticle.get().getLikes(), exerciseCategory, PageRequest.of(0, size));
+        else
+            findArticle = articleRepository.findAllByExerciseCategoryOrderByLikesDesc(exerciseCategory,PageRequest.of(0, size));
+        return findArticle;
+    }
+
+    @Override
+    public Page<Article> findArticlePagingLikes(User user, Long last) {
+        Page<Article> findArticle = null;
+
+        if(last == null)
+            last = 0L;
+        Optional<Article> lastArticle = articleRepository.findById(last);
+
+        if(lastArticle.isPresent())
+            findArticle = articleRepository.findByLikesLessThanOrderByLikesDesc(lastArticle.get().getLikes(),PageRequest.of(0, size));
+        else
+            findArticle = articleRepository.findAllByOrderByLikesDesc(PageRequest.of(0, size));
+        return findArticle;
+    }
+
 }

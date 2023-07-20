@@ -23,6 +23,7 @@ public class CategoryExistValidator implements ConstraintValidator<ExistCategory
 
     @Override
     public boolean isValid(Integer value, ConstraintValidatorContext context) {
+        System.out.println("It works!");
         if(!exerciseCategoryRepository.existsById(value)) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(Code.CATEGORY_ERROR.toString()).addConstraintViolation();

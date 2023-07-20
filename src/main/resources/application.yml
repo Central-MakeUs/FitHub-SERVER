@@ -87,3 +87,6 @@ cloud:
       secretKey: ${AWS_SECRET_ACCESS_KEY}
 #    cloudFront:
 #      distributionDomain: https://d3j1uqx77q4q2.cloudfront.net
+
+paging:
+  size : 12

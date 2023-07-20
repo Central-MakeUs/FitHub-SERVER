@@ -15,11 +15,11 @@ public class ArticleExistValidator implements ConstraintValidator<ExistArticle, 
 
     private final ArticleRepository articleRepository;
 
+
     @Override
     public void initialize(ExistArticle constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
-
     @Override
     public boolean isValid(Long value, ConstraintValidatorContext context) {
         if(!articleRepository.existsById(value)) {
