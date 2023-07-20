@@ -2,7 +2,9 @@ package fithub.app.web.controller;
 
 import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.base.ResponseDto;
+import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.RecordConverter;
+import fithub.app.domain.Article;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
 import fithub.app.service.RecordService;
@@ -21,6 +23,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -67,8 +70,13 @@ public class RecordRestController {
             @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤",required = false)
     })
     @GetMapping("/records/{categoryId}")
-    public ResponseEntity<RecordResponseDto.recordDtoList> recordTimeList(@RequestParam(name = "last",required = false) Long last, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
-        return null;
+    public ResponseDto<RecordResponseDto.recordDtoList> recordTimeList(@RequestParam(name = "last",required = false) Long last, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
+        Page<Record> records = null;
+        if (categoryId != 0)
+            records = recordService.findRecordPagingCategoryAndCreatedAt(user, categoryId, last);
+        else
+            records = recordService.findRecordPagingCreatedAt(user,last);
+        return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList()));
     }
 
     @Operation(summary = "운동 인증 목록 조회 API - 인기순", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
@@ -82,8 +90,13 @@ public class RecordRestController {
             @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false)
     })
     @GetMapping("/records/{categoryId}likes")
-    public ResponseEntity<RecordResponseDto.recordDtoList> recordLikesList(@RequestParam(name = "last",required = false) Long last, @PathVariable(name = "categoryId") @ExistCategory In categoryId, @AuthUser User user){
-        return null;
+    public ResponseDto<RecordResponseDto.recordDtoList> recordLikesList(@RequestParam(name = "last",required = false) Long last, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
+        Page<Record> records = null;
+        if (categoryId != 0)
+            records = recordService.findRecordPagingCategoryAndLikes(user, categoryId, last);
+        else
+            records = recordService.findRecordPagingLikes(user,last);
+        return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList()));
     }
 
     @Operation(summary = "운동인증 작성 API ✔️ - 홈 페이지 작업 후 수정 필요", description = "운동인증 작성 API 입니다. 작성이 되는지 확인만 해주세요, 인증해서 레벨 오르는건 아직 구현 X")
