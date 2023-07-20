@@ -1,9 +1,8 @@
 package fithub.app.converter;
 
-import fithub.app.domain.Article;
 import fithub.app.domain.Comments;
 import fithub.app.domain.User;
-import fithub.app.repository.CommentsRepository;
+import fithub.app.repository.CommentsRepository.CommentsRepository;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import fithub.app.web.dto.responseDto.CommentsResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -39,20 +38,21 @@ public class CommentsConverter {
                 .isRecord(true)
                 .build();
     }
-    public static CommentsResponseDto.CommentsDto toCommentsDto(Comments comments) {
+    public static CommentsResponseDto.CommentsDto toCommentsDto(Comments comments, User user) {
         return CommentsResponseDto.CommentsDto.builder()
                 .commentId(comments.getId())
                 .userInfo(UserConverter.toCommunityUserInfo(comments.getUser()))
                 .contents(comments.getContents())
                 .likes(comments.getLikes())
+                .isLiked(user.isLikedFind(comments))
                 .createdAt(comments.getCreatedAt())
                 .build();
     }
 
-    public static CommentsResponseDto.CommentsDtoList toCommentsDtoList(List<Comments> commentsList){
+    public static CommentsResponseDto.CommentsDtoList toCommentsDtoList(List<Comments> commentsList, User user){
         List<CommentsResponseDto.CommentsDto> commentsDtoList =
                 commentsList.stream()
-                        .map(comments -> toCommentsDto(comments))
+                        .map(comments -> toCommentsDto(comments, user))
                         .collect(Collectors.toList());
 
         return CommentsResponseDto.CommentsDtoList.builder()
@@ -83,7 +83,7 @@ public class CommentsConverter {
                 .build();
     }
 
-    public CommentsResponseDto.CommentLikeDto toCommentLikeDto(Comments comments){
+    public static CommentsResponseDto.CommentLikeDto toCommentLikeDto(Comments comments){
         return CommentsResponseDto.CommentLikeDto.builder()
                 .commentId(comments.getId())
                 .newLikes(comments.getLikes())

@@ -79,8 +79,8 @@ public enum Code {
     //comments error
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, 4051, "댓글이 존재하지 않습니다."),
     COMMENTS_FORBIDDEN(HttpStatus.FORBIDDEN, 4052, "다른 사람의 댓글 입니다."),
-    COMMENTS_BAD_REQUEST(HttpStatus.BAD_REQUEST, 4053, "url에 type을 확인해주세요.");
-
+    COMMENTS_BAD_REQUEST(HttpStatus.BAD_REQUEST, 4053, "url에 type을 확인해주세요."),
+    COMMENTS_LIKES_FORBBIDDEN(HttpStatus.FORBIDDEN, 4054, "자신의 댓글은 좋아요를 누를 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final Integer code;

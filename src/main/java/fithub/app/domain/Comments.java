@@ -2,11 +2,14 @@ package fithub.app.domain;
 
 
 import fithub.app.domain.common.BaseEntity;
+import fithub.app.domain.mapping.CommentsLikes;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Builder
@@ -45,6 +48,9 @@ public class Comments extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "comments", cascade = CascadeType.ALL)
+    List<CommentsLikes> commentsLikesList = new ArrayList<>();
+
     public void setUser(User user){
         if(this.user != null)
             user.getCommentsList().remove(this);
@@ -64,5 +70,9 @@ public class Comments extends BaseEntity {
             record.getCommentsList().remove(this);
         this.record = record;
         record.getCommentsList().add(this);
+    }
+
+    public void toggleLikes(Boolean flag){
+        this.likes  = flag ? this.likes - 1 : this.likes + 1;
     }
 }
