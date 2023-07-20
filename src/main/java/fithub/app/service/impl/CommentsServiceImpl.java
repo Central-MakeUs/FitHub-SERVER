@@ -7,8 +7,10 @@ import fithub.app.domain.Article;
 import fithub.app.domain.Comments;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
+import fithub.app.domain.mapping.CommentsLikes;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
-import fithub.app.repository.CommentsRepository;
+import fithub.app.repository.CommentsRepository.CommentsLikesRepository;
+import fithub.app.repository.CommentsRepository.CommentsRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.service.CommentsService;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
@@ -31,6 +33,8 @@ public class CommentsServiceImpl implements CommentsService {
     private final CommentsRepository commentsRepository;
     private final ArticleRepository articleRepository;
     private final RecordRepository recordRepository;
+
+    private final CommentsLikesRepository commentsLikesRepository;
 
     Logger logger = LoggerFactory.getLogger(CommentsServiceImpl.class);
 
@@ -113,7 +117,31 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public Comments toggleCommentsLikeOnArticle(Long id, Long commentsId, User user) {
-        return null;
+        Article article = articleRepository.findById(id).orElseThrow(() -> new CommentsException(Code.ARTICLE_NOT_FOUND));
+        Comments comments = commentsRepository.findById(commentsId).orElseThrow(() -> new CommentsException(Code.COMMENT_NOT_FOUND));
+        Optional<CommentsLikes> commentsLikesOptional = commentsLikesRepository.findByCommentsAndUser(comments, user);
+        if (comments.getUser().equals(user))
+            throw new CommentsException(Code.COMMENTS_LIKES_FORBBIDDEN);
+        if(commentsLikesOptional.isPresent())
+        {
+            CommentsLikes commentsLikes = commentsLikesOptional.get();
+            user.getCommentsLikesList().remove(commentsLikes);
+            comments.getCommentsLikesList().remove(commentsLikes);
+            commentsLikesRepository.delete(commentsLikes);
+            comments.toggleLikes(true);
+        }
+        else{
+            CommentsLikes newCommentsLikes = CommentsLikes.builder()
+                    .comments(comments)
+                    .user(user)
+                    .build();
+            user.getCommentsLikesList().add(newCommentsLikes);
+            newCommentsLikes.setComments(comments);
+            newCommentsLikes.setUser(user);
+            commentsLikesRepository.save(newCommentsLikes);
+            comments.toggleLikes(false);
+        }
+        return comments;
     }
 
     @Override

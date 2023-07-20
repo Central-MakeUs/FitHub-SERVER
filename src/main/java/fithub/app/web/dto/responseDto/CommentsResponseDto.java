@@ -16,6 +16,7 @@ public class CommentsResponseDto {
         UserResponseDto.CommunityUserInfo userInfo;
         String contents;
         Long likes;
+        Boolean isLiked;
         LocalDateTime createdAt;
     }
 

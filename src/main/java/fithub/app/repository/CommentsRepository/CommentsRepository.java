@@ -1,4 +1,4 @@
-package fithub.app.repository;
+package fithub.app.repository.CommentsRepository;
 
 import fithub.app.domain.Article;
 import fithub.app.domain.Comments;
