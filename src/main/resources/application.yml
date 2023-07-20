@@ -90,3 +90,5 @@ cloud:
 
 paging:
   size : 12
+  comments:
+    size : 10

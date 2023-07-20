@@ -39,7 +39,7 @@ public class CommentsConverter {
                 .isRecord(true)
                 .build();
     }
-    public CommentsResponseDto.CommentsDto toCommentsDto(Comments comments) {
+    public static CommentsResponseDto.CommentsDto toCommentsDto(Comments comments) {
         return CommentsResponseDto.CommentsDto.builder()
                 .commentId(comments.getId())
                 .userInfo(UserConverter.toCommunityUserInfo(comments.getUser()))
@@ -49,7 +49,7 @@ public class CommentsConverter {
                 .build();
     }
 
-    public CommentsResponseDto.CommentsDtoList toCommentsDtoList(List<Comments> commentsList){
+    public static CommentsResponseDto.CommentsDtoList toCommentsDtoList(List<Comments> commentsList){
         List<CommentsResponseDto.CommentsDto> commentsDtoList =
                 commentsList.stream()
                         .map(comments -> toCommentsDto(comments))

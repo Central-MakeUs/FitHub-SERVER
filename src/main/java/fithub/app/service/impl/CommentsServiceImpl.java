@@ -1,4 +1,4 @@
-package fithub.app.service;
+package fithub.app.service.impl;
 
 import fithub.app.base.Code;
 import fithub.app.base.exception.handler.CommentsException;
@@ -10,13 +10,18 @@ import fithub.app.domain.User;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.CommentsRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
+import fithub.app.service.CommentsService;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
-import fithub.app.web.dto.responseDto.CommentsResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,12 +34,48 @@ public class CommentsServiceImpl implements CommentsService {
 
     Logger logger = LoggerFactory.getLogger(CommentsServiceImpl.class);
 
+    @Value("${paging.comments.size}")
+    Integer size;
+
+    @Override
+    public Page<Comments> findOnArticle(Long id, Long last) {
+        Article article = articleRepository.findById(id).orElseThrow(() -> new CommentsException(Code.ARTICLE_NOT_FOUND));
+
+        Page<Comments> comments = null;
+
+        if(last == null)
+            last = 0L;
+        Optional<Comments> lastComments = commentsRepository.findByIdAndIsRecord(last, false);
+        if(lastComments.isPresent())
+            comments = commentsRepository.findByCreatedAtLessThanAndArticleOrderByCreatedAtDesc(lastComments.get().getCreatedAt(), article, PageRequest.of(0, size));
+        else
+            comments = commentsRepository.findByArticleOrderByCreatedAtDesc(article, PageRequest.of(0, size));
+        return comments;
+    }
+
+    @Override
+    public Page<Comments> findOnRecord(Long id, Long last) {
+        Record record = recordRepository.findById(id).orElseThrow(() -> new CommentsException(Code.RECORD_NOT_FOUND));
+
+        Page<Comments> comments = null;
+
+        if(last == null)
+            last = 0L;
+        Optional<Comments> lastComments = commentsRepository.findByIdAndIsRecord(last, true);
+        if(lastComments.isPresent())
+            comments = commentsRepository.findByCreatedAtLessThanAndRecordOrderByCreatedAtDesc(lastComments.get().getCreatedAt(), record, PageRequest.of(0, size));
+        else
+            comments = commentsRepository.findByRecordOrderByCreatedAtDesc(record, PageRequest.of(0, size));
+        return comments;
+    }
+
     @Override
     @Transactional(readOnly = false)
     public Comments createOnArticle(CommentsRequestDto.CreateCommentDto request, Long id, User user) {
         Article article = articleRepository.findById(id).orElseThrow(() -> new CommentsException(Code.ARTICLE_NOT_FOUND));
         Comments comments = CommentsConverter.toCommentsArticle(request);
         comments.setUser(user);
+        comments.setArticle(article);
         article.countComments();
         return commentsRepository.save(comments);
     }
