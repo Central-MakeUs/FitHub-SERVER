@@ -1,8 +1,10 @@
 package fithub.app.converter;
 
+import fithub.app.domain.Article;
 import fithub.app.domain.Comments;
 import fithub.app.domain.User;
 import fithub.app.repository.CommentsRepository;
+import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import fithub.app.web.dto.responseDto.CommentsResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,19 @@ public class CommentsConverter {
         staticCommentsRepository = this.commentsRepository;
     }
 
+    public static Comments toCommentsArticle(CommentsRequestDto.CreateCommentDto request){
+        return Comments.builder()
+                .contents(request.getContents())
+                .isRecord(false)
+                .build();
+    }
+
+    public static Comments toCommentsRecord(CommentsRequestDto.CreateCommentDto request){
+        return Comments.builder()
+                .contents(request.getContents())
+                .isRecord(true)
+                .build();
+    }
     public CommentsResponseDto.CommentsDto toCommentsDto(Comments comments) {
         return CommentsResponseDto.CommentsDto.builder()
                 .commentId(comments.getId())
@@ -47,7 +62,7 @@ public class CommentsConverter {
 
     }
 
-    public CommentsResponseDto.CreateCommentDto toCreateCommentDto(Comments comments){
+    public static CommentsResponseDto.CreateCommentDto toCreateCommentDto(Comments comments){
         return CommentsResponseDto.CreateCommentDto.builder()
                 .commentId(comments.getId())
                 .createdAt(comments.getCreatedAt())
