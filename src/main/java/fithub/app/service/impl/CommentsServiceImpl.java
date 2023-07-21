@@ -1,6 +1,7 @@
 package fithub.app.service.impl;
 
 import fithub.app.base.Code;
+import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.base.exception.handler.CommentsException;
 import fithub.app.converter.CommentsConverter;
 import fithub.app.domain.Article;
@@ -96,13 +97,25 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Comments updateOnArticle(CommentsRequestDto.UpdateCommentDto request, Long id, Long commentsId, User user) {
-        return null;
+        articleRepository.findById(id).orElseThrow(() -> new ArticleException(Code.ARTICLE_NOT_FOUND));
+        Comments comments = commentsRepository.findById(commentsId).orElseThrow(() -> new CommentsException(Code.COMMENT_NOT_FOUND));
+        if (!comments.getUser().getId().equals(user.getId()))
+            throw new CommentsException(Code.COMMENTS_FORBIDDEN);
+        Comments updatedComments = comments.setContents(request.getContents());
+        return updatedComments;
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Comments updateOnRecord(CommentsRequestDto.UpdateCommentDto request, Long id, Long commentsId, User user) {
-        return null;
+        recordRepository.findById(id).orElseThrow(() -> new ArticleException(Code.RECORD_NOT_FOUND));
+        Comments comments = commentsRepository.findById(commentsId).orElseThrow(() -> new CommentsException(Code.COMMENT_NOT_FOUND));
+        if (!comments.getUser().getId().equals(user.getId()))
+            throw new CommentsException(Code.COMMENTS_FORBIDDEN);
+        Comments updatedComments = comments.setContents(request.getContents());
+        return updatedComments;
     }
 
     @Override

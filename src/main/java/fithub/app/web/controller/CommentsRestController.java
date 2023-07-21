@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @Validated
 @RestController
 @RequiredArgsConstructor
@@ -89,8 +91,9 @@ public class CommentsRestController {
             @Parameter(name = "commentId", description = "댓글의 아이디"),
     })
     @PatchMapping("/{type}/{id}/comments/{commentId}")
-    public ResponseDto<CommentsResponseDto.UpdateCommentDto> updateCommentArticle(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id, @PathVariable(name = "commentId") Long commentId, @RequestBody CommentsRequestDto.UpdateCommentDto request, @AuthUser User user){
-        return null;
+    public ResponseDto<CommentsResponseDto.UpdateCommentDto> updateCommentArticle(@PathVariable(name = "type") String type, @PathVariable(name = "id") Long id, @PathVariable(name = "commentId") Long commentId, @RequestBody @Valid CommentsRequestDto.UpdateCommentDto request, @AuthUser User user){
+        Comments updatedComments = type.equals("articles") ? commentsService.updateOnArticle(request, id, commentId, user) : commentsService.updateOnRecord(request, id, commentId, user);
+        return ResponseDto.of(CommentsConverter.toUpdateCommentDto(updatedComments));
     }
 
     @Operation(summary = "댓글 삭제 API", description = "댓글 삭제 API 입니다.")

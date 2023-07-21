@@ -75,4 +75,6 @@ public class Comments extends BaseEntity {
     public void toggleLikes(Boolean flag){
         this.likes  = flag ? this.likes - 1 : this.likes + 1;
     }
+
+    public Comments setContents(String contents){this.contents = contents; return this;}
 }

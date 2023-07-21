@@ -69,7 +69,7 @@ public class CommentsConverter {
                 .build();
     }
 
-    public CommentsResponseDto.UpdateCommentDto toUpdateCommentDto(Comments comments){
+    public static CommentsResponseDto.UpdateCommentDto toUpdateCommentDto(Comments comments){
         return CommentsResponseDto.UpdateCommentDto.builder()
                 .commentId(comments.getId())
                 .updatedAt(comments.getUpdatedAt())
