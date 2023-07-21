@@ -74,7 +74,7 @@ public class CommentsRestController {
         return ResponseDto.of(CommentsConverter.toCreateCommentDto(newComments));
     }
 
-    @Operation(summary = "댓글 수정 API", description = "댓글 수정 API 입니다.")
+    @Operation(summary = "댓글 수정 API ✔️", description = "댓글 수정 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 존재하지 않음, 없는 게시글의 댓글 수정 시도.", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -96,7 +96,7 @@ public class CommentsRestController {
         return ResponseDto.of(CommentsConverter.toUpdateCommentDto(updatedComments));
     }
 
-    @Operation(summary = "댓글 삭제 API", description = "댓글 삭제 API 입니다.")
+    @Operation(summary = "댓글 삭제 API ✔️", description = "댓글 삭제 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 존재하지 않음, 없는 게시글의 댓글 삭제 시도.", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -114,9 +114,13 @@ public class CommentsRestController {
     })
     @DeleteMapping("/{type}/{id}/comments/{commentId}")
     public ResponseDto<CommentsResponseDto.DeleteCommentDto> deleteComment(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id, @PathVariable(name = "commentId") Long commentId,@AuthUser User user){
-        return null;
+        if (type.equals("articles"))
+            commentsService.deleteOnArticle(id, commentId, user);
+        else
+            commentsService.deleteOnRecord(id, commentId, user);
+        return ResponseDto.of(CommentsConverter.toDeleteCommentDto(commentId));
     }
-    @Operation(summary = "댓글 좋아요 누르기/취소 API", description = "댓글 좋아요 누르기/취소 API 입니다.")
+    @Operation(summary = "댓글 좋아요 누르기/취소 API ✔️", description = "댓글 좋아요 누르기/취소 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 존재하지 않음, 없는 게시글의 댓글 좋아요/취소 시도.", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),

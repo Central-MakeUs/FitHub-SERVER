@@ -76,7 +76,7 @@ public class CommentsConverter {
                 .build();
     }
 
-    public CommentsResponseDto.DeleteCommentDto toDeleteCommentDto(Long id){
+    public static CommentsResponseDto.DeleteCommentDto toDeleteCommentDto(Long id){
         return CommentsResponseDto.DeleteCommentDto.builder()
                 .commentId(id)
                 .deletedAt(LocalDateTime.now())
