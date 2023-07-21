@@ -9,5 +9,5 @@ public interface SearchService {
     Page<Article> searchArticleCreatedAt(String tag, Long last);
     Page<Record> searchRecordCreatedAt(String tag, Long last);
     Page<Article> searchArticleLikes(String tag, Long last);
-    Page<Article> searchRecordLikes(String tag, Long last);
+    Page<Record> searchRecordLikes(String tag, Long last);
 }

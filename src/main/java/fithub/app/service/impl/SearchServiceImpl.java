@@ -43,7 +43,7 @@ public class SearchServiceImpl implements SearchService {
     Integer size;
 
     @Override
-    public Page<Article> searchArticleCreatedAt(String tag, Long last) {
+    public Page<Article> searchArticleLikes(String tag, Long last) {
         Optional<HashTag> byName = hashTagRepository.findByName('#' + tag);
         Page<Article> searchResult = null;
         if(byName.isEmpty())
@@ -56,32 +56,31 @@ public class SearchServiceImpl implements SearchService {
             if(last == null)
                 searchResult = articleRepository.findByIdInOrderByLikesDesc(articleIds, PageRequest.of(0, size));
             else
-                searchResult = articleRepository.findByIdInAndLikesLessThanOrderByCreatedAtDesc(articleIds, articleRepository.findById(last).get().getLikes(), PageRequest.of(0, size));
+                searchResult = articleRepository.findByIdInAndLikesLessThanOrderByLikesDesc(articleIds, articleRepository.findById(last).get().getLikes(), PageRequest.of(0, size));
         }
         return searchResult;
     }
 
     @Override
     public Page<Record> searchRecordCreatedAt(String tag, Long last) {
-        Optional<HashTag> byName = hashTagRepository.findByName(tag);
+        Optional<HashTag> byName = hashTagRepository.findByName('#' + tag);
         Page<Record> searchResult = null;
         if(byName.isEmpty())
             return searchResult;
         else{
             List<RecordHashTag> allByHashTag = recordHashTagRepository.findAllByHashTag(byName.get());
             List<Long> recordIds = allByHashTag.stream()
-                    .map(articleHashTag -> articleHashTag.getHashTag().getId())
+                    .map(articleHashTag -> articleHashTag.getRecord().getId())
                     .collect(Collectors.toList());
             if(last == null)
                 searchResult = recordRepository.findByIdInOrderByCreatedAtDesc(recordIds, PageRequest.of(0, size));
             else
-                searchResult = recordRepository.findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(recordIds, articleRepository.findById(last).get().getCreatedAt(), PageRequest.of(0, size));
+                searchResult = recordRepository.findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(recordIds, recordRepository.findById(last).get().getCreatedAt(), PageRequest.of(0, size));
         }
         return searchResult;
     }
-
     @Override
-    public Page<Article> searchArticleLikes(String tag, Long last) {
+    public Page<Article> searchArticleCreatedAt(String tag, Long last) {
         Optional<HashTag> byName = hashTagRepository.findByName('#' + tag);
         Page<Article> searchResult = null;
         if(byName.isEmpty())
@@ -100,7 +99,21 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Page<Article> searchRecordLikes(String tag, Long last) {
-        return null;
+    public Page<Record> searchRecordLikes(String tag, Long last) {
+        Optional<HashTag> byName = hashTagRepository.findByName('#' + tag);
+        Page<Record> searchResult = null;
+        if(byName.isEmpty())
+            return searchResult;
+        else{
+            List<RecordHashTag> allByHashTag = recordHashTagRepository.findAllByHashTag(byName.get());
+            List<Long> recordIds = allByHashTag.stream()
+                    .map(recordHashTag -> recordHashTag.getRecord().getId())
+                    .collect(Collectors.toList());
+            if(last == null)
+                searchResult = recordRepository.findByIdInOrderByLikesDesc(recordIds, PageRequest.of(0, size));
+            else
+                searchResult = recordRepository.findByIdInAndLikesLessThanOrderByLikesDesc(recordIds, recordRepository.findById(last).get().getLikes(), PageRequest.of(0, size));
+        }
+        return searchResult;
     }
 }

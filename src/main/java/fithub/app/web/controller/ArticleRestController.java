@@ -17,6 +17,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +33,7 @@ import java.io.IOException;
 @Validated
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "게시글 API", description = "게시글 관련 API")
 public class ArticleRestController {
 
     Logger logger = LoggerFactory.getLogger(ArticleRestController.class);
