@@ -11,6 +11,7 @@ import fithub.app.domain.User;
 import fithub.app.service.SearchService;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
+import fithub.app.web.dto.responseDto.SearchPreViewResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -35,7 +36,23 @@ public class SearchRestController {
 
     private final SearchService searchService;
 
-    @Operation(summary = "게시글 검색 API - 최신순 ✔️", description = "tag에 검색 태그를 담아서 전달, last로 페이징 🐶 전체 검색은 이 api와 운동인증 검색 api 2개를 같이 사용해주세요🐶")
+    @Operation(summary = "게시글 검색 API - 전체 미리보기 ✔️", description = "tag에 검색 태그를 담아서 전달")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 검색결과 있음"),
+            @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "tag", description = "검색하려는 태그"),
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/search")
+    public ResponseDto<SearchPreViewResponseDto.SearchPreViewDto> articleSearchPreView(@RequestParam(name = "tag") String tag, @AuthUser User user){
+        SearchPreViewResponseDto.SearchPreViewDto searchPreViewDto = searchService.searchPreview(tag, user);
+        return ResponseDto.of(searchPreViewDto);
+    }
+
+    @Operation(summary = "게시글 검색 API - 최신순 ✔️", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 검색결과 있음"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -55,7 +72,7 @@ public class SearchRestController {
             return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
     }
 
-    @Operation(summary = "게시글 검색 API - 인기순 ✔️", description = "tag에 검색 태그를 담아서 전달, last로 페이징 🐶 전체 검색은 이 api와 운동인증 검색 api 2개를 같이 사용해주세요🐶")
+    @Operation(summary = "게시글 검색 API - 인기순 ✔️", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 검색결과 있음"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
