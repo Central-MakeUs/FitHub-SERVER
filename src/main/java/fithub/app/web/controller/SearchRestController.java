@@ -64,7 +64,11 @@ public class SearchRestController {
     })
     @GetMapping("/search/records")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> articleSearchLikes(@RequestParam(name = "tag") String tag,@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
-        return null;
+        Page<Article> articles = searchService.searchArticleCreatedAt(tag, last);
+        if(articles == null || articles.getTotalElements() == 0)
+            return ResponseDto.of(Code.SEARCH_NO_DATA, null);
+        else
+            return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
     }
 
     @Operation(summary = "인증 검색 API - 최신순 ", description = "tag에 검색 태그를 담아서 전달, last로 페이징")

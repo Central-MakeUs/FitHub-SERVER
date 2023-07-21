@@ -54,9 +54,9 @@ public class SearchServiceImpl implements SearchService {
                     .map(articleHashTag -> articleHashTag.getArticle().getId())
                     .collect(Collectors.toList());
             if(last == null)
-                searchResult = articleRepository.findByIdInOrderByCreatedAtDesc(articleIds, PageRequest.of(0, size));
+                searchResult = articleRepository.findByIdInOrderByLikesDesc(articleIds, PageRequest.of(0, size));
             else
-                searchResult = articleRepository.findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(articleIds, articleRepository.findById(last).get().getCreatedAt(), PageRequest.of(0, size));
+                searchResult = articleRepository.findByIdInAndLikesLessThanOrderByCreatedAtDesc(articleIds, articleRepository.findById(last).get().getLikes(), PageRequest.of(0, size));
         }
         return searchResult;
     }
@@ -82,7 +82,21 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Page<Article> searchArticleLikes(String tag, Long last) {
-        return null;
+        Optional<HashTag> byName = hashTagRepository.findByName('#' + tag);
+        Page<Article> searchResult = null;
+        if(byName.isEmpty())
+            return searchResult;
+        else{
+            List<ArticleHashTag> allByHashTag = articleHashTagRepository.findAllByHashTag(byName.get());
+            List<Long> articleIds = allByHashTag.stream()
+                    .map(articleHashTag -> articleHashTag.getArticle().getId())
+                    .collect(Collectors.toList());
+            if(last == null)
+                searchResult = articleRepository.findByIdInOrderByCreatedAtDesc(articleIds, PageRequest.of(0, size));
+            else
+                searchResult = articleRepository.findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(articleIds, articleRepository.findById(last).get().getCreatedAt(), PageRequest.of(0, size));
+        }
+        return searchResult;
     }
 
     @Override
