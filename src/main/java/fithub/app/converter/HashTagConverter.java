@@ -3,7 +3,7 @@ package fithub.app.converter;
 import fithub.app.domain.HashTag;
 import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.RecordHashTag;
-import fithub.app.repository.HashTagRepository;
+import fithub.app.repository.HashTagRepositories.HashTagRepository;
 import fithub.app.web.dto.responseDto.HashTagResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

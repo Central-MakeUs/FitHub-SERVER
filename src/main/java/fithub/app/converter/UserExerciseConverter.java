@@ -1,6 +1,7 @@
 package fithub.app.converter;
 
 import fithub.app.domain.User;
+import fithub.app.domain.UserExercise;
 import fithub.app.web.dto.responseDto.UserExerciseResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -10,7 +11,8 @@ import org.springframework.stereotype.Component;
 public class UserExerciseConverter {
 
     public static UserExerciseResponseDto.UserExerciseDto toUserExerciseDto(User user){
-        return user.getMainExercise() == null ? null : UserExerciseResponseDto.UserExerciseDto.builder()
+        UserExercise mainExercise = user.getMainExercise();
+        return mainExercise == null ? null : UserExerciseResponseDto.UserExerciseDto.builder()
                 .category(user.getMainExercise().getExerciseCategory().getName())
                 .GradeName(user.getMainExercise().getGrade().getName())
                 .level(user.getMainExercise().getGrade().getLevel())

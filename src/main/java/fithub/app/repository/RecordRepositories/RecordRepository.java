@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
 
@@ -23,4 +24,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     Page<Record> findByLikesLessThanOrderByLikesDesc(Long likes, Pageable pageable);
 
     Page<Record> findByLikesLessThanAndExerciseCategoryOrderByLikesDesc(Long likes, ExerciseCategory exerciseCategory, Pageable pageable);
+
+    Page<Record> findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(List<Long> recordIds, LocalDateTime createdAt, Pageable pageable);
+    Page<Record> findByIdInOrderByCreatedAtDesc(List<Long> recordIds,Pageable pageable);
 }
