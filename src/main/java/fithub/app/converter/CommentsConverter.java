@@ -44,7 +44,7 @@ public class CommentsConverter {
                 .userInfo(UserConverter.toCommunityUserInfo(comments.getUser()))
                 .contents(comments.getContents())
                 .likes(comments.getLikes())
-                .isLiked(user.isLikedFind(comments))
+                .isLiked(user.isLikedCommentsFind(comments))
                 .createdAt(comments.getCreatedAt())
                 .build();
     }

@@ -43,6 +43,7 @@ public class ArticleResponseDto {
         String exerciseTag;
         Long likes;
         Long comments;
+        Boolean isLiked;
         LocalDateTime createdAt;
     }
 
