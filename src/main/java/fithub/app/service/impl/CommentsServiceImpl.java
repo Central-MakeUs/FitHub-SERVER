@@ -1,6 +1,7 @@
 package fithub.app.service.impl;
 
 import fithub.app.base.Code;
+import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.base.exception.handler.CommentsException;
 import fithub.app.converter.CommentsConverter;
 import fithub.app.domain.Article;
@@ -96,23 +97,45 @@ public class CommentsServiceImpl implements CommentsService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Comments updateOnArticle(CommentsRequestDto.UpdateCommentDto request, Long id, Long commentsId, User user) {
-        return null;
+        articleRepository.findById(id).orElseThrow(() -> new ArticleException(Code.ARTICLE_NOT_FOUND));
+        Comments comments = commentsRepository.findById(commentsId).orElseThrow(() -> new CommentsException(Code.COMMENT_NOT_FOUND));
+        if (!comments.getUser().getId().equals(user.getId()))
+            throw new CommentsException(Code.COMMENTS_FORBIDDEN);
+        Comments updatedComments = comments.setContents(request.getContents());
+        return updatedComments;
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Comments updateOnRecord(CommentsRequestDto.UpdateCommentDto request, Long id, Long commentsId, User user) {
-        return null;
+        recordRepository.findById(id).orElseThrow(() -> new ArticleException(Code.RECORD_NOT_FOUND));
+        Comments comments = commentsRepository.findById(commentsId).orElseThrow(() -> new CommentsException(Code.COMMENT_NOT_FOUND));
+        if (!comments.getUser().getId().equals(user.getId()))
+            throw new CommentsException(Code.COMMENTS_FORBIDDEN);
+        Comments updatedComments = comments.setContents(request.getContents());
+        return updatedComments;
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteOnArticle(Long id, Long commentsId, User user) {
-
+        articleRepository.findById(id).orElseThrow(()->new CommentsException(Code.ARTICLE_NOT_FOUND));
+        Comments comments = commentsRepository.findById(commentsId).orElseThrow(() -> new CommentsException(Code.COMMENT_NOT_FOUND));
+        if (!comments.getUser().getId().equals(user.getId()))
+            throw new CommentsException(Code.COMMENTS_FORBIDDEN);
+        commentsRepository.delete(comments);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteOnRecord(Long id, Long commentsId, User user) {
-
+        recordRepository.findById(id).orElseThrow(()->new CommentsException(Code.RECORD_NOT_FOUND));
+        Comments comments = commentsRepository.findById(commentsId).orElseThrow(() -> new CommentsException(Code.COMMENT_NOT_FOUND));
+        if (!comments.getUser().getId().equals(user.getId()))
+            throw new CommentsException(Code.COMMENTS_FORBIDDEN);
+        commentsRepository.delete(comments);
     }
 
     @Override
@@ -146,6 +169,30 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     public Comments toggleCommentsLikeOnRecord(Long id, Long commentsId, User user) {
-        return null;
+        Record record= recordRepository.findById(id).orElseThrow(() -> new CommentsException(Code.ARTICLE_NOT_FOUND));
+        Comments comments = commentsRepository.findById(commentsId).orElseThrow(() -> new CommentsException(Code.COMMENT_NOT_FOUND));
+        Optional<CommentsLikes> commentsLikesOptional = commentsLikesRepository.findByCommentsAndUser(comments, user);
+        if (comments.getUser().equals(user))
+            throw new CommentsException(Code.COMMENTS_LIKES_FORBBIDDEN);
+        if(commentsLikesOptional.isPresent())
+        {
+            CommentsLikes commentsLikes = commentsLikesOptional.get();
+            user.getCommentsLikesList().remove(commentsLikes);
+            comments.getCommentsLikesList().remove(commentsLikes);
+            commentsLikesRepository.delete(commentsLikes);
+            comments.toggleLikes(true);
+        }
+        else{
+            CommentsLikes newCommentsLikes = CommentsLikes.builder()
+                    .comments(comments)
+                    .user(user)
+                    .build();
+            user.getCommentsLikesList().add(newCommentsLikes);
+            newCommentsLikes.setComments(comments);
+            newCommentsLikes.setUser(user);
+            commentsLikesRepository.save(newCommentsLikes);
+            comments.toggleLikes(false);
+        }
+        return comments;
     }
 }
