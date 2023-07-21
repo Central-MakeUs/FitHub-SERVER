@@ -6,6 +6,7 @@ import fithub.app.domain.enums.Gender;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.domain.enums.Status;
 import fithub.app.domain.mapping.ArticleLikes;
+import fithub.app.domain.mapping.CommentsLikes;
 import fithub.app.domain.mapping.RecordLikes;
 import fithub.app.domain.mapping.SavedArticle;
 import fithub.app.web.dto.requestDto.UserRequestDto;
@@ -15,6 +16,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Builder
@@ -90,6 +92,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Comments> commentsList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<CommentsLikes> commentsLikesList = new ArrayList<>();
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "main_exercise")
     private UserExercise mainExercise;
@@ -117,5 +122,11 @@ public class User extends BaseEntity {
         this.nickname = request.getNickname();
         this.gender = gender;
         return  this;
+    }
+
+    public Boolean isLikedFind(Comments comments){
+        return this.commentsLikesList.stream()
+                .filter(commentsLikes -> commentsLikes.getComments().getId().equals(comments.getId()))
+                .collect(Collectors.toList()).size() > 0;
     }
 }

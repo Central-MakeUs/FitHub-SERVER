@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,9 +48,9 @@ public class CommentsRestController {
             @Parameter(name = "id", description = "게시글/운동 인증의 아이디")
     })
     @GetMapping("/{type}/{id}/comments")
-    public ResponseDto<CommentsResponseDto.CommentsDtoList>articleCommentList(@RequestParam(name = "last", required = false) Long last,@PathVariable(name = "type") String type,@PathVariable(name = "id") @ExistArticle Long id){
+    public ResponseDto<CommentsResponseDto.CommentsDtoList>articleCommentList(@RequestParam(name = "last", required = false) Long last,@PathVariable(name = "type") String type,@PathVariable(name = "id") @ExistArticle Long id, @AuthUser User user){
         Page<Comments> comments = type.equals("articles") ? commentsService.findOnArticle(id, last) : commentsService.findOnRecord(id, last);
-        return ResponseDto.of(CommentsConverter.toCommentsDtoList(comments.toList()));
+        return ResponseDto.of(CommentsConverter.toCommentsDtoList(comments.toList(), user));
     }
 
     @Operation(summary = "댓글 작성 API ✔️", description = "댓글 작성 API 입니다.")
@@ -119,6 +120,7 @@ public class CommentsRestController {
             @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동 인증이 존재하지 않음, 없는 운동 인증의 댓글 좋아요/취소 시도.", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "4051", description = "NOT_FOUND : 댓글이 존재하지 않음", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "4053", description = "BAD_REQUEST : url에 type을 확인해주세요", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4053", description = "FORBIDDEN : 자신의 댓글은 좋아요를 누를 수 없음", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
@@ -127,8 +129,10 @@ public class CommentsRestController {
             @Parameter(name = "id", description = "게시글/운동 인증의 아이디"),
             @Parameter(name = "commentId", description = "댓글의 아이디"),
     })
+    @Transactional(readOnly = false)
     @PostMapping("/{type}/{id}/comments/{commentId}")
     public ResponseDto<CommentsResponseDto.CommentLikeDto> toggleComment(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id, @PathVariable(name = "commentId") Long commentId,@AuthUser User user){
-        return null;
+        Comments comments = type.equals("articles") ? commentsService.toggleCommentsLikeOnArticle(id, commentId, user) : commentsService.toggleCommentsLikeOnRecord(id, commentId, user);
+        return ResponseDto.of(CommentsConverter.toCommentLikeDto(comments));
     }
 }
