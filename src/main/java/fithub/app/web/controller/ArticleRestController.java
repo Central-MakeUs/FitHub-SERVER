@@ -75,7 +75,7 @@ public class ArticleRestController {
             articles = articleService.findArticlePagingCategoryAndCreatedAt(user, categoryId, last);
         else
             articles = articleService.findArticlePagingCreatedAt(user,last);
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList()));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
     }
 
     @Operation(summary = "게시글 목록 조회 API - 인기순 ✔️", description = "categoryId가 0이면 전체조회, last로 페이징")
@@ -97,7 +97,7 @@ public class ArticleRestController {
         else
             articles = articleService.findArticlePagingLikes(user,last);
 
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList()));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
     }
 
     @Operation(summary = "게시글 추가 API ✔️", description = "게시글 추가 API 입니다. 사진 여러 장을 한번에 보내 주세요")

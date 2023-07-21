@@ -124,9 +124,21 @@ public class User extends BaseEntity {
         return  this;
     }
 
-    public Boolean isLikedFind(Comments comments){
+    public Boolean isLikedCommentsFind(Comments comments){
         return this.commentsLikesList.stream()
                 .filter(commentsLikes -> commentsLikes.getComments().getId().equals(comments.getId()))
+                .collect(Collectors.toList()).size() > 0;
+    }
+
+    public Boolean isLikedArticle(Article article){
+        return this.articleLikesList.stream()
+                .filter(articleLikes -> articleLikes.getArticle().getId().equals(article.getId()))
+                .collect(Collectors.toList()).size() > 0;
+    }
+
+    public Boolean isLikedRecord(Record record){
+        return this.recordLikesList.stream()
+                .filter(recordLikes -> recordLikes.getRecord().getId().equals(record.getId()))
                 .collect(Collectors.toList()).size() > 0;
     }
 }

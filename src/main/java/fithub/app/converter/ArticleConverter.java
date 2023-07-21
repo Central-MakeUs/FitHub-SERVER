@@ -142,7 +142,7 @@ public class ArticleConverter {
                 .build();
     }
 
-    public static ArticleResponseDto.ArticleDto toArticleDto(Article article){
+    public static ArticleResponseDto.ArticleDto toArticleDto(Article article, User user){
         return ArticleResponseDto.ArticleDto.builder()
                 .articleId(article.getId())
                 .userInfo(UserConverter.toCommunityUserInfo(article.getUser()))
@@ -153,14 +153,15 @@ public class ArticleConverter {
                 .exerciseTag('#' + article.getExerciseCategory().getName())
                 .likes(article.getLikes())
                 .comments(article.getComments())
+                .isLiked(user.isLikedArticle(article))
                 .createdAt(article.getCreatedAt())
                 .build();
     }
 
-    public static ArticleResponseDto.ArticleDtoList toArticleDtoList(List<Article> articleList){
+    public static ArticleResponseDto.ArticleDtoList toArticleDtoList(List<Article> articleList, User user){
         List<ArticleResponseDto.ArticleDto> articleDtoList =
                 articleList.stream()
-                        .map(article -> toArticleDto(article))
+                        .map(article -> toArticleDto(article, user))
                         .collect(Collectors.toList());
 
         return ArticleResponseDto.ArticleDtoList.builder()
