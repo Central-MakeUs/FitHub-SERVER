@@ -69,14 +69,14 @@ public class CommentsConverter {
                 .build();
     }
 
-    public CommentsResponseDto.UpdateCommentDto toUpdateCommentDto(Comments comments){
+    public static CommentsResponseDto.UpdateCommentDto toUpdateCommentDto(Comments comments){
         return CommentsResponseDto.UpdateCommentDto.builder()
                 .commentId(comments.getId())
                 .updatedAt(comments.getUpdatedAt())
                 .build();
     }
 
-    public CommentsResponseDto.DeleteCommentDto toDeleteCommentDto(Long id){
+    public static CommentsResponseDto.DeleteCommentDto toDeleteCommentDto(Long id){
         return CommentsResponseDto.DeleteCommentDto.builder()
                 .commentId(id)
                 .deletedAt(LocalDateTime.now())
