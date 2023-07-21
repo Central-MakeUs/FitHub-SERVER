@@ -11,7 +11,8 @@ import fithub.app.domain.mapping.ArticleLikes;
 import fithub.app.domain.mapping.SavedArticle;
 import fithub.app.repository.ArticleRepositories.*;
 import fithub.app.repository.ExerciseCategoryRepository;
-import fithub.app.repository.HashTagRepository;
+import fithub.app.repository.HashTagRepositories.ArticleHashTagRepository;
+import fithub.app.repository.HashTagRepositories.HashTagRepository;
 import fithub.app.service.ArticleService;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +21,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 

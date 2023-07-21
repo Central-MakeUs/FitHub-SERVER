@@ -8,13 +8,12 @@ import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.HashTagConverter;
 import fithub.app.converter.RecordConverter;
 import fithub.app.domain.*;
-import fithub.app.domain.mapping.ArticleHashTag;
-import fithub.app.domain.mapping.ArticleLikes;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.domain.mapping.RecordLikes;
 import fithub.app.repository.ExerciseCategoryRepository;
-import fithub.app.repository.HashTagRepository;
-import fithub.app.repository.RecordRepositories.RecordHashTagRepository;
+import fithub.app.repository.HashTagRepositories.HashTagRepository;
+
+import fithub.app.repository.HashTagRepositories.RecordHashTagRepository;
 import fithub.app.repository.RecordRepositories.RecordLikesRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.service.RecordService;

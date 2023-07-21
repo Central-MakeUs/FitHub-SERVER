@@ -31,6 +31,7 @@ public enum Code {
 
     NICKNAME_OK(HttpStatus.OK,2011, "사용 가능한 닉네임 입니다."),
 
+    SEARCH_NO_DATA(HttpStatus.OK, 2021, "검색 결과가 없습니다."),
     // Error Code
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 5000, "Internal server Error"),
 

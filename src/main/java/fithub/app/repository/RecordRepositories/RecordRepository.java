@@ -1,6 +1,5 @@
 package fithub.app.repository.RecordRepositories;
 
-import fithub.app.domain.Article;
 import fithub.app.domain.ExerciseCategory;
 import fithub.app.domain.Record;
 import org.springframework.data.domain.Page;
@@ -8,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public interface RecordRepository extends JpaRepository<Record, Long> {
 
@@ -23,4 +23,10 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     Page<Record> findByLikesLessThanOrderByLikesDesc(Long likes, Pageable pageable);
 
     Page<Record> findByLikesLessThanAndExerciseCategoryOrderByLikesDesc(Long likes, ExerciseCategory exerciseCategory, Pageable pageable);
+
+    Page<Record> findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(List<Long> recordIds, LocalDateTime createdAt, Pageable pageable);
+    Page<Record> findByIdInOrderByCreatedAtDesc(List<Long> recordIds,Pageable pageable);
+
+    Page<Record> findByIdInAndLikesLessThanOrderByLikesDesc(List<Long> articleIds, Long likes, Pageable pageable);
+    Page<Record> findByIdInOrderByLikesDesc(List<Long> articleIds, Pageable pageable);
 }

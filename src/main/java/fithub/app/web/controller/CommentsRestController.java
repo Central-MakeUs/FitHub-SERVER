@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +30,7 @@ import javax.validation.Valid;
 @Validated
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "댓글 API", description = "댓글 관련 API")
 public class CommentsRestController {
 
     private final CommentsService commentsService;

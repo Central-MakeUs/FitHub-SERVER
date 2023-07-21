@@ -1,4 +1,4 @@
-package fithub.app.repository;
+package fithub.app.repository.HashTagRepositories;
 
 import fithub.app.domain.HashTag;
 import org.springframework.data.jpa.repository.JpaRepository;
