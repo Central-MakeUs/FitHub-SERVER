@@ -121,19 +121,20 @@ public class RecordConverter {
                 .build();
     }
 
-    public static RecordResponseDto.recordDto toRecordDto(Record record){
+    public static RecordResponseDto.recordDto toRecordDto(Record record, User user){
         return RecordResponseDto.recordDto.builder()
                 .recordId(record.getId())
                 .pictureUrl(record.getImageUrl())
                 .likes(record.getLikes())
+                .isLiked(user.isLikedRecord(record))
                 .createdAt(record.getCreatedAt())
                 .build();
     }
 
-    public static RecordResponseDto.recordDtoList toRecordDtoList(List<Record> recordList){
+    public static RecordResponseDto.recordDtoList toRecordDtoList(List<Record> recordList, User user){
         List<RecordResponseDto.recordDto> recordDtoList =
                 recordList.stream()
-                        .map(record -> toRecordDto(record))
+                        .map(record -> toRecordDto(record, user))
                         .collect(Collectors.toList());
 
         return RecordResponseDto.recordDtoList.builder()

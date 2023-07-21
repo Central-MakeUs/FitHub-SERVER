@@ -39,6 +39,8 @@ public class RecordResponseDto {
         Long likes;
         @Schema(description = "작성 시간")
         LocalDateTime createdAt;
+
+        Boolean isLiked;
     }
 
     @Builder

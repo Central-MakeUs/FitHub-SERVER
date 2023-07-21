@@ -76,7 +76,7 @@ public class RecordRestController {
             records = recordService.findRecordPagingCategoryAndCreatedAt(user, categoryId, last);
         else
             records = recordService.findRecordPagingCreatedAt(user,last);
-        return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList()));
+        return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
     }
 
     @Operation(summary = "운동 인증 목록 조회 API - 인기순 ✔️", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
@@ -96,7 +96,7 @@ public class RecordRestController {
             records = recordService.findRecordPagingCategoryAndLikes(user, categoryId, last);
         else
             records = recordService.findRecordPagingLikes(user,last);
-        return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList()));
+        return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
     }
 
     @Operation(summary = "운동인증 작성 API ✔️ - 홈 페이지 작업 후 수정 필요", description = "운동인증 작성 API 입니다. 작성이 되는지 확인만 해주세요, 인증해서 레벨 오르는건 아직 구현 X")
