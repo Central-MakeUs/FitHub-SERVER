@@ -14,5 +14,6 @@ public class OAuthResult {
     public static class OAuthResultDto{
         Boolean isLogin;
         String jwt;
+        Long userId;
     }
 }
