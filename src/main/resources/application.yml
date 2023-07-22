@@ -92,3 +92,6 @@ paging:
   size : 12
   comments:
     size : 10
+
+fcm:
+  url: ${FCM_API_URL}

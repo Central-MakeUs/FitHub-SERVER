@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "fithub-push-alarm",
+  "private_key_id": "fa680dcbdab4c95cfe439108ca9621c4c29d531f",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEuwIBADANBgkqhkiG9w0BAQEFAASCBKUwggShAgEAAoIBAQClqi+6fbQBuAZW\ns1K+Bv7SjsdA1ifcLXFV9lTLtpN7g/rJahICUqGiK2cYOMAJpB/T+5y2mBhIJU+F\nwAia6j+bmvqGxl/xpIf3Al3WxjyL2dWWCUAvuQ2CbM09S9vDSEno/n/8MhDzzrym\n7YAWRKpKmwZdRiSo+JBaWaObF/a7NKl7+abkchh+l3nKqnFeqGqOZrtxSDKjLKhm\nAa/PBQ2k8GT2QR8n5moUXVbDtQ6m5n7kjRZIUTPxaEsFFrQcyFRrmRPlHEh6/SSq\n2e0sYkIGpMYAenDKAfaadSo+fgDnQ/R+Izc0NmaAXlAMq/9oYwfH0M57wfJZMIu/\n4LfeKnePAgMBAAECgf85u3DCDOflHyo66B620UuOzA5/nCIjYfvmVJaBjDEifsmw\nHjSWLOyUzh2fZZU9xuIsEANWMPP8MHIqqkF6BEzdSMmYCa5l4wLstmZrFxgnEkLc\nqxN8aYDwTkOBK0nqscZ9x1fSwntKe9OwWKZc0yNgt+7bSV+hzCI5ESiXY/lhHumL\nKOiSVFAaDxnGWJL98DR8eeo8uq5dQ5AVmmOIuItnu4SuXHtvQbgy+J6y6Hn8m7+7\nuSE5bR0NmgmZHBfnIstoQ5fWR/q1+XumrVToOTtifzNjE07/eaF1rQXEwgBcvOrg\nUwWOqLcdBMKAyv/7ks6cts3gPz8GnBN+8Seyx6kCgYEAz/5XWabcKsK4dHSj8bkZ\nqIeCNBbPtASgLF7eFTLeYamC6fspv0MYkAOWk+tipsykZ5S/KQlcwjWGuu7a6vbR\nin0dKrWiHyv98td4DwORlu7ZlUBPq8NmqFgZlWLiwl0Iq8ab5qiQngxWWzxbyPVU\nISDCb0Zkz7cyu2qvSxH3jskCgYEAy+bHVS9gJkvrJcmSt6gvtE5Qn4qiIbUMLl81\nGlGjrd/8w8k4hSsJQlBiBzmZb1P31ScYuLiK8XxW872tMkI0vHwmpQ1na/He3nRv\nPW5YKQo5a7QaBCYtR+Mx0eQ69NF8r0fzAi3ezQArkvvRvcEk0giO61mzR5Apyxxd\nrIxvx5cCgYBUG+Aq6uUBjbiVr01UxKtxkUq/0bGwdGZpSvu3ythO2gOMpvqc038t\nTaYorvk3xm19TZN3/sc56fdPxKNWfPUDcdDHoqeqv1l0SFnOiHzpcjEev+D37o6m\n6Ol/lXtpacHF5QzKW8QPhaGuR1w+iaa5tsupv+eob8beLygvzVY0sQKBgQDG1uiw\nM6EJ96L6mJXRL9xFctHAo4r0X//fAM1iOxbpKrLtor7RbmR7HLRb41mzbSkT3iqH\niL9GO0D4NJI/nryayl9NOcMPSzFRsi4AtCiY7PWOCHYOccRahD5DNtQfhmKW9A0Q\npPbO50mW7qdc6osjn2DwNetU8EsxXRokeFdRRQKBgAmPAqVnE+Kwx7U7YBOmc1fi\nc+1Ui/AUcz/pYHHH1RUo9MB03527wdwP6Rvtcg9BuSegjU3Q8Shi6wr8r1aq5bWg\nYNBUo5GMdxCL8aXAQceW4p7PEK9cLg3eQUKWL0tRWiY7/0Pau+dwoeG3tRk3lShA\naOqJexSTsx6Zq7H64Z+b\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-sgbgs@fithub-push-alarm.iam.gserviceaccount.com",
+  "client_id": "103133572992342058096",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-sgbgs%40fithub-push-alarm.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
