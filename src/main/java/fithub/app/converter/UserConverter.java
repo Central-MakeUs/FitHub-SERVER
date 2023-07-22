@@ -178,9 +178,10 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDto.LoginDto toLoginDto(String jwt){
+    public static UserResponseDto.LoginDto toLoginDto(String jwt, User user){
         return UserResponseDto.LoginDto.builder()
                 .accessToken(jwt)
+                .userId(user.getId())
                 .build();
     }
 
