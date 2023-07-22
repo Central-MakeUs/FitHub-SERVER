@@ -46,7 +46,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleExceptionInternal(Exception e, Code errorCode,
                                                            HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ResponseDto<Object> body = ResponseDto.of(true,errorCode, errorCode.getMessage(e));
+        ResponseDto<Object> body = ResponseDto.of(true,errorCode, null);
         return super.handleExceptionInternal(
                 e,
                 body,
@@ -58,7 +58,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
     private ResponseEntity<Object> handleExceptionInternalFalse(Exception e, Code errorCode,
                                                            HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ResponseDto<Object> body = ResponseDto.of(false,errorCode, errorCode.getMessage(e));
+        ResponseDto<Object> body = ResponseDto.of(false,errorCode, null);
         return super.handleExceptionInternal(
                 e,
                 body,
