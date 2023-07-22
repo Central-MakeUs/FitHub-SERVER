@@ -55,6 +55,7 @@ public class UserResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class OauthDto{
         private String accessToken;
+        private Long userId;
     }
 
     @Builder
@@ -71,6 +72,7 @@ public class UserResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class LoginDto{
         private String accessToken;
+        private Long userId;
     }
 
     @Builder

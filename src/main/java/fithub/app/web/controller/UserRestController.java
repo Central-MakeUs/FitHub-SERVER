@@ -257,6 +257,6 @@ public class UserRestController {
         String jwt = userService.login(user,request.getPassword());
         logger.info("로그인 토큰 : {}", jwt);
 
-        return ResponseDto.of(UserConverter.toLoginDto(jwt));
+        return ResponseDto.of(UserConverter.toLoginDto(jwt, user));
     }
 }
