@@ -64,7 +64,7 @@ public class ArticleConverter {
                 .exerciseCategory(exerciseCategory)
                 .build();
 
-        staticLogger.info("생성된 article : {}", article);
+        staticLogger.info("생성된 article : {}", article.toString());
         article.setArticleHashTagList(toArticleHashTagList(hashTagList, article));
         article.setUser(user);
 

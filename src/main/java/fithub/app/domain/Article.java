@@ -20,6 +20,25 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Article extends BaseEntity {
 
+    @Override
+    public String toString() {
+        return "Article{" +
+                "id=" + id +
+                ", comments=" + comments +
+                ", title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", views=" + views +
+                ", reported=" + reported +
+                ", saves=" + saves +
+                ", likes=" + likes +
+                ", articleImageList=" + articleImageList +
+                ", articleHashTagList=" + articleHashTagList +
+                ", commentsList=" + commentsList +
+                ", user=" + user +
+                ", exerciseCategory=" + exerciseCategory +
+                '}';
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
