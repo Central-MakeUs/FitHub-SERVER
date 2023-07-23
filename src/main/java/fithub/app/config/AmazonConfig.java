@@ -35,6 +35,9 @@ public class AmazonConfig {
     @Value("${cloud.aws.s3.folder.fithub-record}")
     private String fithubRecord;
 
+    @Value("${cloud.aws.s3.folder.fithub-profile}")
+    private String fithubProfile;
+
     private AWSCredentials awsCredentials;
 
     @PostConstruct

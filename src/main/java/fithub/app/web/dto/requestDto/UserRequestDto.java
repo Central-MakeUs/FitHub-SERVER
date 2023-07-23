@@ -3,6 +3,7 @@ package fithub.app.web.dto.requestDto;
 import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import java.util.List;
@@ -51,6 +52,7 @@ public class UserRequestDto {
         @NotBlank
         private String gender;
         private List<Integer> preferExercises;
+        private MultipartFile profileImage;
     }
 
     @Getter @Setter
@@ -64,6 +66,7 @@ public class UserRequestDto {
         private String birth;
         private String gender;
         private List<Integer> preferExercises;
+        private MultipartFile profileImage;
     }
 
     @Getter @Setter

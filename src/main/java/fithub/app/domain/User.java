@@ -115,12 +115,13 @@ public class User extends BaseEntity {
         return this;
     }
 
-    public User updateInfo(UserRequestDto.UserOAuthInfo request, Integer age, Gender gender){
+    public User updateInfo(UserRequestDto.UserOAuthInfo request, Integer age, Gender gender, String profileUrl){
         this.name = request.getName();
         this.age = age;
         this.marketingAgree = request.getMarketingAgree();
         this.nickname = request.getNickname();
         this.gender = gender;
+        this.profileUrl = profileUrl;
         return  this;
     }
 
