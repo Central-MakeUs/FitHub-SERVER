@@ -252,7 +252,7 @@ public class UserRestController {
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @PostMapping("/users/sign-in")
-    public ResponseDto<UserResponseDto.LoginDto> login(@RequestBody UserRequestDto.LoginDto request){
+    public ResponseDto<UserResponseDto.LoginResultDto> login(@RequestBody UserRequestDto.LoginDto request){
         User user = userService.findByPhoneNum(request.getTargetPhoneNum());
         String jwt = userService.login(user,request.getPassword());
         logger.info("로그인 토큰 : {}", jwt);

@@ -70,7 +70,7 @@ public class UserResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class LoginDto{
+    public static class LoginResultDto{
         private String accessToken;
         private Long userId;
     }
