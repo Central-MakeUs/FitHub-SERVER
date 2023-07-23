@@ -1,8 +1,11 @@
 package fithub.app.converter;
 
 import fithub.app.auth.provider.TokenProvider;
+import fithub.app.aws.s3.AmazonS3Manager;
 import fithub.app.base.Code;
+import fithub.app.domain.Record;
 import fithub.app.domain.User;
+import fithub.app.domain.Uuid;
 import fithub.app.domain.enums.Gender;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.base.exception.handler.UserException;
@@ -14,8 +17,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -37,11 +42,16 @@ public class UserConverter {
 
     private static PasswordEncoder staticPasswordEncoder;
 
+    private final AmazonS3Manager amazonS3Manager;
+
+    private static AmazonS3Manager staticAmazonS3Manager;
+
     @PostConstruct
     public void init() {
         this.staticUserRepository = this.userRepository;
         this.staticPasswordEncoder = this.passwordEncoder;
         this.staticTokenProvider = this.tokenProvider;
+        this.staticAmazonS3Manager = this.amazonS3Manager;
     }
 
     public static User toCreateOAuthUser(String socialId, SocialType socialType){
@@ -52,7 +62,8 @@ public class UserConverter {
                 .build();
     }
 
-    public static User toUserPhoneNum(UserRequestDto.UserInfo request){
+    public static User toUserPhoneNum(UserRequestDto.UserInfo request) throws IOException
+    {
 
         String birthdayString = request.getBirth(); // 생년월일 문자열 (YYMMDD 형식)
 
@@ -95,11 +106,21 @@ public class UserConverter {
                 .password(staticPasswordEncoder.encode(request.getPassword()))
                 .age(age)
                 .gender(gender)
+                .profileUrl(uploadProfileImage(request.getProfileImage()))
                 .build();
 
     }
 
-    public static User toSocialUser(UserRequestDto.UserOAuthInfo request, User user){
+    public static String uploadProfileImage(MultipartFile recordImage) throws IOException
+    {
+        Uuid uuid = staticAmazonS3Manager.createUUID();
+        String KeyName = staticAmazonS3Manager.generateProfileName(uuid, recordImage.getOriginalFilename());
+        String fileUrl = staticAmazonS3Manager.uploadFile(KeyName, recordImage);
+        return fileUrl;
+    }
+
+    public static User toSocialUser(UserRequestDto.UserOAuthInfo request, User user) throws IOException
+    {
         String birthdayString = request.getBirth(); // 생년월일 문자열 (YYMMDD 형식)
 
         // 생년월일 문자열을 LocalDate로 변환
@@ -133,7 +154,9 @@ public class UserConverter {
 
         Gender gender = Integer.valueOf(genderFlag) % 2 == 0 ? Gender.FEMALE : Gender.MALE;
 
-        return user.updateInfo(request, age,gender);
+        String profileUrl = uploadProfileImage(request.getProfileImage());
+
+        return user.updateInfo(request, age,gender, profileUrl);
     }
 
     public static User toUser(Long userId){

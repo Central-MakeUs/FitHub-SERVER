@@ -23,6 +23,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -99,7 +100,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = false)
-    public User signUpPhoneNum(UserRequestDto.UserInfo request) {
+    public User signUpPhoneNum(UserRequestDto.UserInfo request) throws IOException
+    {
         User newUser = UserConverter.toUserPhoneNum(request);
         User savedUser = userRepository.save(newUser);
 
@@ -138,7 +140,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = false)
-    public User socialInfoComplete(UserRequestDto.UserOAuthInfo request, User user) {
+    public User socialInfoComplete(UserRequestDto.UserOAuthInfo request, User user) throws IOException
+    {
         User updatedUser =  UserConverter.toSocialUser(request, user);
         for (int i = 0; i < request.getPreferExercises().size(); i++) {
             ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises().get(i))

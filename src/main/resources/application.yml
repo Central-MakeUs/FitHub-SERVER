@@ -31,8 +31,8 @@ spring:
 
   servlet:
     multipart:
-      maxFileSize: 20MB
-      maxRequestSize: 30MB
+      maxFileSize: 200MB
+      maxRequestSize: 300MB
       enabled: true
 jwt:
   header: Authorization
@@ -78,6 +78,7 @@ cloud:
       folder:
         fithub-article: fithub-article
         fithub-record : fithub-record
+        fithub-profile : profile
     region:
       static: ap-northeast-2
     stack:
