@@ -28,6 +28,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
@@ -152,14 +153,15 @@ public class UserRestController {
         return ResponseDto.of(exerciseList);
     }
 
-    @PostMapping("/users/sign-up")
     @Operation(summary = "핸드폰 번호를 이용한 회원가입 완료 API ✔️", description = "핸드폰 번호를 이용한 회원가입 시 사용됩니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 가입 한 사용자의 DB 상 id, nickname이 담긴 result 반환"),
             @ApiResponse(responseCode = "4017", description = "BAD_REQUEST : 운동 카테고리가 잘못 됨"),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
-    public ResponseDto<UserResponseDto.JoinUserDto> signUpByPhoneNum(@RequestBody UserRequestDto.UserInfo request){
+    @PostMapping(value = "/users/sign-up",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseDto<UserResponseDto.JoinUserDto> signUpByPhoneNum(@ModelAttribute UserRequestDto.UserInfo request) throws IOException
+    {
 
         logger.info("넘겨 받은 사용자의 정보 : {}", request.toString());
 
@@ -180,8 +182,9 @@ public class UserRestController {
     @Parameters({
             @Parameter(name = "user", hidden = true)
     })
-    @PatchMapping("/users/sign-up/oauth")
-    public ResponseDto<UserResponseDto.SocialInfoDto> signUpByOAuth(@RequestBody UserRequestDto.UserOAuthInfo request, @AuthUser User user){
+    @PatchMapping(value = "/users/sign-up/oauth",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseDto<UserResponseDto.SocialInfoDto> signUpByOAuth(@RequestBody UserRequestDto.UserOAuthInfo request, @AuthUser User user) throws IOException
+    {
         logger.info("넘겨받은 사용자의 정보 : {}", request.toString());
         User updatedUser = userService.socialInfoComplete(request, user);
         logger.info("로그인 된 사용자의 정보 : {}", user.toString());
