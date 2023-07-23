@@ -31,9 +31,9 @@ spring:
 
   servlet:
     multipart:
+      enabled: true
       maxFileSize: 200MB
       maxRequestSize: 300MB
-      enabled: true
 jwt:
   header: Authorization
   secret: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
