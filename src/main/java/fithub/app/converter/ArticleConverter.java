@@ -150,7 +150,7 @@ public class ArticleConverter {
                 .title(article.getTitle())
                 .contents(article.getContents())
                 .pictureUrl(article.getArticleImageList().size() == 0 ? null : article.getArticleImageList().get(0).getImageUrl())
-                .exerciseTag('#' + article.getExerciseCategory().getName())
+                .exerciseTag(article.getExerciseCategory().getName())
                 .likes(article.getLikes())
                 .comments(article.getComments())
                 .isLiked(user.isLikedArticle(article))

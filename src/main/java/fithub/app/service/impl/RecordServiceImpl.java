@@ -60,11 +60,11 @@ public class RecordServiceImpl implements RecordService {
     public Record create(RecordRequestDto.CreateRecordDto request, User user, Integer categoryId) throws IOException
     {
         String exerciseTag = request.getExerciseTag();
-        HashTag exerciseHash = hashTagRepository.findByName('#' + exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
+        HashTag exerciseHash = hashTagRepository.findByName(exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
         List<HashTag> hashTagList = new ArrayList<>();
         if (request.getHashTagList() != null) {
             hashTagList =request.getHashTagList().stream()
-                    .map(tag -> hashTagRepository.findByName('#' + tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
+                    .map(tag -> hashTagRepository.findByName(tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
                     .collect(Collectors.toList());
         }
         hashTagList.add(exerciseHash);
