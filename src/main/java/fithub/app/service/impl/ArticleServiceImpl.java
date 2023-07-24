@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -61,9 +62,12 @@ public class ArticleServiceImpl implements ArticleService {
     {
         String exerciseTag = request.getExerciseTag();
         HashTag exercisehashTag = hashTagRepository.findByName('#' + exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
-        List<HashTag> hashTagList = request.getTagList().stream()
-                .map(tag -> hashTagRepository.findByName('#' + tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
-                .collect(Collectors.toList());
+        List<HashTag> hashTagList = new ArrayList<>();
+        if (request.getTagList() != null) {
+         hashTagList =request.getTagList().stream()
+                    .map(tag -> hashTagRepository.findByName('#' + tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
+                    .collect(Collectors.toList());
+        }
 
         hashTagList.add(exercisehashTag);
 
