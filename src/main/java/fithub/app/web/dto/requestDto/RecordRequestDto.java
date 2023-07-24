@@ -38,11 +38,22 @@ public class RecordRequestDto {
 
     @Getter @Setter
     public static class updateRecordDto{
-        @NotBlank
+        @Override
+        public String toString() {
+            return "updateRecordDto{" +
+                    "contents='" + contents + '\'' +
+                    ", category=" + category +
+                    ", exerciseTag='" + exerciseTag + '\'' +
+                    ", hashTagList=" + hashTagList +
+                    ", newImage=" + newImage +
+                    ", remainImageUrl='" + remainImageUrl + '\'' +
+                    '}';
+        }
+
         String contents;
-        @NotBlank
+
         Integer category;
-        @NotBlank
+
         String exerciseTag;
         @Size(min = 0, max = 4)
         List<String> hashTagList;

@@ -78,13 +78,16 @@ public class RecordConverter {
     public static Record toUpdateRecord(Record record, RecordRequestDto.updateRecordDto request, List<HashTag> hashTagList) throws IOException{
         ExerciseCategory exerciseCategory = staticExerciseCategoryRepository.findById(request.getCategory()).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
         record.update(request, exerciseCategory);
-
-        MultipartFile recordImage = request.getNewImage();
-        record.setRecordHashTagList(toRecordHashTagList(hashTagList, record));
-        String imageUrl = null;
-        if(recordImage != null)
-            imageUrl = uploadRecordImage(recordImage, record);
-        record.setImage(imageUrl);
+        if (request.getRemainImageUrl() != null)
+            record.setImage(request.getRemainImageUrl());
+        else{
+            MultipartFile recordImage = request.getNewImage();
+            record.setRecordHashTagList(toRecordHashTagList(hashTagList, record));
+            String imageUrl = null;
+            if(recordImage != null)
+                imageUrl = uploadRecordImage(recordImage, record);
+            record.setImage(imageUrl);
+        }
         return record;
     }
 

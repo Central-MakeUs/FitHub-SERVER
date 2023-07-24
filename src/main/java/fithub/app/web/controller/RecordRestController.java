@@ -136,6 +136,7 @@ public class RecordRestController {
     @PatchMapping(value = "/record/{recordId}",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
     public ResponseDto<RecordResponseDto.recordUpdateDto> updateRecord(@PathVariable(name = "recordId") Long recordId, @ModelAttribute RecordRequestDto.updateRecordDto request, @AuthUser User user) throws IOException
     {
+        logger.error("사용자가 넘긴 정보 : {}",request.toString());
         Record record = recordService.updateRecord(request, recordId, user);
         return ResponseDto.of(RecordConverter.toRecordUpdateDto(record));
     }
