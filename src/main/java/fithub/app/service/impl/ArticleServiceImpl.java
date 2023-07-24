@@ -61,11 +61,11 @@ public class ArticleServiceImpl implements ArticleService {
     public Article create(ArticleRequestDto.CreateArticleDto request, User user, Integer categoryId) throws IOException
     {
         String exerciseTag = request.getExerciseTag();
-        HashTag exercisehashTag = hashTagRepository.findByName('#' + exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
+        HashTag exercisehashTag = hashTagRepository.findByName(exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
         List<HashTag> hashTagList = new ArrayList<>();
         if (request.getTagList() != null) {
          hashTagList =request.getTagList().stream()
-                    .map(tag -> hashTagRepository.findByName('#' + tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
+                    .map(tag -> hashTagRepository.findByName(tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
                     .collect(Collectors.toList());
         }
 
