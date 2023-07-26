@@ -102,6 +102,7 @@ public class UserConverter {
                 .marketingAgree(request.getMarketingAgree())
                 .phoneNum(request.getPhoneNumber())
                 .name(request.getName())
+                .isSocial(false)
                 .nickname(request.getNickname())
                 .password(staticPasswordEncoder.encode(request.getPassword()))
                 .age(age)
