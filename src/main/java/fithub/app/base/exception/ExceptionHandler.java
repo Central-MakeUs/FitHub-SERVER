@@ -43,6 +43,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
                                                              HttpHeaders headers, HttpStatus status, WebRequest request) {
+
         logger.info("At exception handler");
         ServletRequestAttributes requestAttributes = (ServletRequestAttributes) request;
         HttpServletRequest servletRequest = requestAttributes.getRequest();
