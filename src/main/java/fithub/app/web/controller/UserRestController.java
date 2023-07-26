@@ -193,11 +193,10 @@ public class UserRestController {
             @Parameter(name = "user", hidden = true)
     })
     @PatchMapping(value = "/users/sign-up/oauth",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseDto<UserResponseDto.SocialInfoDto> signUpByOAuth(@RequestBody UserRequestDto.UserOAuthInfo request, @AuthUser User user) throws IOException
+    public ResponseDto<UserResponseDto.SocialInfoDto> signUpByOAuth(@ModelAttribute UserRequestDto.UserOAuthInfo request, @AuthUser User user) throws IOException
     {
         logger.info("넘겨받은 사용자의 정보 : {}", request.toString());
         User updatedUser = userService.socialInfoComplete(request, user);
-        logger.info("로그인 된 사용자의 정보 : {}", user.toString());
         return ResponseDto.of(UserConverter.toSocialInfoDto(updatedUser));
     }
 
