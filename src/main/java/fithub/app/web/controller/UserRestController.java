@@ -9,6 +9,7 @@ import fithub.app.base.ResponseDto;
 import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.RecordConverter;
 import fithub.app.converter.UserConverter;
+import fithub.app.converter.common.BaseConverter;
 import fithub.app.domain.Article;
 import fithub.app.domain.ExerciseCategory;
 import fithub.app.domain.Record;
@@ -18,6 +19,7 @@ import fithub.app.service.UserService;
 import fithub.app.sms.dto.SmsResponseDto;
 import fithub.app.sms.service.SmsService;
 import fithub.app.utils.OAuthResult;
+import fithub.app.web.dto.common.BaseDto;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
@@ -221,7 +223,6 @@ public class UserRestController {
     @PostMapping("/users/sms")
     public ResponseDto<Integer> sendSms(@RequestBody UserRequestDto.SmsRequestDto request) throws JsonProcessingException, RestClientException, URISyntaxException, InvalidKeyException, NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        userService.findByPhoneNumJoin(request.getTargetPhoneNum());
         Integer data = smsService.sendSms(request.getTargetPhoneNum());
         return ResponseDto.of(data);
     }
@@ -296,11 +297,21 @@ public class UserRestController {
             @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
             @Parameter(name = "user", hidden = true),
     })
-
-
     @GetMapping("/users/records")
     public ResponseDto<RecordResponseDto.recordDtoList> myRecords(@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
         Page<Record> records = userService.getMyRecords(last, user);
         return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
+    }
+
+    @Operation(summary = "이미 가입된 번호인지 체크하는 API", description = "이미 가입된 번호인지 체크하는 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답",content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4018", description = "BAD_REQUEST : 이미 가입된 번호.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @PostMapping("/users/exist-phone/")
+    public ResponseDto<BaseDto.BaseResponseDto> checkExistPhone(@RequestBody UserRequestDto.findExistPhoneDto request){
+        userService.findByPhoneNumJoin(request.getTargetPhoneNum());
+        return ResponseDto.of(Code.OK, null);
     }
 }

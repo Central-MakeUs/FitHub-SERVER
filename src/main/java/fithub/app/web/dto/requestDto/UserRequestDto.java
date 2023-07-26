@@ -82,6 +82,11 @@ public class UserRequestDto {
     }
 
     @Getter @Setter
+    public static class findExistPhoneDto{
+        private String targetPhoneNum;
+    }
+
+    @Getter @Setter
     public static class PhoneNumAuthDto{
         @Override
         public String toString() {
