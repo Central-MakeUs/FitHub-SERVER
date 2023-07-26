@@ -72,7 +72,7 @@ public class UserServiceImpl implements UserService {
         SocialType socialType = SocialType.KAKAO;
 
         Boolean isLogin = true;
-        String jwt = null;
+        String accessToken = null;
         Optional<User> userOptional = userRepository.findBySocialIdAndSocialType(socialId, socialType);
 
         User user;
@@ -86,17 +86,17 @@ public class UserServiceImpl implements UserService {
                             .socialType(socialType)
                             .build()
             );
-            
-            jwt = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
+
+            accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
         else{
             user = userOptional.get();
-            jwt = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
+            accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
         return OAuthResult.OAuthResultDto.builder()
                 .isLogin(isLogin)
-                .jwt(jwt)
+                .accessToken(accessToken)
                 .userId(user.getId())
                 .build();
 
@@ -207,7 +207,7 @@ public class UserServiceImpl implements UserService {
         SocialType socialType = SocialType.APPLE;
 
         Boolean isLogin = true;
-        String jwt = null;
+        String accessToken = null;
         User user;
 
         Optional<User> userOptional = userRepository.findBySocialIdAndSocialType(socialId, socialType);
@@ -222,16 +222,16 @@ public class UserServiceImpl implements UserService {
                             .build()
             );
 
-            jwt = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
+            accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
         else{
             user = userOptional.get();
-            jwt = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
+            accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
         return OAuthResult.OAuthResultDto.builder()
                 .isLogin(isLogin)
-                .jwt(jwt)
+                .accessToken(accessToken)
                 .userId(user.getId())
                 .build();
     }
