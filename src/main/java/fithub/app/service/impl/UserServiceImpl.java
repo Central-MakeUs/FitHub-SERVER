@@ -91,6 +91,8 @@ public class UserServiceImpl implements UserService {
         }
         else{
             user = userOptional.get();
+            if (user.getAge() == null || user.getGender() == null)
+                isLogin = false;
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
@@ -226,6 +228,8 @@ public class UserServiceImpl implements UserService {
         }
         else{
             user = userOptional.get();
+            if (user.getAge() == null || user.getGender() == null)
+                isLogin = false;
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
