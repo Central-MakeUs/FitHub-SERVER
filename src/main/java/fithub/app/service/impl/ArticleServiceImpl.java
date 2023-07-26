@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -60,10 +61,13 @@ public class ArticleServiceImpl implements ArticleService {
     public Article create(ArticleRequestDto.CreateArticleDto request, User user, Integer categoryId) throws IOException
     {
         String exerciseTag = request.getExerciseTag();
-        HashTag exercisehashTag = hashTagRepository.findByName('#' + exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
-        List<HashTag> hashTagList = request.getTagList().stream()
-                .map(tag -> hashTagRepository.findByName('#' + tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
-                .collect(Collectors.toList());
+        HashTag exercisehashTag = hashTagRepository.findByName(exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
+        List<HashTag> hashTagList = new ArrayList<>();
+        if (request.getTagList() != null) {
+         hashTagList =request.getTagList().stream()
+                    .map(tag -> hashTagRepository.findByName(tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
+                    .collect(Collectors.toList());
+        }
 
         hashTagList.add(exercisehashTag);
 
@@ -186,10 +190,10 @@ public class ArticleServiceImpl implements ArticleService {
         }
 
         String exerciseTag =  request.getExerciseTag();
-        HashTag exercisehashTag = hashTagRepository.findByName('#' + exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
+        HashTag exercisehashTag = hashTagRepository.findByName(exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
 
         List<HashTag> hashTagList = request.getHashTagList().stream()
-                .map(tag -> hashTagRepository.findByName('#' + tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
+                .map(tag -> hashTagRepository.findByName(tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
                 .collect(Collectors.toList());
 
         hashTagList.add(exercisehashTag);

@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,11 +60,13 @@ public class RecordServiceImpl implements RecordService {
     public Record create(RecordRequestDto.CreateRecordDto request, User user, Integer categoryId) throws IOException
     {
         String exerciseTag = request.getExerciseTag();
-        HashTag exerciseHash = hashTagRepository.findByName('#' + exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
-        List<HashTag> hashTagList = request.getHashTagList().stream()
-                .map(tag -> hashTagRepository.findByName('#' + tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
-                .collect(Collectors.toList());
-
+        HashTag exerciseHash = hashTagRepository.findByName(exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
+        List<HashTag> hashTagList = new ArrayList<>();
+        if (request.getHashTagList() != null) {
+            hashTagList =request.getHashTagList().stream()
+                    .map(tag -> hashTagRepository.findByName(tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
+                    .collect(Collectors.toList());
+        }
         hashTagList.add(exerciseHash);
         Record record = RecordConverter.toRecord(request, user, hashTagList, categoryId);
         return recordRepository.save(record);
@@ -137,10 +140,10 @@ public class RecordServiceImpl implements RecordService {
         }
 
         String exerciseTag =  request.getExerciseTag();
-        HashTag exercisehashTag = hashTagRepository.findByName('#' + exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
+        HashTag exercisehashTag = hashTagRepository.findByName(exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
 
         List<HashTag> hashTagList = request.getHashTagList().stream()
-                .map(tag -> hashTagRepository.findByName('#' + tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
+                .map(tag -> hashTagRepository.findByName(tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
                 .collect(Collectors.toList());
 
         hashTagList.add(exercisehashTag);
@@ -149,21 +152,23 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public void deleteRecordSingle(Long recordId, User user) {
         Record record = recordRepository.findById(recordId).orElseThrow(() -> new RecordException(Code.RECORD_NOT_FOUND));
 
         if(!record.getUser().getId().equals(user.getId()))
             throw new RecordException(Code.RECORD_FORBIDDEN);
         String imageUrl = record.getImageUrl();
-        String Keyname = ArticleConverter.toKeyName(imageUrl);
-        amazonS3Manager.deleteFile(Keyname.substring(1));
+        if (imageUrl != null) {
+            String Keyname = ArticleConverter.toKeyName(imageUrl);
+            amazonS3Manager.deleteFile(Keyname.substring(1));
+        }
 
         List<RecordHashTag> recordHashTagList = record.getRecordHashTagList();
-
         for(int i = 0; i < recordHashTagList.size(); i++) {
-            RecordHashTag articleHashTag = recordHashTagList.get(i);
-            record.getRecordHashTagList().remove(articleHashTag);
-            recordHashTagRepository.delete(articleHashTag);
+            RecordHashTag recordHashTag = recordHashTagList.get(i);
+            record.getRecordHashTagList().remove(recordHashTag);
+            recordHashTagRepository.delete(recordHashTag);
         }
 
         if(recordHashTagList.size() > 0) {
