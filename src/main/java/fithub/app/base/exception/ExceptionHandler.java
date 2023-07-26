@@ -2,18 +2,27 @@ package fithub.app.base.exception;
 
 import fithub.app.base.Code;
 import fithub.app.base.ResponseDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintViolationException;
+import java.io.BufferedReader;
+import java.io.IOException;
 
 @RestControllerAdvice(annotations = {RestController.class})
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
+
+
+    Logger logger = LoggerFactory.getLogger(ExceptionHandler.class);
 
     @org.springframework.web.bind.annotation.ExceptionHandler
     public ResponseEntity<Object> validation(ConstraintViolationException e, WebRequest request) {
@@ -34,7 +43,14 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
                                                              HttpHeaders headers, HttpStatus status, WebRequest request) {
-        System.out.println(ex);
+
+        logger.info("At exception handler");
+        ServletRequestAttributes requestAttributes = (ServletRequestAttributes) request;
+        HttpServletRequest servletRequest = requestAttributes.getRequest();
+
+        String contentType = request.getHeader("Content-Type");
+        logger.info("Content-Type : {}", contentType);
+        logger.error("발생한 에러의 로그 :", ex);
         return handleExceptionInternal(ex, Code.valueOf(status), headers, status, request);
     }
 
