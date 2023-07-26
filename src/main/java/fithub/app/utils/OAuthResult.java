@@ -13,7 +13,7 @@ public class OAuthResult {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class OAuthResultDto{
         Boolean isLogin;
-        String jwt;
+        String accessToken;
         Long userId;
     }
 }
