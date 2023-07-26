@@ -6,8 +6,12 @@ import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.base.Code;
 import fithub.app.base.ResponseDto;
 
+import fithub.app.converter.ArticleConverter;
+import fithub.app.converter.RecordConverter;
 import fithub.app.converter.UserConverter;
+import fithub.app.domain.Article;
 import fithub.app.domain.ExerciseCategory;
+import fithub.app.domain.Record;
 import fithub.app.domain.User;
 import fithub.app.service.AppleService;
 import fithub.app.service.UserService;
@@ -15,6 +19,8 @@ import fithub.app.sms.dto.SmsResponseDto;
 import fithub.app.sms.service.SmsService;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
+import fithub.app.web.dto.responseDto.ArticleResponseDto;
+import fithub.app.web.dto.responseDto.RecordResponseDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 import io.swagger.annotations.ApiParam;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,6 +34,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -261,5 +268,37 @@ public class UserRestController {
         logger.info("로그인 토큰 : {}", jwt);
 
         return ResponseDto.of(UserConverter.toLoginDto(jwt, user));
+    }
+
+    @Operation(summary = "내가 적은 게시글 목록 조회 API - 최신순  ", description = "last로 페이징")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/users/articles")
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> myArticles(@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
+        Page<Article> articles = userService.getMyArticles(last, user);
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
+    }
+
+    @Operation(summary = "내가 적은 운동 인증 목록 조회 API - 최신순 ", description = "last로 페이징")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/users/articles")
+    public ResponseDto<RecordResponseDto.recordDtoList> myRecords(@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
+        Page<Record> records = userService.getMyRecords(last, user);
+        return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
     }
 }
