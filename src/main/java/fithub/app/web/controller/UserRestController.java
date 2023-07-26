@@ -42,6 +42,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 
+import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
@@ -169,7 +170,7 @@ public class UserRestController {
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @PostMapping(value = "/users/sign-up",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseDto<UserResponseDto.JoinUserDto> signUpByPhoneNum(@ModelAttribute UserRequestDto.UserInfo request) throws IOException
+    public ResponseDto<UserResponseDto.JoinUserDto> signUpByPhoneNum(@ModelAttribute @Valid UserRequestDto.UserInfo request) throws IOException
     {
 
         logger.info("넘겨 받은 사용자의 정보 : {}", request.toString());

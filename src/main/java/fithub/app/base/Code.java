@@ -108,6 +108,7 @@ public enum Code {
                 .findFirst()
                 .orElseGet(() -> {
                     if (httpStatus.is4xxClientError()) {
+                        System.out.println("!!!!!!!!!!!!!!!");
                         return Code.BAD_REQUEST;
                     } else if (httpStatus.is5xxServerError()) {
                         return Code.INTERNAL_ERROR;
