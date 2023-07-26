@@ -102,6 +102,7 @@ public class UserConverter {
                 .marketingAgree(request.getMarketingAgree())
                 .phoneNum(request.getPhoneNumber())
                 .name(request.getName())
+                .isSocial(false)
                 .nickname(request.getNickname())
                 .password(staticPasswordEncoder.encode(request.getPassword()))
                 .age(age)
@@ -165,7 +166,7 @@ public class UserConverter {
 
     public static UserResponseDto.OauthDto toOauthDto(OAuthResult.OAuthResultDto result){
         return UserResponseDto.OauthDto.builder()
-                .accessToken(result.getJwt())
+                .accessToken(result.getAccessToken())
                 .build();
     }
 

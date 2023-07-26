@@ -9,10 +9,10 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class BaseConverter {
 
-    public static BaseDto.BaseResponseDto toBaseDto(ResponseCode responseCode, Object result){
+    public static BaseDto.BaseResponseDto toBaseDto(ResponseCode Code, Object result){
         return BaseDto.BaseResponseDto.builder()
-                .code(responseCode.getCode())
-                .message(responseCode.getMessage())
+                .code(Code.getCode())
+                .message(Code.getMessage())
                 .build();
     }
 }

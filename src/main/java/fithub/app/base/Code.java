@@ -15,10 +15,6 @@ public enum Code {
 
     OK(HttpStatus.OK,2000, "Ok"),
 
-    AUTO_LOGIN_NEW_FACE(HttpStatus.OK,2003, "새로온 사용자 입니다."),
-    AUTO_LOGIN_INFO_NULL(HttpStatus.OK,2002, "회원정보 입력이 필요합니다."),
-    AUTO_LOGIN_SUCCESS(HttpStatus.OK,2001, "로그인 된 사용자 입니다."),
-
     KAKAO_OAUTH_LOGIN(HttpStatus.OK,2004, "로그인 입니다."),
 
     KAKAO_OAUTH_JOIN(HttpStatus.OK,2005, "회원가입 입니다."),
@@ -26,6 +22,10 @@ public enum Code {
     APPLE_OAUTH_LOGIN(HttpStatus.OK,2006, "로그인 입니다."),
 
     APPLE_OAUTH_JOIN(HttpStatus.OK,2007, "회원가입 입니다."),
+
+    AUTO_LOGIN_MAIN(HttpStatus.OK, 2008, "메인 화면으로 이동해도 됩니다."),
+
+    AUTO_LOGIN_NOT_MAIN(HttpStatus.OK, 2009, "로그인 화면으로 이동해주세요"),
 
     NICKNAME_EXIST(HttpStatus.OK,2010, "닉네임이 이미 존재합니다."),
 
