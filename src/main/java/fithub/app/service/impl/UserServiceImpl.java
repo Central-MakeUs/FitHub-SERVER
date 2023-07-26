@@ -4,13 +4,17 @@ import fithub.app.auth.provider.TokenProvider;
 import fithub.app.base.Code;
 import fithub.app.converter.ExercisePreferenceConverter;
 import fithub.app.converter.UserConverter;
+import fithub.app.domain.Article;
 import fithub.app.domain.ExerciseCategory;
+import fithub.app.domain.Record;
 import fithub.app.domain.User;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.domain.mapping.ExercisePreference;
 import fithub.app.base.exception.handler.UserException;
+import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.ExercisePreferenceRepository;
+import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.repository.UserRepository;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
@@ -18,6 +22,9 @@ import fithub.app.web.dto.requestDto.UserRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -45,6 +52,13 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final TokenProvider tokenProvider;
+
+    private final ArticleRepository articleRepository;
+
+    private final RecordRepository recordRepository;
+
+    @Value("${paging.size}")
+    private Integer size;
 
     private User createUser(String socialId, SocialType socialType) {
         User newUser = UserConverter.toCreateOAuthUser(socialId, socialType);
@@ -151,6 +165,32 @@ public class UserServiceImpl implements UserService {
         }
 
         return updatedUser;
+    }
+
+    @Override
+    public Page<Article> getMyArticles(Long last, User user) {
+        Page<Article> articles = null;
+        if (last != null){
+            Article article = articleRepository.findById(last).get();
+            articles = articleRepository.findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(article.getCreatedAt(), user, PageRequest.of(0,size));
+        }
+        else{
+            articles = articleRepository.findAllByUserOrderByCreatedAtDesc(user, PageRequest.of(0,size));
+        }
+
+        return articles;
+    }
+
+    @Override
+    public Page<Record> getMyRecords(Long last, User user) {
+        Page<Record> records = null;
+        if (last != null){
+            Record record = recordRepository.findById(last).get();
+            records = recordRepository.findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(record.getCreatedAt(),user, PageRequest.of(0, size));
+        }else{
+            records = recordRepository.findAllByUserOrderByCreatedAtDesc(user, PageRequest.of(0,size));
+        }
+        return records;
     }
 
     @Override

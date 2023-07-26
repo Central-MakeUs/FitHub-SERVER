@@ -2,6 +2,7 @@ package fithub.app.repository.ArticleRepositories;
 
 import fithub.app.domain.Article;
 import fithub.app.domain.ExerciseCategory;
+import fithub.app.domain.User;
 import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -32,4 +33,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findByIdInOrderByCreatedAtDesc(List<Long> articleIds, Pageable pageable);
     Page<Article> findByIdInAndLikesLessThanOrderByLikesDesc(List<Long> articleIds, Long likes, Pageable pageable);
     Page<Article> findByIdInOrderByLikesDesc(List<Long> articleIds, Pageable pageable);
+
+    Page<Article> findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(LocalDateTime createdAt, User user, Pageable pageable);
+
+    Page<Article> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
 }
