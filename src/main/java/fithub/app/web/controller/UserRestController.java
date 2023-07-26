@@ -297,6 +297,7 @@ public class UserRestController {
             @Parameter(name = "user", hidden = true),
     })
 
+
     @GetMapping("/users/records")
     public ResponseDto<RecordResponseDto.recordDtoList> myRecords(@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
         Page<Record> records = userService.getMyRecords(last, user);
