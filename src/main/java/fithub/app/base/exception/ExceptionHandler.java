@@ -34,6 +34,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleExceptionInternal(Exception ex, Object body,
                                                              HttpHeaders headers, HttpStatus status, WebRequest request) {
+        System.out.println(ex);
         return handleExceptionInternal(ex, Code.valueOf(status), headers, status, request);
     }
 
