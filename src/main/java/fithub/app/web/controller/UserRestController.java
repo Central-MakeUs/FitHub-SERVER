@@ -296,7 +296,9 @@ public class UserRestController {
             @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
             @Parameter(name = "user", hidden = true),
     })
-    @GetMapping("/users/articles")
+
+
+    @GetMapping("/users/records")
     public ResponseDto<RecordResponseDto.recordDtoList> myRecords(@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
         Page<Record> records = userService.getMyRecords(last, user);
         return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
