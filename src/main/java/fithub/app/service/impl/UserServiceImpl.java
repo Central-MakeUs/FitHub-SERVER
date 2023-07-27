@@ -121,14 +121,14 @@ public class UserServiceImpl implements UserService {
         User newUser = UserConverter.toUserPhoneNum(request);
         User savedUser = userRepository.save(newUser);
 
-        for (int i = 0; i < request.getPreferExercises().size(); i++) {
-            ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises().get(i))
-                    .orElseThrow(()->new UserException(Code.NO_EXERCISE_CATEGORY_EXIST));
-            ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(savedUser, exerciseCategory);
-            exercisePreferenceRepository.save(exercisePreference);
-        }
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises())
+                .orElseThrow(()->new UserException(Code.NO_EXERCISE_CATEGORY_EXIST));
+        ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(savedUser, exerciseCategory);
+        exercisePreferenceRepository.save(exercisePreference);
 
-        return savedUser;
+
+
+        return UserConverter.toCompleteUser(savedUser, exerciseCategory);
     }
 
     @Override
@@ -159,14 +159,14 @@ public class UserServiceImpl implements UserService {
     public User socialInfoComplete(UserRequestDto.UserOAuthInfo request, User user) throws IOException
     {
         User updatedUser =  UserConverter.toSocialUser(request, user);
-        for (int i = 0; i < request.getPreferExercises().size(); i++) {
-            ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises().get(i))
-                    .orElseThrow(()->new UserException(Code.NO_EXERCISE_CATEGORY_EXIST));
-            ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(updatedUser, exerciseCategory);
-            exercisePreferenceRepository.save(exercisePreference);
-        }
 
-        return updatedUser;
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises())
+                .orElseThrow(()->new UserException(Code.NO_EXERCISE_CATEGORY_EXIST));
+        ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(updatedUser, exerciseCategory);
+        exercisePreferenceRepository.save(exercisePreference);
+
+
+        return UserConverter.toCompleteUser(updatedUser, exerciseCategory);
     }
 
     @Override

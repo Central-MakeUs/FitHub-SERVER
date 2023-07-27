@@ -24,5 +24,9 @@ public class Grade extends BaseEntity {
     @Column(columnDefinition = "VARCHAR(10)", unique = true)
     private String name;
 
+    private Integer maxContiguous;
+
+    private Integer maxExp;
+
     private String gradeIcon;
 }

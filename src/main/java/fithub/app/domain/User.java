@@ -142,4 +142,13 @@ public class User extends BaseEntity {
                 .filter(recordLikes -> recordLikes.getRecord().getId().equals(record.getId()))
                 .collect(Collectors.toList()).size() > 0;
     }
+
+    public void setUserExerciseList(List<UserExercise> exerciseList){
+        this.userExerciseList = exerciseList;
+    }
+
+    public User setMainExercise(UserExercise mainExercise){
+        this.mainExercise = mainExercise;
+        return this;
+    }
 }
