@@ -3,6 +3,7 @@ package fithub.app.web.dto.requestDto;
 import io.swagger.models.auth.In;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
@@ -52,11 +53,27 @@ public class UserRequestDto {
         @NotBlank
         private String gender;
         private List<Integer> preferExercises;
+        @Nullable
         private MultipartFile profileImage;
     }
 
     @Getter @Setter
     public static class UserInfo{
+
+        @Override
+        public String toString() {
+            return "UserInfo{" +
+                    "marketingAgree=" + marketingAgree +
+                    ", phoneNumber='" + phoneNumber + '\'' +
+                    ", name='" + name + '\'' +
+                    ", nickname='" + nickname + '\'' +
+                    ", password='" + password + '\'' +
+                    ", birth='" + birth + '\'' +
+                    ", gender='" + gender + '\'' +
+                    ", preferExercises=" + preferExercises +
+                    ", profileImage=" + profileImage +
+                    '}';
+        }
 
         private Boolean marketingAgree;
         private String phoneNumber;
@@ -66,6 +83,7 @@ public class UserRequestDto {
         private String birth;
         private String gender;
         private List<Integer> preferExercises;
+        @Nullable
         private MultipartFile profileImage;
     }
 
