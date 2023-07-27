@@ -117,6 +117,7 @@ public class RecordConverter {
                 .userInfo(UserConverter.toCommunityUserInfo(record.getUser()))
                 .contents(record.getContents())
                 .pictureImage(record.getImageUrl())
+                .comments(record.getComments())
                 .createdAt(record.getCreatedAt())
                 .Hashtags(HashTagConverter.toHashtagDtoListRecord(record.getRecordHashTagList()))
                 .likes(record.getLikes())
@@ -184,6 +185,7 @@ public class RecordConverter {
         return RecordResponseDto.recordLikeDto.builder()
                 .recordId(record.getId())
                 .newLikes(record.getLikes())
+                .isLiked(record.getUser().isLikedRecord(record))
                 .build();
     }
 }
