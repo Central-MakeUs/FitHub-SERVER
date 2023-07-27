@@ -184,6 +184,7 @@ public class RecordConverter {
         return RecordResponseDto.recordLikeDto.builder()
                 .recordId(record.getId())
                 .newLikes(record.getLikes())
+                .isLiked(record.getUser().isLikedRecord(record))
                 .build();
     }
 }

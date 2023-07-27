@@ -96,5 +96,6 @@ public class RecordResponseDto {
     public static class recordLikeDto{
         Long recordId;
         Long newLikes;
+        Boolean isLiked;
     }
 }
