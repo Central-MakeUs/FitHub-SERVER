@@ -4,10 +4,7 @@ import fithub.app.auth.provider.TokenProvider;
 import fithub.app.base.Code;
 import fithub.app.converter.ExercisePreferenceConverter;
 import fithub.app.converter.UserConverter;
-import fithub.app.domain.Article;
-import fithub.app.domain.ExerciseCategory;
-import fithub.app.domain.Record;
-import fithub.app.domain.User;
+import fithub.app.domain.*;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.domain.mapping.ExercisePreference;
 import fithub.app.base.exception.handler.UserException;
@@ -15,6 +12,7 @@ import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.ExercisePreferenceRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
+import fithub.app.repository.UserExerciseRepository;
 import fithub.app.repository.UserRepository;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
@@ -31,9 +29,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -56,6 +56,8 @@ public class UserServiceImpl implements UserService {
     private final ArticleRepository articleRepository;
 
     private final RecordRepository recordRepository;
+
+    private final UserExerciseRepository userExerciseRepository;
 
     @Value("${paging.size}")
     private Integer size;
@@ -121,14 +123,14 @@ public class UserServiceImpl implements UserService {
         User newUser = UserConverter.toUserPhoneNum(request);
         User savedUser = userRepository.save(newUser);
 
-        for (int i = 0; i < request.getPreferExercises().size(); i++) {
-            ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises().get(i))
-                    .orElseThrow(()->new UserException(Code.NO_EXERCISE_CATEGORY_EXIST));
-            ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(savedUser, exerciseCategory);
-            exercisePreferenceRepository.save(exercisePreference);
-        }
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises())
+                .orElseThrow(()->new UserException(Code.NO_EXERCISE_CATEGORY_EXIST));
+        ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(savedUser, exerciseCategory);
+        exercisePreferenceRepository.save(exercisePreference);
 
-        return savedUser;
+
+
+        return UserConverter.toCompleteUser(savedUser, exerciseCategory);
     }
 
     @Override
@@ -159,14 +161,14 @@ public class UserServiceImpl implements UserService {
     public User socialInfoComplete(UserRequestDto.UserOAuthInfo request, User user) throws IOException
     {
         User updatedUser =  UserConverter.toSocialUser(request, user);
-        for (int i = 0; i < request.getPreferExercises().size(); i++) {
-            ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises().get(i))
-                    .orElseThrow(()->new UserException(Code.NO_EXERCISE_CATEGORY_EXIST));
-            ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(updatedUser, exerciseCategory);
-            exercisePreferenceRepository.save(exercisePreference);
-        }
 
-        return updatedUser;
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(request.getPreferExercises())
+                .orElseThrow(()->new UserException(Code.NO_EXERCISE_CATEGORY_EXIST));
+        ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(updatedUser, exerciseCategory);
+        exercisePreferenceRepository.save(exercisePreference);
+
+
+        return UserConverter.toCompleteUser(updatedUser, exerciseCategory);
     }
 
     @Override
@@ -193,6 +195,24 @@ public class UserServiceImpl implements UserService {
             records = recordRepository.findAllByUserOrderByCreatedAtDesc(user, PageRequest.of(0,size));
         }
         return records;
+    }
+
+    @Override
+    public List<UserExercise> getMyExercises(User user) {
+        List<UserExercise> myExercises = new ArrayList<>();
+
+        myExercises.add(user.getMainExercise());
+
+        List<UserExercise> userExerciseList = userExerciseRepository.findAllByUser(user);
+
+        for (int i = 0; i < userExerciseList.size(); i++){
+            if (userExerciseList.get(i).getExerciseCategory().getName().equals(myExercises.get(0).getExerciseCategory().getName()))
+                continue;
+            else
+                myExercises.add(userExerciseList.get(i));
+        }
+
+        return myExercises;
     }
 
     @Override

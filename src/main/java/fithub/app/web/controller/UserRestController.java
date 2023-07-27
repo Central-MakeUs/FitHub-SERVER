@@ -10,10 +10,7 @@ import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.RecordConverter;
 import fithub.app.converter.UserConverter;
 import fithub.app.converter.common.BaseConverter;
-import fithub.app.domain.Article;
-import fithub.app.domain.ExerciseCategory;
-import fithub.app.domain.Record;
-import fithub.app.domain.User;
+import fithub.app.domain.*;
 import fithub.app.service.AppleService;
 import fithub.app.service.UserService;
 import fithub.app.sms.dto.SmsResponseDto;
@@ -313,5 +310,19 @@ public class UserRestController {
     public ResponseDto<BaseDto.BaseResponseDto> checkExistPhone(@RequestBody UserRequestDto.findExistPhoneDto request){
         userService.findByPhoneNumJoin(request.getTargetPhoneNum());
         return ResponseDto.of(Code.OK, null);
+    }
+
+    @Operation(summary = "마이 페이지 조회 API ✔️ 🔑", description = "마이 페이지를 조회하는 API 입니다. 운동 종목 중 첫 번째는 메인 운동입니다")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/users/my-page")
+    public ResponseDto<UserResponseDto.MyPageDto> getMyPage(@AuthUser User user){
+        List<UserExercise> myExercises = userService.getMyExercises(user);
+        return ResponseDto.of(UserConverter.toMyPageDto(user, myExercises));
     }
 }
