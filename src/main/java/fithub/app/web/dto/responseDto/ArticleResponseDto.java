@@ -101,6 +101,7 @@ public class ArticleResponseDto {
     public static class ArticleLikeDto{
         Long articleId;
         Long articleLikes;
+        Boolean isLiked;
     }
 
 
