@@ -20,6 +20,7 @@ public class RecordResponseDto {
         UserResponseDto.CommunityUserInfo userInfo;
         String contents;
         String pictureImage;
+        Long comments;
         LocalDateTime createdAt;
         HashTagResponseDto.HashtagDtoList Hashtags;
         Long likes;
@@ -96,5 +97,6 @@ public class RecordResponseDto {
     public static class recordLikeDto{
         Long recordId;
         Long newLikes;
+        Boolean isLiked;
     }
 }

@@ -210,6 +210,7 @@ public class ArticleConverter {
         return ArticleResponseDto.ArticleLikeDto.builder()
                 .articleId(article.getId())
                 .articleLikes(article.getLikes())
+                .isLiked(article.getUser().isLikedArticle(article))
                 .build();
     }
 

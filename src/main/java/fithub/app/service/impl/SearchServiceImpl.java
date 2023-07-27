@@ -49,7 +49,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Page<Article> searchArticleLikes(String tag, Long last) {
-        Optional<HashTag> byName = hashTagRepository.findByName('#' + tag);
+        Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Article> searchResult = null;
         if(byName.isEmpty())
             return searchResult;
@@ -68,7 +68,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Page<Record> searchRecordCreatedAt(String tag, Long last) {
-        Optional<HashTag> byName = hashTagRepository.findByName('#' + tag);
+        Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Record> searchResult = null;
         if(byName.isEmpty())
             return searchResult;
@@ -86,7 +86,7 @@ public class SearchServiceImpl implements SearchService {
     }
     @Override
     public Page<Article> searchArticleCreatedAt(String tag, Long last) {
-        Optional<HashTag> byName = hashTagRepository.findByName('#' + tag);
+        Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Article> searchResult = null;
         if(byName.isEmpty())
             return searchResult;
@@ -105,7 +105,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public Page<Record> searchRecordLikes(String tag, Long last) {
-        Optional<HashTag> byName = hashTagRepository.findByName('#' + tag);
+        Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Record> searchResult = null;
         if(byName.isEmpty())
             return searchResult;
@@ -124,7 +124,7 @@ public class SearchServiceImpl implements SearchService {
 
     @Override
     public SearchPreViewResponseDto.SearchPreViewDto searchPreview(String tag, User user) {
-        Optional<HashTag> byName = hashTagRepository.findByName('#' + tag);
+        Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Record> searchRecord = null;
         Page<Article> searchArticle = null;
         if(byName.isEmpty())
