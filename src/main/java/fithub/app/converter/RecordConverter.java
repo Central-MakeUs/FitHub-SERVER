@@ -117,6 +117,7 @@ public class RecordConverter {
                 .userInfo(UserConverter.toCommunityUserInfo(record.getUser()))
                 .contents(record.getContents())
                 .pictureImage(record.getImageUrl())
+                .comments(record.getComments())
                 .createdAt(record.getCreatedAt())
                 .Hashtags(HashTagConverter.toHashtagDtoListRecord(record.getRecordHashTagList()))
                 .likes(record.getLikes())

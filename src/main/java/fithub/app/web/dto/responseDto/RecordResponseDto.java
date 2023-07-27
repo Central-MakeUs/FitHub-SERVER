@@ -20,6 +20,7 @@ public class RecordResponseDto {
         UserResponseDto.CommunityUserInfo userInfo;
         String contents;
         String pictureImage;
+        Long comments;
         LocalDateTime createdAt;
         HashTagResponseDto.HashtagDtoList Hashtags;
         Long likes;
