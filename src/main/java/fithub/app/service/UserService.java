@@ -1,9 +1,6 @@
 package fithub.app.service;
 
-import fithub.app.domain.Article;
-import fithub.app.domain.ExerciseCategory;
-import fithub.app.domain.Record;
-import fithub.app.domain.User;
+import fithub.app.domain.*;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
@@ -36,4 +33,6 @@ public interface UserService {
     Page<Article> getMyArticles(Long last, User user);
 
     Page<Record> getMyRecords(Long last, User user);
+
+    List<UserExercise> getMyExercises(User user);
 }

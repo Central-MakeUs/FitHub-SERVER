@@ -261,4 +261,27 @@ public class UserConverter {
                 .nickname(user.getNickname())
                 .build();
     }
+
+    public static UserResponseDto.UserExerciseDto toUserExerciseDto(UserExercise userExercise){
+        return UserResponseDto.UserExerciseDto.builder()
+                .GradeName(userExercise.getGrade().getName())
+                .category(userExercise.getExerciseCategory().getName())
+                .maxExp(userExercise.getGrade().getMaxExp())
+                .exp(userExercise.getExp())
+                .level(userExercise.getGrade().getLevel())
+                .build();
+    }
+
+    public static UserResponseDto.MyPageDto toMyPageDto(User user, List<UserExercise> myExerciseList){
+
+        List<UserResponseDto.UserExerciseDto> userExerciseDtoList = myExerciseList.stream()
+                .map(userExercise -> toUserExerciseDto(userExercise))
+                .collect(Collectors.toList());
+
+
+        return UserResponseDto.MyPageDto.builder()
+                .myInfo(toCommunityUserInfo(user))
+                .myExerciseList(userExerciseDtoList)
+                .build();
+    }
 }
