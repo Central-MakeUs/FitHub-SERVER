@@ -43,7 +43,7 @@ public class RecordRestController {
 
     private final RecordService recordService;
 
-    @Operation(summary = "운동인증 상세조회 API ✔️", description = "운동인증 상세조회 API 입니다.")
+    @Operation(summary = "운동인증 상세조회 API ✔️ 🔑", description = "운동인증 상세조회 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -61,7 +61,7 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordSpecDto(record, isLiked));
     }
 
-    @Operation(summary = "운동 인증 목록 조회 API - 최신순 ✔️", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
+    @Operation(summary = "운동 인증 목록 조회 API - 최신순 ✔️ 🔑", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
@@ -81,7 +81,7 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
     }
 
-    @Operation(summary = "운동 인증 목록 조회 API - 인기순 ✔️", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
+    @Operation(summary = "운동 인증 목록 조회 API - 인기순 ✔️ 🔑", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
@@ -101,7 +101,7 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
     }
 
-    @Operation(summary = "운동인증 작성 API ✔️ - 홈 페이지 작업 후 수정 필요", description = "운동인증 작성 API 입니다. 작성이 되는지 확인만 해주세요, 인증해서 레벨 오르는건 아직 구현 X")
+    @Operation(summary = "운동인증 작성 API ✔️ 🔑- 홈 페이지 작업 후 수정 필요", description = "운동인증 작성 API 입니다. ")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -118,10 +118,12 @@ public class RecordRestController {
         logger.info("사용자가 준 정보 : {}", request.toString());
 
         Record record = recordService.create(request, user, categoryId);
+        // 레벨 계산
+        recordService.calcExp(user,categoryId);
         return ResponseDto.of(RecordConverter.toRecordCreateDto(record));
     }
 
-    @Operation(summary = "운동인증 수정 API ✔️", description = "운동인증 수정 API 입니다.")
+    @Operation(summary = "운동인증 수정 API ✔️ 🔑", description = "운동인증 수정 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -142,7 +144,7 @@ public class RecordRestController {
     }
 
 
-    @Operation(summary = "운동인증 삭제 API✔️", description = "운동인증 삭제 API 입니다.")
+    @Operation(summary = "운동인증 삭제 API✔️ 🔑", description = "운동인증 삭제 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -174,7 +176,7 @@ public class RecordRestController {
         return null;
     }
 
-    @Operation(summary = "운동인증 좋아요 누르기/취소 ✔️",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")
+    @Operation(summary = "운동인증 좋아요 누르기/취소 ✔️ 🔑",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 새로 바뀐 좋아요 갯수 응답에 포함"),
             @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),

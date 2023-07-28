@@ -11,11 +11,13 @@ import fithub.app.domain.*;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.domain.mapping.RecordLikes;
 import fithub.app.repository.ExerciseCategoryRepository;
+import fithub.app.repository.GradeRepository;
 import fithub.app.repository.HashTagRepositories.HashTagRepository;
 
 import fithub.app.repository.HashTagRepositories.RecordHashTagRepository;
 import fithub.app.repository.RecordRepositories.RecordLikesRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
+import fithub.app.repository.UserExerciseRepository;
 import fithub.app.service.RecordService;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -52,9 +56,18 @@ public class RecordServiceImpl implements RecordService {
 
     private final ExerciseCategoryRepository exerciseCategoryRepository;
 
+    private final UserExerciseRepository userExerciseRepository;
+
+    private final GradeRepository gradeRepository;
+
     @Value("${paging.size}")
     Integer size;
 
+    @Value("${recordExp.combo}")
+    Integer comboExp;
+
+    @Value("${recordExp.default}")
+    Integer defaultExp;
     @Override
     @Transactional(readOnly = false)
     public Record create(RecordRequestDto.CreateRecordDto request, User user, Integer categoryId) throws IOException
@@ -242,5 +255,42 @@ public class RecordServiceImpl implements RecordService {
         else
             findRecord = recordRepository.findAllByOrderByLikesDesc(PageRequest.of(0, size));
         return findRecord;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void calcExp(User user, Integer categoryId) {
+
+        // 카테고리에 해당하는 유저의 운동 종목을 가져온다
+        UserExercise userExercise = userExerciseRepository.findByUserAndExerciseCategory(user, exerciseCategoryRepository.findById(categoryId).get()).get();
+        Grade exerciseGrade = gradeRepository.findByName(userExercise.getGrade().getName()).get();
+
+        // 경험치 계산을 위해 먼저 연속 인증인지 판단한다.
+        LocalDate recentRecord = userExercise.getRecentRecord();
+
+        Integer newExp = 0;
+
+        // 연속 일수와 경험치 계산
+        if(recentRecord == null || ChronoUnit.DAYS.between(recentRecord, LocalDate.now()) >= 2) {
+            userExercise.setContiguousDay(1);
+            newExp = defaultExp;
+        }
+        else{
+            Integer comboMultiple = Math.min(userExercise.getContiguousDay() + 1, exerciseGrade.getMaxContiguous());
+            userExercise.setContiguousDay(comboMultiple);
+            newExp = defaultExp + comboExp * comboMultiple;
+        }
+
+        // 경험치 계산 및 레벨업, 남은 경험치 이월 및 인증 수 업데이트
+        int totalExp = userExercise.getExp() + newExp;
+
+        // 레벨 업
+        if (totalExp >= exerciseGrade.getMaxExp()) {
+            totalExp -= exerciseGrade.getMaxExp();
+            userExercise.setGrade(gradeRepository.findByLevel(exerciseGrade.getLevel() + 1).get());
+        }
+        userExercise.setExp(totalExp);
+        userExercise.setRecords(userExercise.getRecords() + 1);
+        userExercise.setRecentRecord(LocalDate.now());
     }
 }
