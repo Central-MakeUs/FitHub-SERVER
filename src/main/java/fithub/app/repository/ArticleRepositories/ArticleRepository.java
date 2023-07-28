@@ -37,4 +37,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(LocalDateTime createdAt, User user, Pageable pageable);
 
     Page<Article> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
+
+    Page<Article> findByCreatedAtLessThanAndUserAndExerciseCategoryOrderByCreatedAtDesc(LocalDateTime createdAt, User user,ExerciseCategory exerciseCategory, Pageable pageable);
+
+    Page<Article> findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(User user, ExerciseCategory exerciseCategory,Pageable pageable);
 }

@@ -22,6 +22,7 @@ import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 import io.swagger.annotations.ApiParam;
+import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -276,11 +277,12 @@ public class UserRestController {
     })
     @Parameters({
             @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "categoryId", description = "카테고리 아이디"),
             @Parameter(name = "user", hidden = true),
     })
-    @GetMapping("/users/articles")
-    public ResponseDto<ArticleResponseDto.ArticleDtoList> myArticles(@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
-        Page<Article> articles = userService.getMyArticles(last, user);
+    @GetMapping("/users/articles/{categoryId}")
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> myArticles(@RequestParam(name = "last", required = false) Long last,@PathVariable(name = "categoryId") Integer categoryId ,@AuthUser User user){
+        Page<Article> articles = categoryId.equals(0) ? userService.getMyArticlesNoCategory(last,user) : userService.getMyArticles(last, user,categoryId);
         return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
     }
 
@@ -292,11 +294,12 @@ public class UserRestController {
     })
     @Parameters({
             @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "categoryId", description = "카테고리 아이디"),
             @Parameter(name = "user", hidden = true),
     })
-    @GetMapping("/users/records")
-    public ResponseDto<RecordResponseDto.recordDtoList> myRecords(@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
-        Page<Record> records = userService.getMyRecords(last, user);
+    @GetMapping("/users/records/{categoryId}")
+    public ResponseDto<RecordResponseDto.recordDtoList> myRecords(@RequestParam(name = "last", required = false) Long last, @PathVariable(name = "categoryId")Integer categoryId, @AuthUser User user){
+        Page<Record> records = categoryId.equals(0) ? userService.getMyRecordsNoCategory(last, user) : userService.getMyRecords(last,user,categoryId);
         return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
     }
 
