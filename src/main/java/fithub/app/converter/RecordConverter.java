@@ -169,7 +169,7 @@ public class RecordConverter {
                 .build();
     }
 
-    public RecordResponseDto.recordDeleteDtoList toRecordDeleteDtoList(List<Long> idList){
+    public static RecordResponseDto.recordDeleteDtoList toRecordDeleteDtoList(List<Long> idList){
         List<RecordResponseDto.recordDeleteDto> recordDeleteDtoList =
                 idList.stream()
                         .map(id -> toRecordDeleteDto(id))

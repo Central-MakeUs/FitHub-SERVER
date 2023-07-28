@@ -7,6 +7,7 @@ import fithub.app.web.dto.requestDto.RecordRequestDto;
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;
+import java.util.List;
 
 public interface RecordService {
 
@@ -29,4 +30,6 @@ public interface RecordService {
     Page<Record> findRecordPagingLikes(User user, Long last);
 
     void calcExp(User user, Integer categoryId);
+
+    void deleteRecordBulk(RecordRequestDto.deleteListRecordDto request, User user);
 }

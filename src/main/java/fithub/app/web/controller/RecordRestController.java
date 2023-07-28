@@ -161,7 +161,7 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordDeleteDto(recordId));
     }
 
-    @Operation(summary = "운동인증 한번에 여러개 삭제 API - 마이 페이지에서 사용됨", description = "운동인증 한번에 여러개 삭제 API 입니다.")
+    @Operation(summary = "운동인증 한번에 여러개 삭제 API ✔️🔑- 마이 페이지에서 사용됨", description = "운동인증 한번에 여러개 삭제 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -172,8 +172,9 @@ public class RecordRestController {
             @Parameter(name = "user", hidden = true),
     })
     @DeleteMapping("/records")
-    public ResponseEntity<RecordResponseDto.recordDeleteDtoList> deleteListRecord(@RequestBody RecordRequestDto.deleteListRecordDto request, @AuthUser User user){
-        return null;
+    public ResponseDto<RecordResponseDto.recordDeleteDtoList> deleteListRecord(@RequestBody RecordRequestDto.deleteListRecordDto request, @AuthUser User user){
+        recordService.deleteRecordBulk(request, user);
+        return ResponseDto.of(RecordConverter.toRecordDeleteDtoList(request.getRecordIdList()));
     }
 
     @Operation(summary = "운동인증 좋아요 누르기/취소 ✔️ 🔑",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")

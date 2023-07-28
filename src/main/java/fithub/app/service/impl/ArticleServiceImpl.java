@@ -286,4 +286,22 @@ public class ArticleServiceImpl implements ArticleService {
         return findArticle;
     }
 
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteArticleBulk(ArticleRequestDto.DeleteListArticleDto request, User user) {
+        List<Article> articleList = articleRepository.findByIdIn(request.getArticleIdList());
+        for(Article article : articleList){
+            if (!article.getUser().getId().equals(user.getId()))
+                throw new ArticleException(Code.ARTICLE_FORBIDDEN);
+
+            List<ArticleImage> articleImageList = article.getArticleImageList();
+            for (ArticleImage articleImage : articleImageList) {
+                String s = articleImage.getImageUrl();
+                String Keyname = ArticleConverter.toKeyName(s);
+                amazonS3Manager.deleteFile(Keyname.substring(1));
+            }
+            articleRepository.delete(article);
+        }
+    }
+
 }
