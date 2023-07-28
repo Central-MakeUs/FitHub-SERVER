@@ -147,6 +147,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void findByPhoneNumPassChange(String phoneNum) {
+        Optional<User> byPhoneNum = userRepository.findByPhoneNum(phoneNum);
+        if(byPhoneNum.isEmpty())
+            throw new UserException(Code.NO_PHONE_USER);
+    }
+
+    @Override
     public String login(User user, String password) {
         System.out.println(password);
         String jwt = null;
