@@ -4,6 +4,7 @@ import fithub.app.domain.*;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
+import io.swagger.models.auth.In;
 import org.springframework.data.domain.Page;
 
 import java.io.IOException;
@@ -37,4 +38,6 @@ public interface UserService {
     Page<Record> getMyRecords(Long last, User user, Integer categoryId);
 
     List<UserExercise> getMyExercises(User user);
+
+    UserExercise patchMainExercise(User user, Integer categoryId);
 }
