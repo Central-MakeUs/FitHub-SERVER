@@ -96,3 +96,7 @@ paging:
 
 fcm:
   url: ${FCM_API_URL}
+
+recordExp:
+  default : 100
+  combo: 20
