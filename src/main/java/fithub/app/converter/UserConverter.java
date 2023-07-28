@@ -3,12 +3,13 @@ package fithub.app.converter;
 import fithub.app.auth.provider.TokenProvider;
 import fithub.app.aws.s3.AmazonS3Manager;
 import fithub.app.base.Code;
-import fithub.app.domain.Record;
-import fithub.app.domain.User;
-import fithub.app.domain.Uuid;
+import fithub.app.domain.*;
 import fithub.app.domain.enums.Gender;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.base.exception.handler.UserException;
+import fithub.app.repository.ExerciseCategoryRepository;
+import fithub.app.repository.GradeRepository;
+import fithub.app.repository.UserExerciseRepository;
 import fithub.app.repository.UserRepository;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
@@ -25,6 +26,9 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -33,6 +37,18 @@ public class UserConverter {
     private final UserRepository userRepository;
 
     private static UserRepository staticUserRepository;
+
+    private final UserExerciseRepository userExerciseRepository;
+
+    private static UserExerciseRepository staticUserExerciseRepository;
+
+    private final ExerciseCategoryRepository exerciseCategoryRepository;
+
+    private static ExerciseCategoryRepository staticExerciseCategoryRepository;
+
+    private final GradeRepository gradeRepository;
+
+    private static GradeRepository staticGradeRepository;
 
     private final TokenProvider tokenProvider;
 
@@ -52,14 +68,35 @@ public class UserConverter {
         this.staticPasswordEncoder = this.passwordEncoder;
         this.staticTokenProvider = this.tokenProvider;
         this.staticAmazonS3Manager = this.amazonS3Manager;
+        this.staticUserExerciseRepository = this.userExerciseRepository;
+        this.staticExerciseCategoryRepository = this.exerciseCategoryRepository;
+        this.staticGradeRepository = this.gradeRepository;
     }
 
     public static User toCreateOAuthUser(String socialId, SocialType socialType){
-        return User.builder()
+        User newUser = User.builder()
                 .socialId(socialId)
                 .socialType(socialType)
                 .isSocial(true)
                 .build();
+        newUser.setUserExerciseList(toUserExerciseList(newUser));
+        return newUser;
+    }
+
+    public static List<UserExercise> toUserExerciseList(User user){
+        List<ExerciseCategory> exerciseCategoryList = staticExerciseCategoryRepository.findAll();
+        Grade grade = staticGradeRepository.findByName("우주먼지").get();
+        return exerciseCategoryList.stream()
+                .map(
+                        exerciseCategory ->
+                                UserExercise
+                                        .builder()
+                                        .user(user)
+                                        .grade(grade)
+                                        .exerciseCategory(exerciseCategory)
+                                        .build()
+
+                ).collect(Collectors.toList());
     }
 
     public static User toUserPhoneNum(UserRequestDto.UserInfo request) throws IOException
@@ -98,7 +135,7 @@ public class UserConverter {
 
         Gender gender = Integer.valueOf(genderFlag) % 2 == 0 ? Gender.FEMALE : Gender.MALE;
 
-        return User.builder()
+        User newUser = User.builder()
                 .marketingAgree(request.getMarketingAgree())
                 .phoneNum(request.getPhoneNumber())
                 .name(request.getName())
@@ -110,6 +147,8 @@ public class UserConverter {
                 .profileUrl(request.getProfileImage() == null ? "https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png" : uploadProfileImage(request.getProfileImage()))
                 .build();
 
+        newUser.setUserExerciseList(toUserExerciseList(newUser));
+        return newUser;
     }
 
     public static String uploadProfileImage(MultipartFile recordImage) throws IOException
@@ -157,7 +196,14 @@ public class UserConverter {
 
         String profileUrl = request.getProfileImage() == null ? "https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png" : uploadProfileImage(request.getProfileImage());
 
-        return user.updateInfo(request, age,gender, profileUrl);
+        User updatedUser = user.updateInfo(request, age, gender, profileUrl);
+        updatedUser.setUserExerciseList(toUserExerciseList(updatedUser));
+        return updatedUser;
+    }
+
+    public static User toCompleteUser(User user, ExerciseCategory exerciseCategory){
+        UserExercise mainExercise = staticUserExerciseRepository.findByUserAndExerciseCategory(user, exerciseCategory).get();
+        return user.setMainExercise(mainExercise);
     }
 
     public static User toUser(Long userId){
@@ -213,6 +259,29 @@ public class UserConverter {
         return UserResponseDto.SocialInfoDto.builder()
                 .userId(user.getId())
                 .nickname(user.getNickname())
+                .build();
+    }
+
+    public static UserResponseDto.UserExerciseDto toUserExerciseDto(UserExercise userExercise){
+        return UserResponseDto.UserExerciseDto.builder()
+                .GradeName(userExercise.getGrade().getName())
+                .category(userExercise.getExerciseCategory().getName())
+                .maxExp(userExercise.getGrade().getMaxExp())
+                .exp(userExercise.getExp())
+                .level(userExercise.getGrade().getLevel())
+                .build();
+    }
+
+    public static UserResponseDto.MyPageDto toMyPageDto(User user, List<UserExercise> myExerciseList){
+
+        List<UserResponseDto.UserExerciseDto> userExerciseDtoList = myExerciseList.stream()
+                .map(userExercise -> toUserExerciseDto(userExercise))
+                .collect(Collectors.toList());
+
+
+        return UserResponseDto.MyPageDto.builder()
+                .myInfo(toCommunityUserInfo(user))
+                .myExerciseList(userExerciseDtoList)
                 .build();
     }
 }

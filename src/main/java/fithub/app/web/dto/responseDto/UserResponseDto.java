@@ -85,4 +85,27 @@ public class UserResponseDto {
         String nickname;
         UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
     }
+
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class UserExerciseDto{
+        String category;
+        String GradeName;
+        Integer level;
+        Integer exp;
+        Integer maxExp;
+    }
+
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class MyPageDto{
+        CommunityUserInfo myInfo;
+        List<UserExerciseDto> myExerciseList;
+    }
 }

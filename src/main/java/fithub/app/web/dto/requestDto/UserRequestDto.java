@@ -52,7 +52,7 @@ public class UserRequestDto {
         private String birth;
         @NotBlank
         private String gender;
-        private List<Integer> preferExercises;
+        private Integer preferExercises;
         @Nullable
         private MultipartFile profileImage;
     }
@@ -82,7 +82,7 @@ public class UserRequestDto {
         private String password;
         private String birth;
         private String gender;
-        private List<Integer> preferExercises;
+        private Integer preferExercises;
         @Nullable
         private MultipartFile profileImage;
     }

@@ -95,7 +95,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<CommentsLikes> commentsLikesList = new ArrayList<>();
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "main_exercise")
     private UserExercise mainExercise;
 
@@ -141,5 +141,14 @@ public class User extends BaseEntity {
         return this.recordLikesList.stream()
                 .filter(recordLikes -> recordLikes.getRecord().getId().equals(record.getId()))
                 .collect(Collectors.toList()).size() > 0;
+    }
+
+    public void setUserExerciseList(List<UserExercise> exerciseList){
+        this.userExerciseList = exerciseList;
+    }
+
+    public User setMainExercise(UserExercise mainExercise){
+        this.mainExercise = mainExercise;
+        return this;
     }
 }
