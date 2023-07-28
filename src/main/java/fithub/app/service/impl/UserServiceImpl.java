@@ -246,6 +246,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = false)
+    public UserExercise patchMainExercise(User user, Integer categoryId) {
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new UserException(Code.CATEGORY_ERROR));
+        UserExercise target = userExerciseRepository.findByUserAndExerciseCategory(user, exerciseCategory).get();
+        user.setMainExercise(target);
+        return target;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
         String encodedPassword = passwordEncoder.encode(password);

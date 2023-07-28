@@ -108,4 +108,12 @@ public class UserResponseDto {
         CommunityUserInfo myInfo;
         List<UserExerciseDto> myExerciseList;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class MainExerciseChangeDto{
+        String mainExerciseName;
+    }
 }

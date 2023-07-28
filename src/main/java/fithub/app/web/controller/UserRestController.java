@@ -269,7 +269,7 @@ public class UserRestController {
         return ResponseDto.of(UserConverter.toLoginDto(jwt, user));
     }
 
-    @Operation(summary = "내가 적은 게시글 목록 조회 API - 최신순  ", description = "last로 페이징")
+    @Operation(summary = "내가 적은 게시글 목록 조회 API ✔️🔑- 최신순  ", description = "last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -286,7 +286,7 @@ public class UserRestController {
         return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
     }
 
-    @Operation(summary = "내가 적은 운동 인증 목록 조회 API - 최신순 ", description = "last로 페이징")
+    @Operation(summary = "내가 적은 운동 인증 목록 조회 API ✔️🔑- 최신순 ", description = "last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -303,7 +303,7 @@ public class UserRestController {
         return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
     }
 
-    @Operation(summary = "이미 가입된 번호인지 체크하는 API", description = "이미 가입된 번호인지 체크하는 API 입니다.")
+    @Operation(summary = "이미 가입된 번호인지 체크하는 API ✔️", description = "이미 가입된 번호인지 체크하는 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답",content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "4018", description = "BAD_REQUEST : 이미 가입된 번호.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -327,5 +327,20 @@ public class UserRestController {
     public ResponseDto<UserResponseDto.MyPageDto> getMyPage(@AuthUser User user){
         List<UserExercise> myExercises = userService.getMyExercises(user);
         return ResponseDto.of(UserConverter.toMyPageDto(user, myExercises));
+    }
+
+    @Operation(summary = "내 메인운동 바꾸기 API ✔️ 🔑", description = "메인 운동을 바꾸는 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PatchMapping("/users/my-page/main-exercise/{categoryId}")
+    public ResponseDto<UserResponseDto.MainExerciseChangeDto> changeMainExercise(@PathVariable(name = "categoryId") Integer categoryId, @AuthUser User user){
+        UserExercise userExercise = userService.patchMainExercise(user, categoryId);
+        return ResponseDto.of(UserConverter.toMainExerciseChangeDto(userExercise));
     }
 }

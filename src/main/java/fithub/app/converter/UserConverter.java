@@ -284,4 +284,10 @@ public class UserConverter {
                 .myExerciseList(userExerciseDtoList)
                 .build();
     }
+
+    public static UserResponseDto.MainExerciseChangeDto toMainExerciseChangeDto(UserExercise exercise){
+        return UserResponseDto.MainExerciseChangeDto.builder()
+                .mainExerciseName(exercise.getExerciseCategory().getName())
+                .build();
+    }
 }
