@@ -25,9 +25,11 @@ public interface UserService {
 
     User updatePassword(String phoneNum,String password);
 
-    public void findByPhoneNumJoin(String phoNum);
+    void findByPhoneNumJoin(String phoNum);
 
-    public String login(User user, String password);
+    void findByPhoneNumPassChange(String phoneNum);
+
+    String login(User user, String password);
 
     User socialInfoComplete(UserRequestDto.UserOAuthInfo request, User user) throws IOException;
 
