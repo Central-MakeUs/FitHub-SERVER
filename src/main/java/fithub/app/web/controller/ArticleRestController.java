@@ -40,7 +40,7 @@ public class ArticleRestController {
 
     private final ArticleService articleService;
 
-    @Operation(summary = "게시글 상세조회 API ✔️ ", description = "게시글의 id를 통해 상세조회하는 API 입니다. 댓글 정보는 api를 하나 더 호출해주세요!")
+    @Operation(summary = "게시글 상세조회 API ✔️🔑 ", description = "게시글의 id를 통해 상세조회하는 API 입니다. 댓글 정보는 api를 하나 더 호출해주세요!")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 응답이 복잡하니 주의!"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -59,7 +59,7 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleSpecDto(article,isLiked,isSaved));
     }
 
-    @Operation(summary = "게시글 목록 조회 API - 최신순 ✔️", description = "categoryId가 0이면 전체조회, last로 페이징")
+    @Operation(summary = "게시글 목록 조회 API - 최신순 ✔️🔑", description = "categoryId가 0이면 전체조회, last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -80,7 +80,7 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
     }
 
-    @Operation(summary = "게시글 목록 조회 API - 인기순 ✔️", description = "categoryId가 0이면 전체조회, last로 페이징")
+    @Operation(summary = "게시글 목록 조회 API - 인기순 ✔️🔑", description = "categoryId가 0이면 전체조회, last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -102,7 +102,7 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
     }
 
-    @Operation(summary = "게시글 추가 API ✔️", description = "게시글 추가 API 입니다. 사진 여러 장을 한번에 보내 주세요")
+    @Operation(summary = "게시글 추가 API ✔️🔑", description = "게시글 추가 API 입니다. 사진 여러 장을 한번에 보내 주세요")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -120,7 +120,7 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleCreateDto(article));
     }
 
-    @Operation(summary = "게시글 수정 API ✔️", description = "게시글 수정 API 입니다.")
+    @Operation(summary = "게시글 수정 API ✔️🔑", description = "게시글 수정 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -140,7 +140,7 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleUpdateDto(updatedArticle));
     }
 
-    @Operation(summary = "게시글 삭제 API ✔️", description = "게시글 삭제 API 입니다.")
+    @Operation(summary = "게시글 삭제 API ✔️🔑", description = "게시글 삭제 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -157,7 +157,7 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleDeleteDto(articleId));
     }
 
-    @Operation(summary = "게시글 여러개 삭제 API - 마이 페이지에서 사용됨", description = "게시글 여러개 삭제 API 입니다.")
+    @Operation(summary = "게시글 여러개 삭제 API ✔️🔑- 마이 페이지에서 사용됨", description = "게시글 여러개 삭제 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -168,11 +168,12 @@ public class ArticleRestController {
             @Parameter(name = "user", hidden = true),
     })
     @DeleteMapping("/articles")
-    public ResponseEntity<ArticleResponseDto.ArticleDeleteDtoList> deleteListArticle(@RequestBody ArticleRequestDto.DeleteListArticleDto request, @AuthUser User user){
-        return null;
+    public ResponseDto<ArticleResponseDto.ArticleDeleteDtoList> deleteListArticle(@RequestBody ArticleRequestDto.DeleteListArticleDto request, @AuthUser User user){
+        articleService.deleteArticleBulk(request, user);
+        return ResponseDto.of(ArticleConverter.toArticleDeleteDtoList(request.getArticleIdList()));
     }
 
-    @Operation(summary = "게시글 좋아요 누르기/취소 ✔️",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")
+    @Operation(summary = "게시글 좋아요 누르기/취소 ✔️🔑",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 새로 바뀐 좋아요 갯수 응답에 포함"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -188,7 +189,7 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleLikeDto(article));
     }
 
-    @Operation(summary = "게시글 저장/취소 ✔️",description = "저장을 한 적이 있다면 취소, 없다면 저장하기 입니다.")
+    @Operation(summary = "게시글 저장/취소 ✔️🔑",description = "저장을 한 적이 있다면 취소, 없다면 저장하기 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 새로 바뀐 저장 갯수 응답에 포함"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),

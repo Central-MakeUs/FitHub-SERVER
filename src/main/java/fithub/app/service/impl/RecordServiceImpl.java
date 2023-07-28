@@ -293,4 +293,21 @@ public class RecordServiceImpl implements RecordService {
         userExercise.setRecords(userExercise.getRecords() + 1);
         userExercise.setRecentRecord(LocalDate.now());
     }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void deleteRecordBulk(RecordRequestDto.deleteListRecordDto request, User user) {
+        List<Record> recordList = recordRepository.findByIdIn(request.getRecordIdList());
+        for (Record record : recordList) {
+            if (!record.getUser().getId().equals(user.getId()))
+                throw new RecordException(Code.RECORD_FORBIDDEN);
+
+            String imageUrl = record.getImageUrl();
+            if (imageUrl != null) {
+                String Keyname = ArticleConverter.toKeyName(imageUrl);
+                amazonS3Manager.deleteFile(Keyname.substring(1));
+            }
+            recordRepository.delete(record);
+        }
+    }
 }
