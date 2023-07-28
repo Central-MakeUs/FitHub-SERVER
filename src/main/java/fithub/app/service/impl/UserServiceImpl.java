@@ -17,6 +17,7 @@ import fithub.app.repository.UserRepository;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -172,7 +173,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<Article> getMyArticles(Long last, User user) {
+    public Page<Article> getMyArticlesNoCategory(Long last, User user) {
         Page<Article> articles = null;
         if (last != null){
             Article article = articleRepository.findById(last).get();
@@ -186,13 +187,41 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<Record> getMyRecords(Long last, User user) {
+    public Page<Article> getMyArticles(Long last, User user, Integer categoryId) {
+        Page<Article> articles = null;
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new UserException(Code.CATEGORY_ERROR));
+        if (last != null){
+            Article article = articleRepository.findById(last).get();
+            articles = articleRepository.findByCreatedAtLessThanAndUserAndExerciseCategoryOrderByCreatedAtDesc(article.getCreatedAt(), user, exerciseCategory,PageRequest.of(0,size));
+        }
+        else{
+            articles = articleRepository.findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(user, exerciseCategory,PageRequest.of(0,size));
+        }
+
+        return articles;
+    }
+
+    @Override
+    public Page<Record> getMyRecordsNoCategory(Long last, User user) {
         Page<Record> records = null;
         if (last != null){
             Record record = recordRepository.findById(last).get();
             records = recordRepository.findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(record.getCreatedAt(),user, PageRequest.of(0, size));
         }else{
             records = recordRepository.findAllByUserOrderByCreatedAtDesc(user, PageRequest.of(0,size));
+        }
+        return records;
+    }
+
+    @Override
+    public Page<Record> getMyRecords(Long last, User user, Integer categoryId) {
+        Page<Record> records = null;
+        ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new UserException(Code.CATEGORY_ERROR));
+        if (last != null){
+            Record record = recordRepository.findById(last).get();
+            records = recordRepository.findByCreatedAtLessThanAndUserAAndExerciseCategoryOrderByCreatedAtDesc(record.getCreatedAt(),user, exerciseCategory,PageRequest.of(0, size));
+        }else{
+            records = recordRepository.findAllByUserAAndExerciseCategoryOrderByCreatedAtDesc(user,exerciseCategory ,PageRequest.of(0,size));
         }
         return records;
     }

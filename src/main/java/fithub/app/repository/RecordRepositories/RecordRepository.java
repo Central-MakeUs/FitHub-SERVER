@@ -33,4 +33,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
 
     Page<Record> findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(LocalDateTime createdAt, User user, Pageable pageable);
     Page<Record> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
+
+    Page<Record> findByCreatedAtLessThanAndUserAAndExerciseCategoryOrderByCreatedAtDesc(LocalDateTime createdAt, User user, ExerciseCategory exerciseCategory,Pageable pageable);
+    Page<Record> findAllByUserAAndExerciseCategoryOrderByCreatedAtDesc(User user, ExerciseCategory exerciseCategory,Pageable pageable);
 }
