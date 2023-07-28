@@ -306,7 +306,7 @@ public class UserRestController {
             @ApiResponse(responseCode = "4018", description = "BAD_REQUEST : 이미 가입된 번호.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
-    @PostMapping("/users/exist-phone/")
+    @PostMapping("/users/exist-phone")
     public ResponseDto<BaseDto.BaseResponseDto> checkExistPhone(@RequestBody UserRequestDto.findExistPhoneDto request){
         userService.findByPhoneNumJoin(request.getTargetPhoneNum());
         return ResponseDto.of(Code.OK, null);

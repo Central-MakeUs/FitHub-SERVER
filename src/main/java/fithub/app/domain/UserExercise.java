@@ -14,6 +14,7 @@ import java.time.LocalDate;
 @Entity
 @DynamicInsert
 @DynamicUpdate
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserExercise extends BaseEntity {
