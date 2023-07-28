@@ -303,15 +303,19 @@ public class UserRestController {
         return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
     }
 
-    @Operation(summary = "이미 가입된 번호인지 체크하는 API ✔️", description = "이미 가입된 번호인지 체크하는 API 입니다.")
+    @Operation(summary = "이미 가입된 번호인지 체크하는 API ✔️", description = "이미 가입된 번호인지 체크하는 API 입니다. 타입이 0이면 이미 있는 번호인지? 타입이 1이면 가입된 번호인지? 판단하며 후자는 비밀번호 재 설정 시 사용이 됩니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답",content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "4018", description = "BAD_REQUEST : 이미 가입된 번호.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4018", description = "BAD_REQUEST : 이미 가입된 번호. 타입이 0일 때만 이 응답이 감", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4019", description = "BAD_REQUEST : 가입 된 적 없는 번호, 타입이 1일 때만 이 응답이 감", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
-    @PostMapping("/users/exist-phone")
-    public ResponseDto<BaseDto.BaseResponseDto> checkExistPhone(@RequestBody UserRequestDto.findExistPhoneDto request){
-        userService.findByPhoneNumJoin(request.getTargetPhoneNum());
+    @PostMapping("/users/exist-phone/{type}")
+    public ResponseDto<BaseDto.BaseResponseDto> checkExistPhone(@RequestBody UserRequestDto.findExistPhoneDto request, @PathVariable(name = "type") Integer type){
+        if (type == 0)
+            userService.findByPhoneNumJoin(request.getTargetPhoneNum());
+        else
+            userService.findByPhoneNumPassChange(request.getTargetPhoneNum());
         return ResponseDto.of(Code.OK, null);
     }
 
