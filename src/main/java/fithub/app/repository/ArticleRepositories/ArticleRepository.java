@@ -41,4 +41,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findByCreatedAtLessThanAndUserAndExerciseCategoryOrderByCreatedAtDesc(LocalDateTime createdAt, User user,ExerciseCategory exerciseCategory, Pageable pageable);
 
     Page<Article> findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(User user, ExerciseCategory exerciseCategory,Pageable pageable);
+
+    List<Article> findByIdIn(List<Long> articleList);
+    void deleteAllByIdInBatch(Iterable<Long> artilceIdList);
 }

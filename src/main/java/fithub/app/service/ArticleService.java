@@ -31,4 +31,6 @@ public interface ArticleService {
 
     Page<Article> findArticlePagingCategoryAndLikes(User user, Integer categoryId, Long last);
     Page<Article> findArticlePagingLikes(User user, Long last);
+
+    void deleteArticleBulk(ArticleRequestDto.DeleteListArticleDto request, User user);
 }

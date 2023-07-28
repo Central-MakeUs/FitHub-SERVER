@@ -219,9 +219,9 @@ public class UserServiceImpl implements UserService {
         ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new UserException(Code.CATEGORY_ERROR));
         if (last != null){
             Record record = recordRepository.findById(last).get();
-            records = recordRepository.findByCreatedAtLessThanAndUserAAndExerciseCategoryOrderByCreatedAtDesc(record.getCreatedAt(),user, exerciseCategory,PageRequest.of(0, size));
+            records = recordRepository.findByCreatedAtLessThanAndUserAndExerciseCategoryOrderByCreatedAtDesc(record.getCreatedAt(),user, exerciseCategory,PageRequest.of(0, size));
         }else{
-            records = recordRepository.findAllByUserAAndExerciseCategoryOrderByCreatedAtDesc(user,exerciseCategory ,PageRequest.of(0,size));
+            records = recordRepository.findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(user,exerciseCategory ,PageRequest.of(0,size));
         }
         return records;
     }

@@ -193,7 +193,7 @@ public class ArticleConverter {
                 .build();
     }
 
-    public ArticleResponseDto.ArticleDeleteDtoList toArticleDeleteDtoList(List<Long> idList){
+    public static ArticleResponseDto.ArticleDeleteDtoList toArticleDeleteDtoList(List<Long> idList){
 
         List<ArticleResponseDto.ArticleDeleteDto> articleDeleteDtoList =
                 idList.stream()

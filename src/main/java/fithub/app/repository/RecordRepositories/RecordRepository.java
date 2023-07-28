@@ -1,5 +1,6 @@
 package fithub.app.repository.RecordRepositories;
 
+import fithub.app.domain.Article;
 import fithub.app.domain.ExerciseCategory;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
@@ -34,6 +35,8 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     Page<Record> findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(LocalDateTime createdAt, User user, Pageable pageable);
     Page<Record> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);
 
-    Page<Record> findByCreatedAtLessThanAndUserAAndExerciseCategoryOrderByCreatedAtDesc(LocalDateTime createdAt, User user, ExerciseCategory exerciseCategory,Pageable pageable);
-    Page<Record> findAllByUserAAndExerciseCategoryOrderByCreatedAtDesc(User user, ExerciseCategory exerciseCategory,Pageable pageable);
+    Page<Record> findByCreatedAtLessThanAndUserAndExerciseCategoryOrderByCreatedAtDesc(LocalDateTime createdAt, User user, ExerciseCategory exerciseCategory,Pageable pageable);
+    Page<Record> findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(User user, ExerciseCategory exerciseCategory,Pageable pageable);
+
+    List<Record> findByIdIn(List<Long> recordIdList);
 }
