@@ -11,6 +11,8 @@ import fithub.app.domain.mapping.RecordLikes;
 import fithub.app.domain.mapping.SavedArticle;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 @Entity
 @Builder
 @Getter
+@DynamicInsert
+@DynamicUpdate
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {
@@ -59,6 +63,15 @@ public class User extends BaseEntity {
 
     @Column(nullable = true)
     private Boolean marketingAgree;
+
+    @Column(columnDefinition = "BIGINT DEFAULT 0")
+    private Long totalRecordNum;
+
+    @Column(columnDefinition = "BIGINT DEFAULT 0")
+    private Long monthlyRecordNum;
+
+    @Column(columnDefinition = "BIGINT DEFAULT 0")
+    private Long contiguousRecordNum;
 
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "VARCHAR(10) DEFAULT 'ACTIVE'")
