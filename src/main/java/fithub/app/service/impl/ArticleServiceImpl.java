@@ -220,68 +220,50 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Page<Article> findArticlePagingCategoryAndCreatedAt(User user, Integer categoryId, Long last) {
+    public Page<Article> findArticlePagingCategoryAndCreatedAt(User user, Integer categoryId, Integer pageIndex) {
 
         ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
 
         Page<Article> findArticle = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Article> lastArticle = articleRepository.findById(last);
+        if(pageIndex == null)
+            pageIndex = 0;
 
-        if (lastArticle.isPresent())
-            findArticle = articleRepository.findByCreatedAtLessThanAndExerciseCategoryOrderByCreatedAtDesc(lastArticle.get().getCreatedAt(), exerciseCategory, PageRequest.of(0, size));
-        else
-            findArticle = articleRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,PageRequest.of(0, size));
+        findArticle = articleRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,PageRequest.of(pageIndex, size));
         return findArticle;
     }
 
     @Override
-    public Page<Article> findArticlePagingCreatedAt(User user, Long last) {
+    public Page<Article> findArticlePagingCreatedAt(User user, Integer pageIndex) {
         Page<Article> findArticle = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Article> lastArticle = articleRepository.findById(last);
-
-        if(lastArticle.isPresent())
-            findArticle = articleRepository.findByCreatedAtLessThanOrderByCreatedAtDesc(lastArticle.get().getCreatedAt(),PageRequest.of(0, size));
-        else
-            findArticle = articleRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, size));
+        if(pageIndex == null)
+            pageIndex = 0;
+        findArticle = articleRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(pageIndex, size));
         return findArticle;
     }
 
     @Override
-    public Page<Article> findArticlePagingCategoryAndLikes(User user, Integer categoryId, Long last) {
+    public Page<Article> findArticlePagingCategoryAndLikes(User user, Integer categoryId, Integer pageIndex) {
 
         ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
 
         Page<Article> findArticle = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Article> lastArticle = articleRepository.findById(last);
+        if(pageIndex == null)
+            pageIndex = 0;
 
-        if (lastArticle.isPresent())
-            findArticle = articleRepository.findByLikesLessThanAndExerciseCategoryOrderByLikesDesc(lastArticle.get().getLikes(), exerciseCategory, PageRequest.of(0, size));
-        else
-            findArticle = articleRepository.findAllByExerciseCategoryOrderByLikesDesc(exerciseCategory,PageRequest.of(0, size));
+        findArticle = articleRepository.findAllByExerciseCategoryOrderByLikesDescCreatedAtDesc(exerciseCategory,PageRequest.of(pageIndex, size));
         return findArticle;
     }
 
     @Override
-    public Page<Article> findArticlePagingLikes(User user, Long last) {
+    public Page<Article> findArticlePagingLikes(User user, Integer pageIndex) {
         Page<Article> findArticle = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Article> lastArticle = articleRepository.findById(last);
-
-        if(lastArticle.isPresent())
-            findArticle = articleRepository.findByLikesLessThanOrderByLikesDesc(lastArticle.get().getLikes(),PageRequest.of(0, size));
-        else
-            findArticle = articleRepository.findAllByOrderByLikesDesc(PageRequest.of(0, size));
+        if(pageIndex == null)
+            pageIndex = 0;
+        findArticle = articleRepository.findAllByOrderByLikesDescCreatedAtDesc(PageRequest.of(pageIndex, size));
         return findArticle;
     }
 

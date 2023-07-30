@@ -283,7 +283,7 @@ public class UserRestController {
     @GetMapping("/users/articles/{categoryId}")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> myArticles(@RequestParam(name = "last", required = false) Long last,@PathVariable(name = "categoryId") Integer categoryId ,@AuthUser User user){
         Page<Article> articles = categoryId.equals(0) ? userService.getMyArticlesNoCategory(last,user) : userService.getMyArticles(last, user,categoryId);
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
     }
 
     @Operation(summary = "내가 적은 운동 인증 목록 조회 API ✔️🔑- 최신순 ", description = "last로 페이징")
