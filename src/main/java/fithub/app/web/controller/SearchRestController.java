@@ -21,6 +21,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,10 +35,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "검색 API", description = "해시태그 검색 API 모음")
 public class SearchRestController {
 
-
+    Logger logger = LoggerFactory.getLogger(SearchRestController.class);
     private final SearchService searchService;
 
-    @Operation(summary = "게시글 검색 API - 전체 미리보기 ✔️", description = "tag에 검색 태그를 담아서 전달")
+    @Operation(summary = "검색 API - 전체 미리보기 ✔️🔑", description = "tag에 검색 태그를 담아서 전달")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 검색결과 있음"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -48,11 +50,12 @@ public class SearchRestController {
     })
     @GetMapping("/search")
     public ResponseDto<SearchPreViewResponseDto.SearchPreViewDto> articleSearchPreView(@RequestParam(name = "tag") String tag, @AuthUser User user){
+        logger.info("검색 태그 : {}",tag);
         SearchPreViewResponseDto.SearchPreViewDto searchPreViewDto = searchService.searchPreview(tag, user);
         return ResponseDto.of(searchPreViewDto);
     }
 
-    @Operation(summary = "게시글 검색 API - 최신순 ✔️", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
+    @Operation(summary = "게시글 검색 API - 최신순 ✔️🔑", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 검색결과 있음"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -65,14 +68,17 @@ public class SearchRestController {
     })
     @GetMapping("/search/articles")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> articleSearchCreatedAt(@RequestParam(name = "tag") String tag,@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
+        logger.info("검색 태그 : {}",tag);
+        logger.info("last의 값 : {}",last);
         Page<Article> articles = searchService.searchArticleCreatedAt(tag, last);
+        logger.info("검색 결과의 갯수 : {}", articles.toList().size());
         if(articles == null || articles.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
             return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
     }
 
-    @Operation(summary = "게시글 검색 API - 인기순 ✔️", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
+    @Operation(summary = "게시글 검색 API - 인기순 ✔️🔑", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 검색결과 있음"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -83,16 +89,19 @@ public class SearchRestController {
             @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
             @Parameter(name = "user", hidden = true),
     })
-    @GetMapping("/search/records")
+    @GetMapping("/search/articles/likes")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> articleSearchLikes(@RequestParam(name = "tag") String tag,@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
+        logger.info("검색 태그 : {}",tag);
+        logger.info("last의 값 : {}",last);
         Page<Article> articles = searchService.searchArticleLikes(tag, last);
+        logger.info("검색 결과의 갯수 : {}", articles.toList().size());
         if(articles == null || articles.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
             return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
     }
 
-    @Operation(summary = "인증 검색 API - 최신순 ✔️", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
+    @Operation(summary = "인증 검색 API - 최신순 ✔️🔑", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -103,9 +112,12 @@ public class SearchRestController {
             @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
             @Parameter(name = "user", hidden = true),
     })
-    @GetMapping("/search/articles/likes")
+    @GetMapping("/search/records")
     public ResponseDto<RecordResponseDto.recordDtoList> recordSearchCreatedAt(@RequestParam(name = "tag") String tag,@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
+        logger.info("검색 태그 : {}",tag);
+        logger.info("last의 값 : {}",last);
         Page<Record> records = searchService.searchRecordCreatedAt(tag, last);
+        logger.info("검색 결과의 갯수 : {}", records.toList().size());
         if(records == null || records.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
@@ -125,7 +137,10 @@ public class SearchRestController {
     })
     @GetMapping("/search/records/likes")
     public ResponseDto<RecordResponseDto.recordDtoList> recordSearchLikes(@RequestParam(name = "tag") String tag,@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
+        logger.info("검색 태그 : {}",tag);
+        logger.info("last의 값 : {}",last);
         Page<Record> records = searchService.searchRecordLikes(tag, last);
+        logger.info("검색 결과의 갯수 : {}", records.toList().size());
         if(records == null || records.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
