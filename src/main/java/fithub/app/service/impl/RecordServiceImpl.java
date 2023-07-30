@@ -293,9 +293,10 @@ public class RecordServiceImpl implements RecordService {
             totalExp -= exerciseGrade.getMaxExp();
             userExercise.setGrade(gradeRepository.findByLevel(exerciseGrade.getLevel() + 1).get());
         }
-        userExercise.setExp(totalExp);
         userExercise.setRecords(userExercise.getRecords() + 1);
+        userExercise.setExp(totalExp);
         userExercise.setRecentRecord(LocalDate.now());
+        user.setBestRecordExercise();
     }
 
     @Override
