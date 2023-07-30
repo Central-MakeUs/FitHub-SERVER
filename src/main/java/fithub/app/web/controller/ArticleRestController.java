@@ -186,7 +186,7 @@ public class ArticleRestController {
     @PostMapping("/articles/{articleId}/likes")
     public ResponseDto<ArticleResponseDto.ArticleLikeDto> likeArticle(@PathVariable(name = "articleId") @ExistArticle Long articleId, @AuthUser User user){
         Article article = articleService.toggleArticleLike(articleId, user);
-        return ResponseDto.of(ArticleConverter.toArticleLikeDto(article));
+        return ResponseDto.of(ArticleConverter.toArticleLikeDto(article,user));
     }
 
     @Operation(summary = "게시글 저장/취소 ✔️🔑",description = "저장을 한 적이 있다면 취소, 없다면 저장하기 입니다.")

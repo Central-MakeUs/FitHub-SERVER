@@ -112,6 +112,10 @@ public class User extends BaseEntity {
     @JoinColumn(name = "main_exercise")
     private UserExercise mainExercise;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "best_exercise")
+    private UserExercise bestRecordExercise;
+
     public User update(String name){
         this.name = name;
         return this;
@@ -176,5 +180,24 @@ public class User extends BaseEntity {
 
     public void returnContiguousRecord(){
         this.contiguousRecordNum = 0L;
+    }
+
+    public void setBestRecordExercise(){
+        List<UserExercise> userExerciseList = this.getUserExerciseList();
+        UserExercise bestExercise = userExerciseList.get(0);
+        for (UserExercise u : userExerciseList){
+            if (u.getRecords() >bestExercise.getRecords())
+                bestExercise = u;
+            else if (u.getRecords() == bestExercise.getRecords()){
+                if (u.getGrade().getLevel() > bestExercise.getGrade().getLevel())
+                    bestExercise = u;
+                else if (u.getGrade().getLevel() > bestExercise.getGrade().getLevel())
+                    bestExercise = bestExercise;
+                else if (u.getGrade().getLevel() == bestExercise.getGrade().getLevel()){
+                    bestExercise = u.getContiguousDay() > bestExercise.getContiguousDay() ? u : bestExercise;
+                }
+            }
+        }
+        this.bestRecordExercise = bestExercise;
     }
 }

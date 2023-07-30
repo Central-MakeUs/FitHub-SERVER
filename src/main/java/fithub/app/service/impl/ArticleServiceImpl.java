@@ -68,7 +68,7 @@ public class ArticleServiceImpl implements ArticleService {
                     .collect(Collectors.toList());
         }
 
-        hashTagList.add(exercisehashTag);
+        hashTagList.add(0,exercisehashTag);
 
         logger.info("해시 태그의 리스트 : {}", hashTagList.toString());
         Article article = ArticleConverter.toArticle(request, user, hashTagList, categoryId);
@@ -195,7 +195,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .map(tag -> hashTagRepository.findByName(tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
                 .collect(Collectors.toList());
 
-        hashTagList.add(exercisehashTag);
+        hashTagList.add(0,exercisehashTag);
 
         return ArticleConverter.toUpdateArticle(article,request,hashTagList);
     }

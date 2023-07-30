@@ -7,7 +7,14 @@ import fithub.app.base.ResponseDto;
 import fithub.app.converter.RootConverter;
 import fithub.app.domain.BestRecorder;
 import fithub.app.domain.User;
+<<<<<<< HEAD
 import fithub.app.service.HomeService;
+=======
+import fithub.app.base.exception.handler.UserException;
+import fithub.app.domain.UserExercise;
+import fithub.app.domain.enums.SocialType;
+import fithub.app.repository.UserRepository;
+>>>>>>> main
 import fithub.app.service.UserService;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +25,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

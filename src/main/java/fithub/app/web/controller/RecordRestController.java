@@ -190,6 +190,6 @@ public class RecordRestController {
     @PostMapping("/records/{recordId}/likes")
     public ResponseDto<RecordResponseDto.recordLikeDto> likeRecord(@PathVariable(name = "recordId") @ExistRecord Long recordId, @AuthUser User user){
         Record record = recordService.toggleRecordLike(recordId, user);
-        return ResponseDto.of(RecordConverter.toRecordLikeDto(record));
+        return ResponseDto.of(RecordConverter.toRecordLikeDto(record, user));
     }
 }
