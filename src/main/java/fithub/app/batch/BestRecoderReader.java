@@ -46,7 +46,7 @@ public class BestRecoderReader extends StepExecutionListenerSupport implements I
 
     @Override
     public void beforeStep(StepExecution stepExecution) {
-        // Step이 시작되기 전에 데이터를 읽어들여서 ExecutionContext에 저장합니다.
+        // Step이 시작되기 전에 데이터를 읽어들여서 ExecutionContext에 저장.
         allBestRecorder = bestRecorderRepository.findAll();
         StringBuilder sb = new StringBuilder();
         for (BestRecorder bestRecorder : allBestRecorder) {
