@@ -12,6 +12,7 @@ import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -158,7 +159,7 @@ public class ArticleConverter {
                 .build();
     }
 
-    public static ArticleResponseDto.ArticleDtoList toArticleDtoList(List<Article> articleList, User user){
+    public static ArticleResponseDto.ArticleDtoList toArticleDtoList(Page<Article> articleList, User user){
         List<ArticleResponseDto.ArticleDto> articleDtoList =
                 articleList.stream()
                         .map(article -> toArticleDto(article, user))
@@ -166,7 +167,11 @@ public class ArticleConverter {
 
         return ArticleResponseDto.ArticleDtoList.builder()
                 .articleList(articleDtoList)
-                .size(articleDtoList.size())
+                .listSize(articleDtoList.size())
+                .totalElements(articleList.getTotalElements())
+                .totalPage(articleList.getTotalPages())
+                .isFirst(articleList.isFirst())
+                .isLast(articleList.isLast())
                 .build();
     }
 

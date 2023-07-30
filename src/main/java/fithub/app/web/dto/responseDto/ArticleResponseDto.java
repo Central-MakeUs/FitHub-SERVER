@@ -53,7 +53,11 @@ public class ArticleResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class ArticleDtoList{
         List<ArticleDto> articleList;
-        Integer size;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
     }
 
     @Builder

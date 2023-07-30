@@ -59,7 +59,7 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleSpecDto(article,isLiked,isSaved));
     }
 
-    @Operation(summary = "게시글 목록 조회 API - 최신순 ✔️🔑", description = "categoryId가 0이면 전체조회, last로 페이징")
+    @Operation(summary = "게시글 목록 조회 API - 최신순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -67,20 +67,20 @@ public class ArticleRestController {
     })
     @Parameters({
             @Parameter(name = "categoryId", description = "카테고리 아이디"),
-            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠"),
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/articles/{categoryId}")
-    public ResponseDto<ArticleResponseDto.ArticleDtoList> articleTimeList(@RequestParam(name = "last", required = false) Long last,@PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> articleTimeList(@RequestParam(name = "pageIndex", required = false) Integer pageIndex,@PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
         Page<Article> articles = null;
         if (categoryId != 0)
-            articles = articleService.findArticlePagingCategoryAndCreatedAt(user, categoryId, last);
+            articles = articleService.findArticlePagingCategoryAndCreatedAt(user, categoryId, pageIndex);
         else
-            articles = articleService.findArticlePagingCreatedAt(user,last);
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
+            articles = articleService.findArticlePagingCreatedAt(user,pageIndex);
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
     }
 
-    @Operation(summary = "게시글 목록 조회 API - 인기순 ✔️🔑", description = "categoryId가 0이면 전체조회, last로 페이징")
+    @Operation(summary = "게시글 목록 조회 API - 인기순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -88,18 +88,18 @@ public class ArticleRestController {
     })
     @Parameters({
             @Parameter(name = "categoryId", description = "카테고리 아이디"),
-            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠"),
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/articles/{categoryId}/likes")
-    public ResponseDto<ArticleResponseDto.ArticleDtoList> articleLikesList(@RequestParam(name = "last", required = false) Long last, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> articleLikesList(@RequestParam(name = "pageIndex") Integer pageIndex, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
         Page<Article> articles = null;
         if (categoryId != 0)
-            articles = articleService.findArticlePagingCategoryAndLikes(user,categoryId,last);
+            articles = articleService.findArticlePagingCategoryAndLikes(user,categoryId,pageIndex);
         else
-            articles = articleService.findArticlePagingLikes(user,last);
+            articles = articleService.findArticlePagingLikes(user,pageIndex);
 
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
     }
 
     @Operation(summary = "게시글 추가 API ✔️🔑", description = "게시글 추가 API 입니다. 사진 여러 장을 한번에 보내 주세요")
