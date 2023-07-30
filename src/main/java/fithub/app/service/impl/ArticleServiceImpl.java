@@ -191,9 +191,12 @@ public class ArticleServiceImpl implements ArticleService {
         String exerciseTag =  request.getExerciseTag();
         HashTag exercisehashTag = hashTagRepository.findByName(exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
 
-        List<HashTag> hashTagList = request.getHashTagList().stream()
-                .map(tag -> hashTagRepository.findByName(tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
-                .collect(Collectors.toList());
+        List<HashTag> hashTagList = new ArrayList<>();
+        if (request.getHashTagList() != null) {
+            hashTagList = request.getHashTagList().stream()
+                    .map(tag -> hashTagRepository.findByName(tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
+                    .collect(Collectors.toList());
+        }
 
         hashTagList.add(0,exercisehashTag);
 
