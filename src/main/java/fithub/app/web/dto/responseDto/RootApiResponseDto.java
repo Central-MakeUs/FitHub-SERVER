@@ -24,9 +24,9 @@ public class RootApiResponseDto {
         private String recorderNickName;
         private String category;
         private String GradeName;
-        private String level;
+        private Integer level;
         private String profileUrl;
-        private String recordCount;
+        private Long recordCount;
     }
 
     @Builder
