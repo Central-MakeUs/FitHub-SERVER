@@ -121,7 +121,7 @@ public class SearchRestController {
         if(records == null || records.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
-            return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
+            return ResponseDto.of(RecordConverter.toRecordDtoList(records, user));
     }
 
     @Operation(summary = "인증 검색 API - 인기순 ✔️", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
@@ -144,6 +144,6 @@ public class SearchRestController {
         if(records == null || records.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
-            return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
+            return ResponseDto.of(RecordConverter.toRecordDtoList(records, user));
     }
 }

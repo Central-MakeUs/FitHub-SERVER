@@ -13,6 +13,7 @@ import fithub.app.web.dto.responseDto.RecordResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -135,7 +136,8 @@ public class RecordConverter {
                 .build();
     }
 
-    public static RecordResponseDto.recordDtoList toRecordDtoList(List<Record> recordList, User user){
+    public static RecordResponseDto.recordDtoList toRecordDtoList(Page<Record> records, User user){
+        List<Record> recordList = records.toList();
         List<RecordResponseDto.recordDto> recordDtoList =
                 recordList.stream()
                         .map(record -> toRecordDto(record, user))
@@ -143,7 +145,11 @@ public class RecordConverter {
 
         return RecordResponseDto.recordDtoList.builder()
                 .recordList(recordDtoList)
-                .size(recordList.size())
+                .totalElements(records.getTotalElements())
+                .totalPage(records.getTotalPages())
+                .listSize(recordList.size())
+                .isFirst(records.isFirst())
+                .isLast(records.isLast())
                 .build();
     }
 
