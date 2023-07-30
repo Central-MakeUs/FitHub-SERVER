@@ -69,7 +69,7 @@ public class ArticleServiceImpl implements ArticleService {
                     .collect(Collectors.toList());
         }
 
-        hashTagList.add(exercisehashTag);
+        hashTagList.add(0,exercisehashTag);
 
         logger.info("해시 태그의 리스트 : {}", hashTagList.toString());
         Article article = ArticleConverter.toArticle(request, user, hashTagList, categoryId);

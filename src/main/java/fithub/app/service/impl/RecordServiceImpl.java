@@ -80,7 +80,7 @@ public class RecordServiceImpl implements RecordService {
                     .map(tag -> hashTagRepository.findByName(tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
                     .collect(Collectors.toList());
         }
-        hashTagList.add(exerciseHash);
+        hashTagList.add(0,exerciseHash);
         Record record = RecordConverter.toRecord(request, user, hashTagList, categoryId);
         user.addRecordCount();
         return recordRepository.save(record);
