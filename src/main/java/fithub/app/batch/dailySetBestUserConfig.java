@@ -21,8 +21,6 @@ import org.springframework.batch.item.support.ListItemReader;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Slf4j
@@ -62,7 +60,7 @@ public class dailySetBestUserConfig {
     }
 
     @Bean
-    public Step firstStep(ItemWriter<BestRecorder> BestRecoderWriter, ItemProcessor<BestRecorder, BestRecorder> fileItemProcessor){
+    public Step DailySetFirstStep(ItemWriter<BestRecorder> BestRecoderWriter, ItemProcessor<BestRecorder, BestRecorder> fileItemProcessor){
         return stepBuilderFactory.get("firstStep")
                 .<BestRecorder, BestRecorder>chunk(10)
                 .reader(bestRecoderReader)
@@ -88,7 +86,7 @@ public class dailySetBestUserConfig {
     }
 
     @Bean
-    public Step secondStep(ItemReader<User> findBestUser, ItemWriter<BestRecorder> bestRecorderItemWriter){
+    public Step DailySetSecondStep(ItemReader<User> findBestUser, ItemWriter<BestRecorder> bestRecorderItemWriter){
         return stepBuilderFactory.get("secondStep")
                 .<User,BestRecorder>chunk(10)
                 .reader(findBestUser)
@@ -99,11 +97,11 @@ public class dailySetBestUserConfig {
 
 
     @Bean
-    public Job setBestRecorder(Step firstStep, Step secondStep){
+    public Job setBestRecorder(Step DailySetFirstStep, Step DailySetSecondStep){
         return jobBuilderFactory.get("FileDelete")
                 .incrementer(new RunIdIncrementer())
-                .start(firstStep)
-                .next(secondStep)
+                .start(DailySetFirstStep)
+                .next(DailySetSecondStep)
                 .build();
     }
 }

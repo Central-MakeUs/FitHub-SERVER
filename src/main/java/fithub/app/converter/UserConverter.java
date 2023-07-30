@@ -78,6 +78,9 @@ public class UserConverter {
                 .socialId(socialId)
                 .socialType(socialType)
                 .isSocial(true)
+                .monthlyRecordNum(0L)
+                .totalRecordNum(0L)
+                .contiguousRecordNum(0L)
                 .build();
         newUser.setUserExerciseList(toUserExerciseList(newUser));
         return newUser;
@@ -144,6 +147,9 @@ public class UserConverter {
                 .password(staticPasswordEncoder.encode(request.getPassword()))
                 .age(age)
                 .gender(gender)
+                .monthlyRecordNum(0L)
+                .totalRecordNum(0L)
+                .contiguousRecordNum(0L)
                 .profileUrl(request.getProfileImage() == null ? "https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png" : uploadProfileImage(request.getProfileImage()))
                 .build();
 

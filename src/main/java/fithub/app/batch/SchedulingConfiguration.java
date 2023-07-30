@@ -19,18 +19,19 @@
 
         private final Job setBestRecorder;
 
-    //    private final Job
-    //
-    //    // 매달 첫 날 0 0 0 1 * *
-    //    @Scheduled(cron = "0 0 0 1 * *")
-    //    public void monthlySetRecordCounts() throws JobExecutionException {
-    //        JobParameters jobParameters = new JobParametersBuilder()
-    //                .addLong("timestamp", System.currentTimeMillis())
-    //                .toJobParameters();
-    //        jobLauncher.run(setBestRecorder, jobParameters);
-    //    }
+        private final Job returnMonthlyRecord;
 
-        @Scheduled(cron = "0 0 0 * * ?")
+        // 매달 첫 날 0 0 0 1 * *
+        @Scheduled(cron = "0 0 0 1 * *")
+        public void monthlySetRecordCounts() throws JobExecutionException {
+            JobParameters jobParameters = new JobParametersBuilder()
+                    .addLong("timestamp", System.currentTimeMillis())
+                    .toJobParameters();
+            jobLauncher.run(returnMonthlyRecord, jobParameters);
+        }
+
+        // 매일 수행 0 0 0 * * ?
+        @Scheduled(cron = "0 7 14 * * ?")
         public void dailySetBestUser() throws JobExecutionException{
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("timestamp", System.currentTimeMillis())
