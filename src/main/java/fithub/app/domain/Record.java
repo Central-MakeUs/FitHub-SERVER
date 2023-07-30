@@ -2,7 +2,9 @@ package fithub.app.domain;
 
 
 import fithub.app.domain.common.BaseEntity;
+import fithub.app.domain.mapping.CommentsLikes;
 import fithub.app.domain.mapping.RecordHashTag;
+import fithub.app.domain.mapping.RecordLikes;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -58,6 +60,9 @@ public class Record extends BaseEntity {
 
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
     private List<Comments> commentsList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
+    private List<RecordLikes> commentsLikesList = new ArrayList<>();
 
     public Record setImage(String imageUrl){
         this.imageUrl = imageUrl;
