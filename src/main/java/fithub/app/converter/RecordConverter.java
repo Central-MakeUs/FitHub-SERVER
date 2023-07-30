@@ -82,12 +82,12 @@ public class RecordConverter {
             record.setImage(request.getRemainImageUrl());
         else{
             MultipartFile recordImage = request.getNewImage();
-            record.setRecordHashTagList(toRecordHashTagList(hashTagList, record));
             String imageUrl = null;
             if(recordImage != null)
                 imageUrl = uploadRecordImage(recordImage, record);
             record.setImage(imageUrl);
         }
+        record.setRecordHashTagList(toRecordHashTagList(hashTagList, record));
         return record;
     }
 
@@ -181,11 +181,11 @@ public class RecordConverter {
                 .build();
     }
 
-    public static RecordResponseDto.recordLikeDto toRecordLikeDto(Record record){
+    public static RecordResponseDto.recordLikeDto toRecordLikeDto(Record record, User user){
         return RecordResponseDto.recordLikeDto.builder()
                 .recordId(record.getId())
                 .newLikes(record.getLikes())
-                .isLiked(record.getUser().isLikedRecord(record))
+                .isLiked(user.isLikedRecord(record))
                 .build();
     }
 }

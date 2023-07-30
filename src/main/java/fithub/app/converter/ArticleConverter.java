@@ -206,11 +206,11 @@ public class ArticleConverter {
                 .build();
     }
 
-    public static ArticleResponseDto.ArticleLikeDto toArticleLikeDto(Article article){
+    public static ArticleResponseDto.ArticleLikeDto toArticleLikeDto(Article article, User user){
         return ArticleResponseDto.ArticleLikeDto.builder()
                 .articleId(article.getId())
                 .articleLikes(article.getLikes())
-                .isLiked(article.getUser().isLikedArticle(article))
+                .isLiked(user.isLikedArticle(article))
                 .build();
     }
 
