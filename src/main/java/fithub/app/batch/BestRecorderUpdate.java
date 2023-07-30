@@ -4,6 +4,7 @@ import fithub.app.domain.BestRecorder;
 import fithub.app.domain.User;
 import fithub.app.domain.enums.RankingStatus;
 import fithub.app.repository.BestRecorderRepository;
+import fithub.app.repository.UserExerciseRepository;
 import fithub.app.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -12,23 +13,26 @@ import org.springframework.batch.core.StepExecution;
 import org.springframework.batch.core.scope.context.StepSynchronizationManager;
 import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class BestRecorderUpdate implements ItemProcessor<User, BestRecorder> {
 
     private final BestRecorderRepository bestRecorderRepository;
-    private final UserRepository userRepository;
+    private final UserExerciseRepository userExerciseRepository;
     private List<BestRecorder> result;
 
     Logger logger = LoggerFactory.getLogger(BestRecorderUpdate.class);
 
     @Override
     public BestRecorder process(User item) throws Exception {
-        List<User> bestUsers = userRepository.findTop5ByOrderByTotalRecordNumDesc();
+        List<User> bestUsers = userExerciseRepository.findTopFiveUserExercises(PageRequest.of(0,5)).stream()
+                .map(userExercise -> userExercise.getUser()).collect(Collectors.toList());
         StepExecution stepExecution = StepSynchronizationManager.getContext().getStepExecution();
         ExecutionContext executionContext = stepExecution.getJobExecution().getExecutionContext();
         List<Long> bestRecorders = (List<Long>) executionContext.get("bestRecorders");

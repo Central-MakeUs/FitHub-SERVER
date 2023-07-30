@@ -7,8 +7,10 @@ import fithub.app.converter.RootConverter;
 import fithub.app.converter.common.BaseConverter;
 import fithub.app.domain.User;
 import fithub.app.base.exception.handler.UserException;
+import fithub.app.domain.UserExercise;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.repository.UserRepository;
+import fithub.app.service.UserService;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -18,6 +20,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
