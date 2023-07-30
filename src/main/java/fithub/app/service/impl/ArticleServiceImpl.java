@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
 public class ArticleServiceImpl implements ArticleService {
 
     Logger logger = LoggerFactory.getLogger(ArticleServiceImpl.class);
