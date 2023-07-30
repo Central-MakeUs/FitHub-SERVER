@@ -196,7 +196,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .map(tag -> hashTagRepository.findByName(tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
                 .collect(Collectors.toList());
 
-        hashTagList.add(exercisehashTag);
+        hashTagList.add(0,exercisehashTag);
 
         return ArticleConverter.toUpdateArticle(article,request,hashTagList);
     }

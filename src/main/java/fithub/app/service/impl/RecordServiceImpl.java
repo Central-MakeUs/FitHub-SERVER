@@ -160,7 +160,7 @@ public class RecordServiceImpl implements RecordService {
                 .map(tag -> hashTagRepository.findByName(tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
                 .collect(Collectors.toList());
 
-        hashTagList.add(exercisehashTag);
+        hashTagList.add(0,exercisehashTag);
 
         return RecordConverter.toUpdateRecord(record,request,hashTagList);
     }
