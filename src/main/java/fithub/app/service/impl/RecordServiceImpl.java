@@ -195,34 +195,26 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Page<Record> findRecordPagingCategoryAndCreatedAt(User user, Integer categoryId, Long last) {
+    public Page<Record> findRecordPagingCategoryAndCreatedAt(User user, Integer categoryId, Integer pageIndex) {
         ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
 
         Page<Record> findRecord = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Record> lastRecord = recordRepository.findById(last);
+        if(pageIndex == null)
+            pageIndex = 0;
 
-        if (lastRecord.isPresent())
-            findRecord = recordRepository.findByCreatedAtLessThanAndExerciseCategoryOrderByCreatedAtDesc(lastRecord.get().getCreatedAt(), exerciseCategory, PageRequest.of(0, size));
-        else
-            findRecord = recordRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,PageRequest.of(0, size));
+        findRecord = recordRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,PageRequest.of(pageIndex, 12));
         return findRecord;
     }
 
     @Override
-    public Page<Record> findRecordPagingCreatedAt(User user, Long last) {
+    public Page<Record> findRecordPagingCreatedAt(User user, Integer pageIndex) {
         Page<Record> findRecord = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Record> lastRecord = recordRepository.findById(last);
+        if(pageIndex == null)
+            pageIndex = 0;
 
-        if(lastRecord.isPresent())
-            findRecord = recordRepository.findByCreatedAtLessThanOrderByCreatedAtDesc(lastRecord.get().getCreatedAt(),PageRequest.of(0, size));
-        else
-            findRecord = recordRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, size));
+        findRecord = recordRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(pageIndex, 12));
         return findRecord;
     }
 

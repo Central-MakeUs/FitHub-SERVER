@@ -42,4 +42,6 @@ public interface UserService {
     List<UserExercise> getMyExercises(User user);
 
     UserExercise patchMainExercise(User user, Integer categoryId);
+
+    User findUser(Long userId);
 }

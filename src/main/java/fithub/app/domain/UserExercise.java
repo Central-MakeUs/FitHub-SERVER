@@ -27,7 +27,7 @@ public class UserExercise extends BaseEntity {
     private Integer exp;
 
     @Column(columnDefinition = "INT DEFAULT 0")
-    private Integer records;
+    private Long records;
 
     @Column(columnDefinition = "INT DEFAULT 0")
     private Integer contiguousDay;
