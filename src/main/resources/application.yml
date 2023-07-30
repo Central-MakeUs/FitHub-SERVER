@@ -26,7 +26,7 @@ spring:
     jdbc:
       initialize-schema: always
     job:
-      names: setBestRecorder
+      names: setBestRecorder,returnMonthlyRecord
 
   logging:
     level:

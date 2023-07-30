@@ -82,6 +82,7 @@ public class RecordServiceImpl implements RecordService {
         }
         hashTagList.add(exerciseHash);
         Record record = RecordConverter.toRecord(request, user, hashTagList, categoryId);
+        user.addRecordCount();
         return recordRepository.save(record);
     }
 
@@ -272,11 +273,14 @@ public class RecordServiceImpl implements RecordService {
 
         // 연속 일수와 경험치 계산
         if(recentRecord == null || ChronoUnit.DAYS.between(recentRecord, LocalDate.now()) >= 2) {
+            // 연속 인증 끊김
+            user.returnContiguousRecord();
             userExercise.setContiguousDay(1);
             newExp = defaultExp;
         }
         else{
             Integer comboMultiple = Math.min(userExercise.getContiguousDay() + 1, exerciseGrade.getMaxContiguous());
+            user.addContiguousRecord();
             userExercise.setContiguousDay(comboMultiple);
             newExp = defaultExp + comboExp * comboMultiple;
         }

@@ -164,4 +164,17 @@ public class User extends BaseEntity {
         this.mainExercise = mainExercise;
         return this;
     }
+
+    public void addRecordCount(){
+        this.monthlyRecordNum = this.monthlyRecordNum + 1;
+        this.totalRecordNum = this.totalRecordNum + 1;
+    }
+
+    public void addContiguousRecord(){
+        this.contiguousRecordNum = this.contiguousRecordNum + 1;
+    }
+
+    public void returnContiguousRecord(){
+        this.contiguousRecordNum = 0L;
+    }
 }
