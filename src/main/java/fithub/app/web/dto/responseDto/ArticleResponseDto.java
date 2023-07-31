@@ -16,6 +16,7 @@ public class ArticleResponseDto {
     public static class ArticleSpecDto{
         Long articleId;
         ExerciseCategoryResponseDto.CategoryDto articleCategory;
+        String loginUserProfileUrl;
         UserResponseDto.CommunityUserInfo userInfo;
         String title;
         String contents;

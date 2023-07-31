@@ -88,10 +88,11 @@ public class CommentsConverter {
                 .build();
     }
 
-    public static CommentsResponseDto.CommentLikeDto toCommentLikeDto(Comments comments){
+    public static CommentsResponseDto.CommentLikeDto toCommentLikeDto(Comments comments, User user){
         return CommentsResponseDto.CommentLikeDto.builder()
                 .commentId(comments.getId())
                 .newLikes(comments.getLikes())
+                .isLiked(user.isLikedComments(comments))
                 .build();
     }
 }

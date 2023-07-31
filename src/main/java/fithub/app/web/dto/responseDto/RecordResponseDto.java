@@ -17,6 +17,7 @@ public class RecordResponseDto {
     public static class RecordSpecDto{
         Long recordId;
         ExerciseCategoryResponseDto.CategoryDto recordCategory;
+        String loginUserProfileUrl;
         UserResponseDto.CommunityUserInfo userInfo;
         String contents;
         String pictureImage;

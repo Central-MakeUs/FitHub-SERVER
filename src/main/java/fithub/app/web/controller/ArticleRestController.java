@@ -56,7 +56,7 @@ public class ArticleRestController {
         Article article = articleService.getArticle(articleId);
         Boolean isLiked = articleService.getIsLiked(article, user);
         Boolean isSaved = articleService.getIsSaved(article, user);
-        return ResponseDto.of(ArticleConverter.toArticleSpecDto(article,isLiked,isSaved));
+        return ResponseDto.of(ArticleConverter.toArticleSpecDto(article,isLiked,isSaved, user));
     }
 
     @Operation(summary = "게시글 목록 조회 API - 최신순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")

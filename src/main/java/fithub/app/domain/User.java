@@ -200,4 +200,10 @@ public class User extends BaseEntity {
         }
         this.bestRecordExercise = bestExercise;
     }
+
+    public Boolean isLikedComments(Comments comments){
+        return this.commentsLikesList.stream()
+                .filter(commentsLikes -> commentsLikes.getComments().getId().equals(comments.getId()))
+                .collect(Collectors.toList()).size() > 0;
+    }
 }

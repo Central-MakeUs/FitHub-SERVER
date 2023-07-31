@@ -142,6 +142,6 @@ public class CommentsRestController {
     @PostMapping("/{type}/{id}/comments/{commentId}")
     public ResponseDto<CommentsResponseDto.CommentLikeDto> toggleComment(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id, @PathVariable(name = "commentId") Long commentId,@AuthUser User user){
         Comments comments = type.equals("articles") ? commentsService.toggleCommentsLikeOnArticle(id, commentId, user) : commentsService.toggleCommentsLikeOnRecord(id, commentId, user);
-        return ResponseDto.of(CommentsConverter.toCommentLikeDto(comments));
+        return ResponseDto.of(CommentsConverter.toCommentLikeDto(comments,user));
     }
 }
