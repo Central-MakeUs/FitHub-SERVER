@@ -180,56 +180,47 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Page<Article> getMyArticlesNoCategory(Long last, User user) {
+    public Page<Article> getMyArticlesNoCategory(Integer pageIndex, User user) {
         Page<Article> articles = null;
-        if (last != null){
-            Article article = articleRepository.findById(last).get();
-            articles = articleRepository.findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(article.getCreatedAt(), user, PageRequest.of(0,size));
-        }
-        else{
-            articles = articleRepository.findAllByUserOrderByCreatedAtDesc(user, PageRequest.of(0,size));
-        }
+
+        pageIndex = pageIndex == null ? 0 : pageIndex;
+
+        articles = articleRepository.findAllByUserOrderByCreatedAtDesc(user, PageRequest.of(pageIndex,size));
 
         return articles;
     }
 
     @Override
-    public Page<Article> getMyArticles(Long last, User user, Integer categoryId) {
+    public Page<Article> getMyArticles(Integer pageIndex, User user, Integer categoryId) {
         Page<Article> articles = null;
+
+        pageIndex = pageIndex == null ? 0 : pageIndex;
+
         ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new UserException(Code.CATEGORY_ERROR));
-        if (last != null){
-            Article article = articleRepository.findById(last).get();
-            articles = articleRepository.findByCreatedAtLessThanAndUserAndExerciseCategoryOrderByCreatedAtDesc(article.getCreatedAt(), user, exerciseCategory,PageRequest.of(0,size));
-        }
-        else{
-            articles = articleRepository.findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(user, exerciseCategory,PageRequest.of(0,size));
-        }
+        articles = articleRepository.findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(user, exerciseCategory,PageRequest.of(pageIndex,size));
 
         return articles;
     }
 
     @Override
-    public Page<Record> getMyRecordsNoCategory(Long last, User user) {
+    public Page<Record> getMyRecordsNoCategory(Integer pageIndex, User user) {
         Page<Record> records = null;
-        if (last != null){
-            Record record = recordRepository.findById(last).get();
-            records = recordRepository.findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(record.getCreatedAt(),user, PageRequest.of(0, size));
-        }else{
-            records = recordRepository.findAllByUserOrderByCreatedAtDesc(user, PageRequest.of(0,size));
-        }
+
+        pageIndex = pageIndex == null ? 0 : pageIndex;
+
+        records = recordRepository.findAllByUserOrderByCreatedAtDesc(user, PageRequest.of(pageIndex,size));
         return records;
     }
 
     @Override
-    public Page<Record> getMyRecords(Long last, User user, Integer categoryId) {
+    public Page<Record> getMyRecords(Integer pageIndex, User user, Integer categoryId) {
         Page<Record> records = null;
+
+        pageIndex = pageIndex == null ? 0 : pageIndex;
+
         ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new UserException(Code.CATEGORY_ERROR));
-        if (last != null){
-            Record record = recordRepository.findById(last).get();
-            records = recordRepository.findByCreatedAtLessThanAndUserAndExerciseCategoryOrderByCreatedAtDesc(record.getCreatedAt(),user, exerciseCategory,PageRequest.of(0, size));
-        }else{
-            records = recordRepository.findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(user,exerciseCategory ,PageRequest.of(0,size));
-        }
+        records = recordRepository.findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(user,exerciseCategory ,PageRequest.of(pageIndex,size));
+
         return records;
     }
 

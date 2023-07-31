@@ -33,11 +33,11 @@ public interface UserService {
 
     User socialInfoComplete(UserRequestDto.UserOAuthInfo request, User user) throws IOException;
 
-    Page<Article> getMyArticlesNoCategory(Long last, User user);
-    Page<Article> getMyArticles(Long last, User user, Integer categoryId);
+    Page<Article> getMyArticlesNoCategory(Integer pageIndex, User user);
+    Page<Article> getMyArticles(Integer pageIndex, User user, Integer categoryId);
 
-    Page<Record> getMyRecordsNoCategory(Long last, User user);
-    Page<Record> getMyRecords(Long last, User user, Integer categoryId);
+    Page<Record> getMyRecordsNoCategory(Integer last, User user);
+    Page<Record> getMyRecords(Integer pageIndex, User user, Integer categoryId);
 
     List<UserExercise> getMyExercises(User user);
 
