@@ -147,6 +147,6 @@ public class SearchServiceImpl implements SearchService {
                 throw new SearchException(Code.SEARCH_NO_DATA);
         }
 
-        return SearchConverter.toSearchPreViewDto(searchArticle.toList(),searchRecord.toList(),user);
+        return SearchConverter.toSearchPreViewDto(searchArticle,searchRecord,user);
     }
 }

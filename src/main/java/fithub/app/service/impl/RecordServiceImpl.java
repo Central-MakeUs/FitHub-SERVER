@@ -156,9 +156,12 @@ public class RecordServiceImpl implements RecordService {
         String exerciseTag =  request.getExerciseTag();
         HashTag exercisehashTag = hashTagRepository.findByName(exerciseTag).orElseGet(() -> HashTagConverter.newHashTag(exerciseTag));
 
-        List<HashTag> hashTagList = request.getHashTagList().stream()
-                .map(tag -> hashTagRepository.findByName(tag).orElseGet(()-> HashTagConverter.newHashTag(tag)))
-                .collect(Collectors.toList());
+        List<HashTag> hashTagList = new ArrayList<>();
+        if (request.getHashTagList() != null) {
+            hashTagList = request.getHashTagList().stream()
+                    .map(tag -> hashTagRepository.findByName(tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
+                    .collect(Collectors.toList());
+        }
 
         hashTagList.add(0,exercisehashTag);
 
@@ -195,66 +198,49 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Page<Record> findRecordPagingCategoryAndCreatedAt(User user, Integer categoryId, Long last) {
+    public Page<Record> findRecordPagingCategoryAndCreatedAt(User user, Integer categoryId, Integer pageIndex) {
         ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
 
         Page<Record> findRecord = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Record> lastRecord = recordRepository.findById(last);
+        if(pageIndex == null)
+            pageIndex = 0;
 
-        if (lastRecord.isPresent())
-            findRecord = recordRepository.findByCreatedAtLessThanAndExerciseCategoryOrderByCreatedAtDesc(lastRecord.get().getCreatedAt(), exerciseCategory, PageRequest.of(0, size));
-        else
-            findRecord = recordRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,PageRequest.of(0, size));
+        findRecord = recordRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,PageRequest.of(pageIndex, 12));
         return findRecord;
     }
 
     @Override
-    public Page<Record> findRecordPagingCreatedAt(User user, Long last) {
+    public Page<Record> findRecordPagingCreatedAt(User user, Integer pageIndex) {
         Page<Record> findRecord = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Record> lastRecord = recordRepository.findById(last);
+        if(pageIndex == null)
+            pageIndex = 0;
 
-        if(lastRecord.isPresent())
-            findRecord = recordRepository.findByCreatedAtLessThanOrderByCreatedAtDesc(lastRecord.get().getCreatedAt(),PageRequest.of(0, size));
-        else
-            findRecord = recordRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, size));
+        findRecord = recordRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(pageIndex, 12));
         return findRecord;
     }
 
     @Override
-    public Page<Record> findRecordPagingCategoryAndLikes(User user, Integer categoryId, Long last) {
+    public Page<Record> findRecordPagingCategoryAndLikes(User user, Integer categoryId, Integer PageIndex) {
         ExerciseCategory exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
 
         Page<Record> findRecord = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Record> lastRecord = recordRepository.findById(last);
-
-        if (lastRecord.isPresent())
-            findRecord = recordRepository.findByLikesLessThanAndExerciseCategoryOrderByLikesDesc(lastRecord.get().getLikes(), exerciseCategory, PageRequest.of(0, size));
-        else
-            findRecord = recordRepository.findAllByExerciseCategoryOrderByLikesDesc(exerciseCategory,PageRequest.of(0, size));
+        if(PageIndex == null)
+            PageIndex = 0;
+        findRecord = recordRepository.findByExerciseCategoryOrderByLikesDescCreatedAtDesc(exerciseCategory,PageRequest.of(PageIndex, size));
         return findRecord;
     }
 
     @Override
-    public Page<Record> findRecordPagingLikes(User user, Long last) {
+    public Page<Record> findRecordPagingLikes(User user, Integer PageIndex) {
         Page<Record> findRecord = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Record> lastRecord = recordRepository.findById(last);
+        if(PageIndex == null)
+            PageIndex = 0;
 
-        if(lastRecord.isPresent())
-            findRecord = recordRepository.findByLikesLessThanOrderByLikesDesc(lastRecord.get().getLikes(),PageRequest.of(0, size));
-        else
-            findRecord = recordRepository.findAllByOrderByLikesDesc(PageRequest.of(0, size));
+        findRecord = recordRepository.findByOrderByLikesDescCreatedAtDesc(PageRequest.of(PageIndex, size));
         return findRecord;
     }
 
@@ -293,9 +279,10 @@ public class RecordServiceImpl implements RecordService {
             totalExp -= exerciseGrade.getMaxExp();
             userExercise.setGrade(gradeRepository.findByLevel(exerciseGrade.getLevel() + 1).get());
         }
-        userExercise.setExp(totalExp);
         userExercise.setRecords(userExercise.getRecords() + 1);
+        userExercise.setExp(totalExp);
         userExercise.setRecentRecord(LocalDate.now());
+        user.setBestRecordExercise();
     }
 
     @Override

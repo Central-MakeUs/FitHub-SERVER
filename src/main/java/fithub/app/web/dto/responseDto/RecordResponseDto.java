@@ -50,7 +50,11 @@ public class RecordResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class recordDtoList{
         List<recordDto> recordList;
-        Integer size;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
     }
 
     @Builder

@@ -261,6 +261,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(()-> new UserException(Code.MEMBER_NOT_FOUND));
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));

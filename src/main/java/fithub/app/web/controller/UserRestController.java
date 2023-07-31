@@ -283,7 +283,7 @@ public class UserRestController {
     @GetMapping("/users/articles/{categoryId}")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> myArticles(@RequestParam(name = "last", required = false) Long last,@PathVariable(name = "categoryId") Integer categoryId ,@AuthUser User user){
         Page<Article> articles = categoryId.equals(0) ? userService.getMyArticlesNoCategory(last,user) : userService.getMyArticles(last, user,categoryId);
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles.toList(), user));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
     }
 
     @Operation(summary = "내가 적은 운동 인증 목록 조회 API ✔️🔑- 최신순 ", description = "last로 페이징")
@@ -300,7 +300,7 @@ public class UserRestController {
     @GetMapping("/users/records/{categoryId}")
     public ResponseDto<RecordResponseDto.recordDtoList> myRecords(@RequestParam(name = "last", required = false) Long last, @PathVariable(name = "categoryId")Integer categoryId, @AuthUser User user){
         Page<Record> records = categoryId.equals(0) ? userService.getMyRecordsNoCategory(last, user) : userService.getMyRecords(last,user,categoryId);
-        return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
+        return ResponseDto.of(RecordConverter.toRecordDtoList(records, user));
     }
 
     @Operation(summary = "이미 가입된 번호인지 체크하는 API ✔️", description = "이미 가입된 번호인지 체크하는 API 입니다. 타입이 0이면 이미 있는 번호인지? 타입이 1이면 가입된 번호인지? 판단하며 후자는 비밀번호 재 설정 시 사용이 됩니다.")

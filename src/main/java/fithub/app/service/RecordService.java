@@ -23,11 +23,11 @@ public interface RecordService {
 
     void deleteRecordSingle(Long recordId, User user);
 
-    Page<Record> findRecordPagingCategoryAndCreatedAt(User user, Integer categoryId, Long last);
-    Page<Record> findRecordPagingCreatedAt(User user, Long last);
+    Page<Record> findRecordPagingCategoryAndCreatedAt(User user, Integer categoryId, Integer pageIndex);
+    Page<Record> findRecordPagingCreatedAt(User user, Integer pageIndex);
 
-    Page<Record> findRecordPagingCategoryAndLikes(User user, Integer categoryId, Long last);
-    Page<Record> findRecordPagingLikes(User user, Long last);
+    Page<Record> findRecordPagingCategoryAndLikes(User user, Integer categoryId, Integer pageIndex);
+    Page<Record> findRecordPagingLikes(User user, Integer pageIndex);
 
     void calcExp(User user, Integer categoryId);
 

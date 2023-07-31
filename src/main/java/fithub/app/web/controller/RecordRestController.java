@@ -61,7 +61,7 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordSpecDto(record, isLiked));
     }
 
-    @Operation(summary = "운동 인증 목록 조회 API - 최신순 ✔️ 🔑", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
+    @Operation(summary = "운동 인증 목록 조회 API - 최신순 ✔️ 🔑", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
@@ -69,19 +69,19 @@ public class RecordRestController {
     @Parameters({
             @Parameter(name = "user", hidden = true),
             @Parameter(name = "categoryId", description = "운동 카테고리, 0이면 전체 조회"),
-            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤",required = false)
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠")
     })
     @GetMapping("/records/{categoryId}")
-    public ResponseDto<RecordResponseDto.recordDtoList> recordTimeList(@RequestParam(name = "last",required = false) Long last, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
+    public ResponseDto<RecordResponseDto.recordDtoList> recordTimeList(@RequestParam(name = "pageIndex") Integer pageIndex, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
         Page<Record> records = null;
         if (categoryId != 0)
-            records = recordService.findRecordPagingCategoryAndCreatedAt(user, categoryId, last);
+            records = recordService.findRecordPagingCategoryAndCreatedAt(user, categoryId, pageIndex);
         else
-            records = recordService.findRecordPagingCreatedAt(user,last);
-        return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
+            records = recordService.findRecordPagingCreatedAt(user,pageIndex);
+        return ResponseDto.of(RecordConverter.toRecordDtoList(records, user));
     }
 
-    @Operation(summary = "운동 인증 목록 조회 API - 인기순 ✔️ 🔑", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, last를 queryString으로 줘서 페이징")
+    @Operation(summary = "운동 인증 목록 조회 API - 인기순 ✔️ 🔑", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
@@ -89,16 +89,16 @@ public class RecordRestController {
     @Parameters({
             @Parameter(name = "user", hidden = true),
             @Parameter(name = "categoryId", description = "운동 카테고리, 0이면 전체 조회"),
-            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false)
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠")
     })
     @GetMapping("/records/{categoryId}likes")
-    public ResponseDto<RecordResponseDto.recordDtoList> recordLikesList(@RequestParam(name = "last",required = false) Long last, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
+    public ResponseDto<RecordResponseDto.recordDtoList> recordLikesList(@RequestParam(name = "pageIndex") Integer pageIndex, @PathVariable(name = "categoryId") @ExistCategory Integer categoryId, @AuthUser User user){
         Page<Record> records = null;
         if (categoryId != 0)
-            records = recordService.findRecordPagingCategoryAndLikes(user, categoryId, last);
+            records = recordService.findRecordPagingCategoryAndLikes(user, categoryId, pageIndex);
         else
-            records = recordService.findRecordPagingLikes(user,last);
-        return ResponseDto.of(RecordConverter.toRecordDtoList(records.toList(), user));
+            records = recordService.findRecordPagingLikes(user,pageIndex);
+        return ResponseDto.of(RecordConverter.toRecordDtoList(records, user));
     }
 
     @Operation(summary = "운동인증 작성 API ✔️ 🔑- 홈 페이지 작업 후 수정 필요", description = "운동인증 작성 API 입니다. ")
