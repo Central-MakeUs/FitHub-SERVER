@@ -58,7 +58,7 @@ public class RecordRestController {
 
         Record record = recordService.getRecord(recordId);
         Boolean isLiked = recordService.getIsLiked(record, user);
-        return ResponseDto.of(RecordConverter.toRecordSpecDto(record, isLiked));
+        return ResponseDto.of(RecordConverter.toRecordSpecDto(record, isLiked, user));
     }
 
     @Operation(summary = "운동 인증 목록 조회 API - 최신순 ✔️ 🔑", description = "운동 인증 목록 조회 API 입니다. categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
