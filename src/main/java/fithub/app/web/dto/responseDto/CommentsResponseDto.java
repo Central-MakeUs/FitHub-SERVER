@@ -63,5 +63,6 @@ public class CommentsResponseDto {
     public static class CommentLikeDto{
         Long commentId;
         Long newLikes;
+        Boolean isLiked;
     }
 }
