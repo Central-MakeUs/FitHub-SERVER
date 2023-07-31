@@ -26,8 +26,8 @@ public interface RecordService {
     Page<Record> findRecordPagingCategoryAndCreatedAt(User user, Integer categoryId, Integer pageIndex);
     Page<Record> findRecordPagingCreatedAt(User user, Integer pageIndex);
 
-    Page<Record> findRecordPagingCategoryAndLikes(User user, Integer categoryId, Long last);
-    Page<Record> findRecordPagingLikes(User user, Long last);
+    Page<Record> findRecordPagingCategoryAndLikes(User user, Integer categoryId, Integer pageIndex);
+    Page<Record> findRecordPagingLikes(User user, Integer pageIndex);
 
     void calcExp(User user, Integer categoryId);
 

@@ -26,11 +26,11 @@ public interface ArticleService {
 
     void deleteArticleSingle(Long articleId, User user);
 
-    Page<Article> findArticlePagingCategoryAndCreatedAt(User user, Integer categoryId, Long last);
-    Page<Article> findArticlePagingCreatedAt(User user, Long last);
+    Page<Article> findArticlePagingCategoryAndCreatedAt(User user, Integer categoryId, Integer last);
+    Page<Article> findArticlePagingCreatedAt(User user, Integer last);
 
-    Page<Article> findArticlePagingCategoryAndLikes(User user, Integer categoryId, Long last);
-    Page<Article> findArticlePagingLikes(User user, Long last);
+    Page<Article> findArticlePagingCategoryAndLikes(User user, Integer categoryId, Integer last);
+    Page<Article> findArticlePagingLikes(User user, Integer last);
 
     void deleteArticleBulk(ArticleRequestDto.DeleteListArticleDto request, User user);
 }
