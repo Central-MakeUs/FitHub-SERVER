@@ -269,37 +269,37 @@ public class UserRestController {
         return ResponseDto.of(UserConverter.toLoginDto(jwt, user));
     }
 
-    @Operation(summary = "내가 적은 게시글 목록 조회 API ✔️🔑- 최신순  ", description = "last로 페이징")
+    @Operation(summary = "내가 적은 게시글 목록 조회 API ✔️🔑- 최신순  ", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
-            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠"),
             @Parameter(name = "categoryId", description = "카테고리 아이디"),
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/users/articles/{categoryId}")
-    public ResponseDto<ArticleResponseDto.ArticleDtoList> myArticles(@RequestParam(name = "last", required = false) Long last,@PathVariable(name = "categoryId") Integer categoryId ,@AuthUser User user){
-        Page<Article> articles = categoryId.equals(0) ? userService.getMyArticlesNoCategory(last,user) : userService.getMyArticles(last, user,categoryId);
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> myArticles(@RequestParam(name = "pageIndex", required = false) Integer pageIndex,@PathVariable(name = "categoryId") Integer categoryId ,@AuthUser User user){
+        Page<Article> articles = categoryId.equals(0) ? userService.getMyArticlesNoCategory(pageIndex,user) : userService.getMyArticles(pageIndex, user,categoryId);
         return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
     }
 
-    @Operation(summary = "내가 적은 운동 인증 목록 조회 API ✔️🔑- 최신순 ", description = "last로 페이징")
+    @Operation(summary = "내가 적은 운동 인증 목록 조회 API ✔️🔑- 최신순 ", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
-            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠"),
             @Parameter(name = "categoryId", description = "카테고리 아이디"),
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/users/records/{categoryId}")
-    public ResponseDto<RecordResponseDto.recordDtoList> myRecords(@RequestParam(name = "last", required = false) Long last, @PathVariable(name = "categoryId")Integer categoryId, @AuthUser User user){
-        Page<Record> records = categoryId.equals(0) ? userService.getMyRecordsNoCategory(last, user) : userService.getMyRecords(last,user,categoryId);
+    public ResponseDto<RecordResponseDto.recordDtoList> myRecords(@RequestParam(name = "pageIndex", required = false) Integer pageIndex, @PathVariable(name = "categoryId")Integer categoryId, @AuthUser User user){
+        Page<Record> records = categoryId.equals(0) ? userService.getMyRecordsNoCategory(pageIndex, user) : userService.getMyRecords(pageIndex,user,categoryId);
         return ResponseDto.of(RecordConverter.toRecordDtoList(records, user));
     }
 
