@@ -3,13 +3,14 @@ package fithub.app.service;
 import fithub.app.domain.Comments;
 import fithub.app.domain.User;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
+import io.swagger.models.auth.In;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface CommentsService {
 
-    Page<Comments> findOnArticle(Long id, Long last);
-    Page<Comments> findOnRecord(Long id, Long last);
+    Page<Comments> findOnArticle(Long id, Integer pageIndex);
+    Page<Comments> findOnRecord(Long id, Integer pageIndex);
 
     Comments createOnArticle (CommentsRequestDto.CreateCommentDto request, Long id, User user);
     Comments createOnRecord (CommentsRequestDto.CreateCommentDto request, Long id, User user);
