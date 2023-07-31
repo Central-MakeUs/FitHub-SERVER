@@ -125,6 +125,7 @@ public class CommentsServiceImpl implements CommentsService {
         Comments comments = commentsRepository.findById(commentsId).orElseThrow(() -> new CommentsException(Code.COMMENT_NOT_FOUND));
         if (!comments.getUser().getId().equals(user.getId()))
             throw new CommentsException(Code.COMMENTS_FORBIDDEN);
+        comments.getArticle().deleteComments();
         commentsRepository.delete(comments);
     }
 
@@ -135,6 +136,7 @@ public class CommentsServiceImpl implements CommentsService {
         Comments comments = commentsRepository.findById(commentsId).orElseThrow(() -> new CommentsException(Code.COMMENT_NOT_FOUND));
         if (!comments.getUser().getId().equals(user.getId()))
             throw new CommentsException(Code.COMMENTS_FORBIDDEN);
+        comments.getRecord().deleteComments();
         commentsRepository.delete(comments);
     }
 
