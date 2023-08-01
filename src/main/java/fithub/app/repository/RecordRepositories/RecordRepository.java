@@ -23,8 +23,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     Page<Record> findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(List<Long> recordIds, LocalDateTime createdAt, Pageable pageable);
     Page<Record> findByIdInOrderByCreatedAtDesc(List<Long> recordIds,Pageable pageable);
 
-    Page<Record> findByIdInAndLikesLessThanOrderByLikesDesc(List<Long> articleIds, Long likes, Pageable pageable);
-    Page<Record> findByIdInOrderByLikesDesc(List<Long> articleIds, Pageable pageable);
+    Page<Record> findByIdInOrderByLikesDescCreatedAtDesc(List<Long> articleIds, Pageable pageable);
 
     Page<Record> findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(LocalDateTime createdAt, User user, Pageable pageable);
     Page<Record> findAllByUserOrderByCreatedAtDesc(User user, Pageable pageable);

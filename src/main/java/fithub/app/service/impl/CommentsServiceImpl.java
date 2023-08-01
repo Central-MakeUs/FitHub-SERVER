@@ -43,34 +43,26 @@ public class CommentsServiceImpl implements CommentsService {
     Integer size;
 
     @Override
-    public Page<Comments> findOnArticle(Long id, Long last) {
+    public Page<Comments> findOnArticle(Long id, Integer pageIndex) {
         Article article = articleRepository.findById(id).orElseThrow(() -> new CommentsException(Code.ARTICLE_NOT_FOUND));
 
         Page<Comments> comments = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Comments> lastComments = commentsRepository.findByIdAndIsRecord(last, false);
-        if(lastComments.isPresent())
-            comments = commentsRepository.findByCreatedAtLessThanAndArticleOrderByCreatedAtDesc(lastComments.get().getCreatedAt(), article, PageRequest.of(0, size));
-        else
-            comments = commentsRepository.findByArticleOrderByCreatedAtDesc(article, PageRequest.of(0, size));
+        if(pageIndex == null)
+            pageIndex = 0;
+        comments = commentsRepository.findByArticleOrderByCreatedAtDesc(article, PageRequest.of(pageIndex, size));
         return comments;
     }
 
     @Override
-    public Page<Comments> findOnRecord(Long id, Long last) {
+    public Page<Comments> findOnRecord(Long id, Integer pageIndex) {
         Record record = recordRepository.findById(id).orElseThrow(() -> new CommentsException(Code.RECORD_NOT_FOUND));
 
         Page<Comments> comments = null;
 
-        if(last == null)
-            last = 0L;
-        Optional<Comments> lastComments = commentsRepository.findByIdAndIsRecord(last, true);
-        if(lastComments.isPresent())
-            comments = commentsRepository.findByCreatedAtLessThanAndRecordOrderByCreatedAtDesc(lastComments.get().getCreatedAt(), record, PageRequest.of(0, size));
-        else
-            comments = commentsRepository.findByRecordOrderByCreatedAtDesc(record, PageRequest.of(0, size));
+        if(pageIndex == null)
+            pageIndex = 0;
+        comments = commentsRepository.findByRecordOrderByCreatedAtDesc(record, PageRequest.of(pageIndex, size));
         return comments;
     }
 

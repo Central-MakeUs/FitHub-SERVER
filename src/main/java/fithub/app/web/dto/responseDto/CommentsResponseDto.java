@@ -26,7 +26,11 @@ public class CommentsResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CommentsDtoList{
         List<CommentsDto> commentList;
-        Integer size;
+        Integer listSize;
+        Integer totalPage;
+        Long totalElements;
+        Boolean isFirst;
+        Boolean isLast;
     }
 
     @Builder

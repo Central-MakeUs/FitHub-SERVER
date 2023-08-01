@@ -55,7 +55,7 @@ public class SearchRestController {
         return ResponseDto.of(searchPreViewDto);
     }
 
-    @Operation(summary = "게시글 검색 API - 최신순 ✔️🔑", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
+    @Operation(summary = "게시글 검색 API - 최신순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 검색결과 있음"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -63,14 +63,14 @@ public class SearchRestController {
     })
     @Parameters({
             @Parameter(name = "tag", description = "검색하려는 태그"),
-            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠"),
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/search/articles")
-    public ResponseDto<ArticleResponseDto.ArticleDtoList> articleSearchCreatedAt(@RequestParam(name = "tag") String tag,@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> articleSearchCreatedAt(@RequestParam(name = "tag") String tag,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
         logger.info("검색 태그 : {}",tag);
-        logger.info("last의 값 : {}",last);
-        Page<Article> articles = searchService.searchArticleCreatedAt(tag, last);
+        logger.info("last의 값 : {}",pageIndex);
+        Page<Article> articles = searchService.searchArticleCreatedAt(tag, pageIndex);
         logger.info("검색 결과의 갯수 : {}", articles.toList().size());
         if(articles == null || articles.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
@@ -78,7 +78,7 @@ public class SearchRestController {
             return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
     }
 
-    @Operation(summary = "게시글 검색 API - 인기순 ✔️🔑", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
+    @Operation(summary = "게시글 검색 API - 인기순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 검색결과 있음"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -86,14 +86,14 @@ public class SearchRestController {
     })
     @Parameters({
             @Parameter(name = "tag", description = "검색하려는 태그"),
-            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠"),
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/search/articles/likes")
-    public ResponseDto<ArticleResponseDto.ArticleDtoList> articleSearchLikes(@RequestParam(name = "tag") String tag,@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> articleSearchLikes(@RequestParam(name = "tag") String tag,@RequestParam(name = "pageIndex", required = false) Integer pageIndex, @AuthUser User user){
         logger.info("검색 태그 : {}",tag);
-        logger.info("last의 값 : {}",last);
-        Page<Article> articles = searchService.searchArticleLikes(tag, last);
+        logger.info("last의 값 : {}",pageIndex);
+        Page<Article> articles = searchService.searchArticleLikes(tag, pageIndex);
         logger.info("검색 결과의 갯수 : {}", articles.toList().size());
         if(articles == null || articles.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
@@ -101,7 +101,7 @@ public class SearchRestController {
             return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
     }
 
-    @Operation(summary = "인증 검색 API - 최신순 ✔️🔑", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
+    @Operation(summary = "인증 검색 API - 최신순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -109,14 +109,14 @@ public class SearchRestController {
     })
     @Parameters({
             @Parameter(name = "tag", description = "검색하려는 태그"),
-            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠"),
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/search/records")
-    public ResponseDto<RecordResponseDto.recordDtoList> recordSearchCreatedAt(@RequestParam(name = "tag") String tag,@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
+    public ResponseDto<RecordResponseDto.recordDtoList> recordSearchCreatedAt(@RequestParam(name = "tag") String tag,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
         logger.info("검색 태그 : {}",tag);
-        logger.info("last의 값 : {}",last);
-        Page<Record> records = searchService.searchRecordCreatedAt(tag, last);
+        logger.info("last의 값 : {}",pageIndex);
+        Page<Record> records = searchService.searchRecordCreatedAt(tag, pageIndex);
         logger.info("검색 결과의 갯수 : {}", records.toList().size());
         if(records == null || records.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
@@ -124,7 +124,7 @@ public class SearchRestController {
             return ResponseDto.of(RecordConverter.toRecordDtoList(records, user));
     }
 
-    @Operation(summary = "인증 검색 API - 인기순 ✔️", description = "tag에 검색 태그를 담아서 전달, last로 페이징")
+    @Operation(summary = "인증 검색 API - 인기순 ✔️", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -132,14 +132,14 @@ public class SearchRestController {
     })
     @Parameters({
             @Parameter(name = "tag", description = "검색하려는 태그"),
-            @Parameter(name = "last", description = "스크롤의 마지막에 존재하는 인증의 Id, 이게 있으면 다음 스크롤", required = false),
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠"),
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/search/records/likes")
-    public ResponseDto<RecordResponseDto.recordDtoList> recordSearchLikes(@RequestParam(name = "tag") String tag,@RequestParam(name = "last", required = false) Long last, @AuthUser User user){
+    public ResponseDto<RecordResponseDto.recordDtoList> recordSearchLikes(@RequestParam(name = "tag") String tag,@RequestParam(name = "pageIndex", required = false) Integer pageIndex, @AuthUser User user){
         logger.info("검색 태그 : {}",tag);
-        logger.info("last의 값 : {}",last);
-        Page<Record> records = searchService.searchRecordLikes(tag, last);
+        logger.info("last의 값 : {}",pageIndex);
+        Page<Record> records = searchService.searchRecordLikes(tag, pageIndex);
         logger.info("검색 결과의 갯수 : {}", records.toList().size());
         if(records == null || records.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);

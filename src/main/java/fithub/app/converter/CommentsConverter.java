@@ -6,6 +6,7 @@ import fithub.app.repository.CommentsRepository.CommentsRepository;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import fithub.app.web.dto.responseDto.CommentsResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -49,7 +50,7 @@ public class CommentsConverter {
                 .build();
     }
 
-    public static CommentsResponseDto.CommentsDtoList toCommentsDtoList(List<Comments> commentsList, User user){
+    public static CommentsResponseDto.CommentsDtoList toCommentsDtoList(Page<Comments> commentsList, User user){
         List<CommentsResponseDto.CommentsDto> commentsDtoList =
                 commentsList.stream()
                         .map(comments -> toCommentsDto(comments, user))
@@ -57,7 +58,11 @@ public class CommentsConverter {
 
         return CommentsResponseDto.CommentsDtoList.builder()
                 .commentList(commentsDtoList)
-                .size(commentsDtoList.size())
+                .totalElements(commentsList.getTotalElements())
+                .totalPage(commentsList.getTotalPages())
+                .isFirst(commentsList.isFirst())
+                .isLast(commentsList.isLast())
+                .listSize(commentsDtoList.size())
                 .build();
 
     }
