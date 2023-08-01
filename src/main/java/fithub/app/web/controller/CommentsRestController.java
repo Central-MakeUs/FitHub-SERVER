@@ -37,7 +37,7 @@ public class CommentsRestController {
 
     Logger logger = LoggerFactory.getLogger(CommentsRestController.class);
 
-    @Operation(summary = "댓글 조회 API ✔️", description = "댓글 조회 API 입니다. 게시글/운동 인증을 type으로 구분하며 상세 조회 시 이 API 까지 2개 조회!, last로 페이징도 있습니다.")
+    @Operation(summary = "댓글 조회 API ✔️", description = "댓글 조회 API 입니다. 게시글/운동 인증을 type으로 구분하며 상세 조회 시 이 API 까지 2개 조회!, categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 존재하지 않음, 없는 게시글의 댓글 조회 시도.", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -48,13 +48,13 @@ public class CommentsRestController {
     @Parameters({
             @Parameter(name = "user", hidden = true),
             @Parameter(name = "type", description = "articles면 게시글의 댓글, records면 운동 인증의 댓글"),
-            @Parameter(name = "last", description = "한번의 스크롤의 마지막으로 조회 된 댓글의 아이디, 페이징을 위함"),
+            @Parameter(name = "pageIndex", description = "페이지 번호, 필수인데 안 주면 0번 페이지로 간주하게 해둠"),
             @Parameter(name = "id", description = "게시글/운동 인증의 아이디")
     })
     @GetMapping("/{type}/{id}/comments")
-    public ResponseDto<CommentsResponseDto.CommentsDtoList>articleCommentList(@RequestParam(name = "last", required = false) Long last,@PathVariable(name = "type") String type,@PathVariable(name = "id") @ExistArticle Long id, @AuthUser User user){
-        Page<Comments> comments = type.equals("articles") ? commentsService.findOnArticle(id, last) : commentsService.findOnRecord(id, last);
-        return ResponseDto.of(CommentsConverter.toCommentsDtoList(comments.toList(), user));
+    public ResponseDto<CommentsResponseDto.CommentsDtoList>articleCommentList(@RequestParam(name = "pageIndex") Integer pageIndex,@PathVariable(name = "type") String type,@PathVariable(name = "id") @ExistArticle Long id, @AuthUser User user){
+        Page<Comments> comments = type.equals("articles") ? commentsService.findOnArticle(id, pageIndex) : commentsService.findOnRecord(id, pageIndex);
+        return ResponseDto.of(CommentsConverter.toCommentsDtoList(comments, user));
     }
 
     @Operation(summary = "댓글 작성 API ✔️", description = "댓글 작성 API 입니다.")
@@ -142,6 +142,6 @@ public class CommentsRestController {
     @PostMapping("/{type}/{id}/comments/{commentId}")
     public ResponseDto<CommentsResponseDto.CommentLikeDto> toggleComment(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id, @PathVariable(name = "commentId") Long commentId,@AuthUser User user){
         Comments comments = type.equals("articles") ? commentsService.toggleCommentsLikeOnArticle(id, commentId, user) : commentsService.toggleCommentsLikeOnRecord(id, commentId, user);
-        return ResponseDto.of(CommentsConverter.toCommentLikeDto(comments));
+        return ResponseDto.of(CommentsConverter.toCommentLikeDto(comments,user));
     }
 }

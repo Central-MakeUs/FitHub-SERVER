@@ -25,8 +25,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     Page<Article> findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(List<Long> articleIds, LocalDateTime createdAt, Pageable pageable);
     Page<Article> findByIdInOrderByCreatedAtDesc(List<Long> articleIds, Pageable pageable);
-    Page<Article> findByIdInAndLikesLessThanOrderByLikesDesc(List<Long> articleIds, Long likes, Pageable pageable);
-    Page<Article> findByIdInOrderByLikesDesc(List<Long> articleIds, Pageable pageable);
+    Page<Article> findByIdInOrderByLikesDescCreatedAtDesc(List<Long> articleIds, Pageable pageable);
 
     Page<Article> findByCreatedAtLessThanAndUserOrderByCreatedAtDesc(LocalDateTime createdAt, User user, Pageable pageable);
 

@@ -120,4 +120,6 @@ public class Article extends BaseEntity {
     public void countComments(){
         this.comments += 1;
     }
+
+    public void deleteComments(){this.comments -= 1;}
 }

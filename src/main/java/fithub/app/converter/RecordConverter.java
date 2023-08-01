@@ -111,10 +111,11 @@ public class RecordConverter {
                 }).collect(Collectors.toList());
     }
 
-    public static RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, Boolean isLiked){
+    public static RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, Boolean isLiked, User user){
         return RecordResponseDto.RecordSpecDto.builder()
                 .recordId(record.getId())
                 .recordCategory(ExerciseCategoryConverter.toCategoryDto(record.getExerciseCategory()))
+                .loginUserProfileUrl(user.getProfileUrl())
                 .userInfo(UserConverter.toCommunityUserInfo(record.getUser()))
                 .contents(record.getContents())
                 .pictureImage(record.getImageUrl())

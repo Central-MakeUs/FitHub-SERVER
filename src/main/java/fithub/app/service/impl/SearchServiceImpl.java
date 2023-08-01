@@ -48,9 +48,11 @@ public class SearchServiceImpl implements SearchService {
     Integer size;
 
     @Override
-    public Page<Article> searchArticleLikes(String tag, Long last) {
+    public Page<Article> searchArticleLikes(String tag, Integer pageIndex) {
         Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Article> searchResult = null;
+
+        pageIndex = pageIndex == null ? 0 : pageIndex;
         if(byName.isEmpty())
             return searchResult;
         else{
@@ -58,18 +60,17 @@ public class SearchServiceImpl implements SearchService {
             List<Long> articleIds = allByHashTag.stream()
                     .map(articleHashTag -> articleHashTag.getArticle().getId())
                     .collect(Collectors.toList());
-            if(last == null)
-                searchResult = articleRepository.findByIdInOrderByLikesDesc(articleIds, PageRequest.of(0, size));
-            else
-                searchResult = articleRepository.findByIdInAndLikesLessThanOrderByLikesDesc(articleIds, articleRepository.findById(last).get().getLikes(), PageRequest.of(0, size));
+            searchResult = articleRepository.findByIdInOrderByLikesDescCreatedAtDesc(articleIds, PageRequest.of(pageIndex, size));
         }
         return searchResult;
     }
 
     @Override
-    public Page<Record> searchRecordCreatedAt(String tag, Long last) {
+    public Page<Record> searchRecordCreatedAt(String tag, Integer pageIndex) {
         Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Record> searchResult = null;
+
+        pageIndex = pageIndex == null ? 0 : pageIndex;
         if(byName.isEmpty())
             return searchResult;
         else{
@@ -77,17 +78,17 @@ public class SearchServiceImpl implements SearchService {
             List<Long> recordIds = allByHashTag.stream()
                     .map(articleHashTag -> articleHashTag.getRecord().getId())
                     .collect(Collectors.toList());
-            if(last == null)
-                searchResult = recordRepository.findByIdInOrderByCreatedAtDesc(recordIds, PageRequest.of(0, size));
-            else
-                searchResult = recordRepository.findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(recordIds, recordRepository.findById(last).get().getCreatedAt(), PageRequest.of(0, size));
+
+            searchResult = recordRepository.findByIdInOrderByCreatedAtDesc(recordIds, PageRequest.of(pageIndex, size));
         }
         return searchResult;
     }
     @Override
-    public Page<Article> searchArticleCreatedAt(String tag, Long last) {
+    public Page<Article> searchArticleCreatedAt(String tag, Integer pageIndex) {
         Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Article> searchResult = null;
+
+        pageIndex = pageIndex == null ? 0 : pageIndex;
         if(byName.isEmpty())
             return searchResult;
         else{
@@ -95,18 +96,17 @@ public class SearchServiceImpl implements SearchService {
             List<Long> articleIds = allByHashTag.stream()
                     .map(articleHashTag -> articleHashTag.getArticle().getId())
                     .collect(Collectors.toList());
-            if(last == null)
-                searchResult = articleRepository.findByIdInOrderByCreatedAtDesc(articleIds, PageRequest.of(0, size));
-            else
-                searchResult = articleRepository.findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(articleIds, articleRepository.findById(last).get().getCreatedAt(), PageRequest.of(0, size));
+            searchResult = articleRepository.findByIdInOrderByCreatedAtDesc(articleIds, PageRequest.of(pageIndex, size));
         }
         return searchResult;
     }
 
     @Override
-    public Page<Record> searchRecordLikes(String tag, Long last) {
+    public Page<Record> searchRecordLikes(String tag, Integer pageIndex) {
         Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Record> searchResult = null;
+
+        pageIndex = pageIndex == null ? 0 : pageIndex;
         if(byName.isEmpty())
             return searchResult;
         else{
@@ -114,10 +114,7 @@ public class SearchServiceImpl implements SearchService {
             List<Long> recordIds = allByHashTag.stream()
                     .map(recordHashTag -> recordHashTag.getRecord().getId())
                     .collect(Collectors.toList());
-            if(last == null)
-                searchResult = recordRepository.findByIdInOrderByLikesDesc(recordIds, PageRequest.of(0, size));
-            else
-                searchResult = recordRepository.findByIdInAndLikesLessThanOrderByLikesDesc(recordIds, recordRepository.findById(last).get().getLikes(), PageRequest.of(0, size));
+            searchResult = recordRepository.findByIdInOrderByLikesDescCreatedAtDesc(recordIds, PageRequest.of(pageIndex, size));
         }
         return searchResult;
     }

@@ -125,10 +125,11 @@ public class ArticleConverter {
     }
 
     public static ArticleResponseDto.ArticleSpecDto toArticleSpecDto(Article article,
-                                                                     Boolean isLiked, Boolean isScraped){
+                                                                     Boolean isLiked, Boolean isScraped, User user){
         return ArticleResponseDto.ArticleSpecDto.builder()
                 .articleId(article.getId())
                 .articleCategory(ExerciseCategoryConverter.toCategoryDto(article.getExerciseCategory()))
+                .loginUserProfileUrl(user.getProfileUrl())
                 .userInfo(UserConverter.toCommunityUserInfo(article.getUser()))
                 .title(article.getTitle())
                 .contents(article.getContents())
