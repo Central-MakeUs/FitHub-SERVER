@@ -4,6 +4,7 @@ import fithub.app.domain.enums.RankingStatus;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Builder
@@ -16,6 +17,8 @@ public class BestRecorder {
     private Long id;
 
     private Integer ranking;
+
+    private LocalDate standardDate;
 
     @Enumerated(EnumType.STRING)
     private RankingStatus rankingStatus;
