@@ -5,6 +5,7 @@ import fithub.app.base.Code;
 import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.domain.*;
 import fithub.app.domain.mapping.ArticleHashTag;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
@@ -237,5 +238,12 @@ public class ArticleConverter {
             extractedString = matcher.group(1);
 
         return extractedString;
+    }
+
+    public static ArticleResponseDto.ArticleReportDto toArticleReportDto(ContentsReport articleReport, Long articleId){
+        return ArticleResponseDto.ArticleReportDto.builder()
+                .reportedArticleId(articleId)
+                .reportedAt(LocalDateTime.now())
+                .build();
     }
 }

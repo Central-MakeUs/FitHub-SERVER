@@ -6,13 +6,17 @@ import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.HashTagConverter;
 import fithub.app.domain.*;
+import fithub.app.domain.enums.ContentsType;
 import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ArticleLikes;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.domain.mapping.SavedArticle;
 import fithub.app.repository.ArticleRepositories.*;
+import fithub.app.repository.ContentsReportRepository;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.HashTagRepositories.ArticleHashTagRepository;
 import fithub.app.repository.HashTagRepositories.HashTagRepository;
+import fithub.app.repository.UserRepository;
 import fithub.app.service.ArticleService;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +54,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final AmazonS3Manager amazonS3Manager;
 
+    private final ContentsReportRepository contentsReportRepository;
+
+    private final UserRepository userRepository;
     @Value("${paging.size}")
     Integer size;
 
@@ -288,4 +295,23 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
+    @Override
+    @Transactional
+    public ContentsReport reportArticle(Long articleId, User user) {
+        Article article = articleRepository.findById(articleId).orElseThrow(() -> new ArticleException(Code.ARTICLE_NOT_FOUND));
+        if(article.getUser().getId().equals(user.getId()))
+            throw new ArticleException(Code.MY_CONTENTS);
+        Optional<ContentsReport> findReport = contentsReportRepository.findByUserAndArticle(user, article);
+        if (findReport.isPresent())
+            throw new ArticleException(Code.ALREADY_REPORT);
+        User articleOwner = userRepository.findById(article.getUser().getId()).get();
+        articleOwner.countReport();
+        article.countReport();
+
+         return contentsReportRepository.save(ContentsReport.builder()
+                .contentsType(ContentsType.ARTICLE)
+                .article(article)
+                .user(user)
+                .build());
+    }
 }

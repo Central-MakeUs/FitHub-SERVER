@@ -3,6 +3,7 @@ package fithub.app.web.dto.responseDto;
 import fithub.app.domain.User;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import lombok.extern.java.Log;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -127,5 +128,14 @@ public class ArticleResponseDto {
     public static class ArticlePictureUploadDto{
         Long articleId;
         String pictureUrl;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ArticleReportDto{
+        Long reportedArticleId;
+        LocalDateTime reportedAt;
     }
 }

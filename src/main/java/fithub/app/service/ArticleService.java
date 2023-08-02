@@ -2,6 +2,7 @@ package fithub.app.service;
 
 import fithub.app.domain.Article;
 import fithub.app.domain.User;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import org.springframework.data.domain.Page;
 
@@ -33,4 +34,6 @@ public interface ArticleService {
     Page<Article> findArticlePagingLikes(User user, Integer last);
 
     void deleteArticleBulk(ArticleRequestDto.DeleteListArticleDto request, User user);
+
+    ContentsReport reportArticle(Long articleId, User user);
 }

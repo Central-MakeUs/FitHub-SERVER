@@ -3,6 +3,7 @@ package fithub.app.domain;
 import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ArticleLikes;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -84,6 +85,9 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "category")
     private ExerciseCategory exerciseCategory;
 
+    @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
+    private List<ContentsReport> reportList;
+
     public void setUser(User user){
         this.user = user;
         user.getArticleList().add(this);
@@ -122,4 +126,6 @@ public class Article extends BaseEntity {
     }
 
     public void deleteComments(){this.comments -= 1;}
+
+    public void countReport(){this.reported += 1;}
 }

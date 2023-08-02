@@ -206,4 +206,8 @@ public class User extends BaseEntity {
                 .filter(commentsLikes -> commentsLikes.getComments().getId().equals(comments.getId()))
                 .collect(Collectors.toList()).size() > 0;
     }
+
+    public void countReport(){
+        this.reported += 1;
+    }
 }
