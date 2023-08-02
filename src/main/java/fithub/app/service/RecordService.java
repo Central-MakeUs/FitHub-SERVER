@@ -3,6 +3,7 @@ package fithub.app.service;
 import fithub.app.domain.Article;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import org.springframework.data.domain.Page;
 
@@ -32,4 +33,6 @@ public interface RecordService {
     void calcExp(User user, Integer categoryId);
 
     void deleteRecordBulk(RecordRequestDto.deleteListRecordDto request, User user);
+
+    ContentsReport reportRecord(Long recordId, User user);
 }

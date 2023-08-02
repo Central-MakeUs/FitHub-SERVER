@@ -8,16 +8,16 @@ import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.HashTagConverter;
 import fithub.app.converter.RecordConverter;
 import fithub.app.domain.*;
+import fithub.app.domain.enums.ContentsType;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.domain.mapping.RecordLikes;
-import fithub.app.repository.ExerciseCategoryRepository;
-import fithub.app.repository.GradeRepository;
+import fithub.app.repository.*;
 import fithub.app.repository.HashTagRepositories.HashTagRepository;
 
 import fithub.app.repository.HashTagRepositories.RecordHashTagRepository;
 import fithub.app.repository.RecordRepositories.RecordLikesRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
-import fithub.app.repository.UserExerciseRepository;
 import fithub.app.service.RecordService;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -59,6 +59,10 @@ public class RecordServiceImpl implements RecordService {
     private final UserExerciseRepository userExerciseRepository;
 
     private final GradeRepository gradeRepository;
+
+    private final ContentsReportRepository contentsReportRepository;
+
+    private final UserRepository userRepository;
 
     @Value("${paging.size}")
     Integer size;
@@ -300,5 +304,25 @@ public class RecordServiceImpl implements RecordService {
             }
             recordRepository.delete(record);
         }
+    }
+
+    @Override
+    @Transactional
+    public ContentsReport reportRecord(Long recordId, User user) {
+        Record record = recordRepository.findById(recordId).orElseThrow(() -> new RecordException(Code.RECORD_NOT_FOUND));
+        if(record.getUser().getId().equals(user.getId()))
+            throw new RecordException(Code.MY_CONTENTS);
+        Optional<ContentsReport> findReport = contentsReportRepository.findByUserAndRecord(user, record);
+        if(findReport.isPresent())
+            throw new RecordException(Code.ALREADY_REPORT);
+        User recordOwner = userRepository.findById(record.getUser().getId()).get();
+        recordOwner.countReport();
+        record.countReport();
+        return contentsReportRepository.save(ContentsReport.builder()
+                .contentsType(ContentsType.RECORD)
+                .record(record)
+                .user(user)
+                .build()
+        );
     }
 }
