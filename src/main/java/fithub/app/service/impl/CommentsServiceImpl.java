@@ -51,26 +51,26 @@ public class CommentsServiceImpl implements CommentsService {
     Integer size;
 
     @Override
-    public Page<Comments> findOnArticle(Long id, Integer pageIndex) {
+    public Page<Comments> findOnArticle(Long id, Integer pageIndex, User user) {
         Article article = articleRepository.findById(id).orElseThrow(() -> new CommentsException(Code.ARTICLE_NOT_FOUND));
 
         Page<Comments> comments = null;
 
         if(pageIndex == null)
             pageIndex = 0;
-        comments = commentsRepository.findByArticleOrderByCreatedAtDesc(article, PageRequest.of(pageIndex, size));
+        comments = commentsRepository.findByArticleOrderByCreatedAtDesc(article, user,PageRequest.of(pageIndex, size));
         return comments;
     }
 
     @Override
-    public Page<Comments> findOnRecord(Long id, Integer pageIndex) {
+    public Page<Comments> findOnRecord(Long id, Integer pageIndex, User user) {
         Record record = recordRepository.findById(id).orElseThrow(() -> new CommentsException(Code.RECORD_NOT_FOUND));
 
         Page<Comments> comments = null;
 
         if(pageIndex == null)
             pageIndex = 0;
-        comments = commentsRepository.findByRecordOrderByCreatedAtDesc(record, PageRequest.of(pageIndex, size));
+        comments = commentsRepository.findByRecordOrderByCreatedAtDesc(record, user,PageRequest.of(pageIndex, size));
         return comments;
     }
 

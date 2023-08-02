@@ -210,7 +210,7 @@ public class RecordServiceImpl implements RecordService {
         if(pageIndex == null)
             pageIndex = 0;
 
-        findRecord = recordRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,PageRequest.of(pageIndex, 12));
+        findRecord = recordRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,user,PageRequest.of(pageIndex, 12));
         return findRecord;
     }
 
@@ -221,7 +221,7 @@ public class RecordServiceImpl implements RecordService {
         if(pageIndex == null)
             pageIndex = 0;
 
-        findRecord = recordRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(pageIndex, 12));
+        findRecord = recordRepository.findAllByOrderByCreatedAtDesc(user,PageRequest.of(pageIndex, 12));
         return findRecord;
     }
 
@@ -233,7 +233,7 @@ public class RecordServiceImpl implements RecordService {
 
         if(PageIndex == null)
             PageIndex = 0;
-        findRecord = recordRepository.findByExerciseCategoryOrderByLikesDescCreatedAtDesc(exerciseCategory,PageRequest.of(PageIndex, size));
+        findRecord = recordRepository.findByExerciseCategoryOrderByLikesDescCreatedAtDesc(exerciseCategory,user,PageRequest.of(PageIndex, size));
         return findRecord;
     }
 
@@ -244,7 +244,7 @@ public class RecordServiceImpl implements RecordService {
         if(PageIndex == null)
             PageIndex = 0;
 
-        findRecord = recordRepository.findByOrderByLikesDescCreatedAtDesc(PageRequest.of(PageIndex, size));
+        findRecord = recordRepository.findByOrderByLikesDescCreatedAtDesc(user,PageRequest.of(PageIndex, size));
         return findRecord;
     }
 
