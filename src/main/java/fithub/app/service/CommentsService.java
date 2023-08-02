@@ -10,8 +10,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface CommentsService {
 
-    Page<Comments> findOnArticle(Long id, Integer pageIndex);
-    Page<Comments> findOnRecord(Long id, Integer pageIndex);
+    Page<Comments> findOnArticle(Long id, Integer pageIndex, User user);
+    Page<Comments> findOnRecord(Long id, Integer pageIndex, User user);
 
     Comments createOnArticle (CommentsRequestDto.CreateCommentDto request, Long id, User user);
     Comments createOnRecord (CommentsRequestDto.CreateCommentDto request, Long id, User user);
