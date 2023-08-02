@@ -59,6 +59,7 @@ public class RootConverter {
         return RootApiResponseDto.HomeProfileDto.builder()
                 .bestRecorderList(bestRecorderDtoList)
                 .userInfo(toHomeUserInfo(user))
+                .BestStandardDate(bestRecorderList.get(0).getStandardDate())
                 .build();
     }
 }

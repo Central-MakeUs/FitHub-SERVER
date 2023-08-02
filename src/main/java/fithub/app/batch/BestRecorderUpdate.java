@@ -16,6 +16,7 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,7 @@ public class BestRecorderUpdate implements ItemProcessor<User, BestRecorder> {
                         .user(bestUsers.get(i))
                         .ranking(i + 1)
                         .rankingStatus(RankingStatus.NEW)
+                        .standardDate(LocalDate.now())
                         .build());
             }
         }
@@ -63,6 +65,7 @@ public class BestRecorderUpdate implements ItemProcessor<User, BestRecorder> {
                                 .user(user)
                                 .ranking(i + 1)
                                 .rankingStatus(RankingStatus.KEEP)
+                                .standardDate(LocalDate.now())
                                 .build());
                     }
                     else if (i < j) {
@@ -70,6 +73,7 @@ public class BestRecorderUpdate implements ItemProcessor<User, BestRecorder> {
                                 .user(user)
                                 .ranking(i + 1)
                                 .rankingStatus(RankingStatus.UP)
+                                .standardDate(LocalDate.now())
                                 .build());
                     }
                     else {
@@ -77,6 +81,7 @@ public class BestRecorderUpdate implements ItemProcessor<User, BestRecorder> {
                                 .user(user)
                                 .ranking(i + 1)
                                 .rankingStatus(RankingStatus.DOWN)
+                                .standardDate(LocalDate.now())
                                 .build());
                     }
                 }
@@ -86,6 +91,7 @@ public class BestRecorderUpdate implements ItemProcessor<User, BestRecorder> {
                         .user(user)
                         .ranking(i + 1)
                         .rankingStatus(RankingStatus.NEW)
+                        .standardDate(LocalDate.now())
                         .build());
             }
         }}

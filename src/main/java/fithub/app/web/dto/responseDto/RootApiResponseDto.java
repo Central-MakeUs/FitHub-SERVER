@@ -2,6 +2,7 @@ package fithub.app.web.dto.responseDto;
 
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class RootApiResponseDto {
@@ -51,5 +52,6 @@ public class RootApiResponseDto {
     public static class HomeProfileDto{
         HomeUserInfo userInfo;
         List<BestRecorderDto> bestRecorderList;
+        LocalDate BestStandardDate;
     }
 }
