@@ -1,6 +1,7 @@
 package fithub.app.domain;
 
 
+import com.amazonaws.services.ec2.model.LocalGateway;
 import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.mapping.CommentsLikes;
 import lombok.*;
@@ -40,6 +41,9 @@ public class Comments extends BaseEntity {
     @JoinColumn(name = "article_id")
     private Article article;
 
+    @Column(columnDefinition = "BIGINT DEFAULT 0")
+    private Long reported;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "record_id")
     private Record record;
@@ -77,4 +81,6 @@ public class Comments extends BaseEntity {
     }
 
     public Comments setContents(String contents){this.contents = contents; return this;}
+
+    public void countReport(){this.reported += 1;}
 }
