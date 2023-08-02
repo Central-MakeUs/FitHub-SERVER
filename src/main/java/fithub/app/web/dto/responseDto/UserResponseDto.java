@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class UserResponseDto {
@@ -115,5 +116,14 @@ public class UserResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class MainExerciseChangeDto{
         String mainExerciseName;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ReportUserDto{
+        Long ReportedUserId;
+        LocalDateTime reportedAt;
     }
 }

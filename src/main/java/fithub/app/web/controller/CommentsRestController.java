@@ -5,6 +5,7 @@ import fithub.app.base.ResponseDto;
 import fithub.app.converter.CommentsConverter;
 import fithub.app.domain.Comments;
 import fithub.app.domain.User;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.service.CommentsService;
 import fithub.app.validation.annotation.ExistArticle;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
@@ -143,5 +144,23 @@ public class CommentsRestController {
     public ResponseDto<CommentsResponseDto.CommentLikeDto> toggleComment(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id, @PathVariable(name = "commentId") Long commentId,@AuthUser User user){
         Comments comments = type.equals("articles") ? commentsService.toggleCommentsLikeOnArticle(id, commentId, user) : commentsService.toggleCommentsLikeOnRecord(id, commentId, user);
         return ResponseDto.of(CommentsConverter.toCommentLikeDto(comments,user));
+    }
+
+    @Operation(summary = "댓글 신고하기 ✔️🔑",description = "댓글을 신고하는 API이며 이미 신고한 경우는 안된다고 응답이 갑니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4051", description = "NOT_FOUND : 댓글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4061", description = "BAD_REQUEST : 이미 신고 했습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4062", description = "BAD_REQUEST : 자신의 콘텐츠는 신고가 안됩니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "commentsId", description = "댓글 아이디")
+    })
+    @PostMapping("/comments/{commentsId}/report")
+    public ResponseDto<CommentsResponseDto.CommentsReportDto> reportComments(@PathVariable(name = "commentsId") Long commentsId, @AuthUser User user){
+        ContentsReport contentsReport = commentsService.reportComments(commentsId, user);
+        return ResponseDto.of(CommentsConverter.toCommentsReportDto(commentsId, contentsReport));
     }
 }

@@ -7,6 +7,7 @@ import fithub.app.domain.*;
 import fithub.app.domain.enums.Gender;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.base.exception.handler.UserException;
+import fithub.app.domain.mapping.UserReport;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.GradeRepository;
 import fithub.app.repository.UserExerciseRepository;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
@@ -294,6 +296,13 @@ public class UserConverter {
     public static UserResponseDto.MainExerciseChangeDto toMainExerciseChangeDto(UserExercise exercise){
         return UserResponseDto.MainExerciseChangeDto.builder()
                 .mainExerciseName(exercise.getExerciseCategory().getName())
+                .build();
+    }
+
+    public static UserResponseDto.ReportUserDto toReportUserDto(Long userId, UserReport userReport){
+        return UserResponseDto.ReportUserDto.builder()
+                .ReportedUserId(userId)
+                .reportedAt(LocalDateTime.now())
                 .build();
     }
 }

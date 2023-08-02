@@ -7,6 +7,7 @@ import fithub.app.converter.RecordConverter;
 import fithub.app.domain.Article;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.service.RecordService;
 import fithub.app.validation.annotation.ExistCategory;
 import fithub.app.validation.annotation.ExistRecord;
@@ -191,5 +192,23 @@ public class RecordRestController {
     public ResponseDto<RecordResponseDto.recordLikeDto> likeRecord(@PathVariable(name = "recordId") @ExistRecord Long recordId, @AuthUser User user){
         Record record = recordService.toggleRecordLike(recordId, user);
         return ResponseDto.of(RecordConverter.toRecordLikeDto(record, user));
+    }
+
+    @Operation(summary = "운동 인증 신고하기 ✔️🔑",description = "운동 인증을 신고하는 API이며 이미 신고한 경우는 안된다고 응답이 갑니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동 인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4061", description = "BAD_REQUEST : 이미 신고 했습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4062", description = "BAD_REQUEST : 자신의 콘텐츠는 신고가 안됩니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "recordId", description = "운동인증 아이디")
+    })
+    @PostMapping("/records/{recordId}/report")
+    public ResponseDto<RecordResponseDto.RecordReportDto> reportRecord(@PathVariable(name = "recordId")Long recordId, @AuthUser User user){
+        ContentsReport contentsReport = recordService.reportRecord(recordId, user);
+        return ResponseDto.of(RecordConverter.toRecordReportDto(recordId, contentsReport));
     }
 }

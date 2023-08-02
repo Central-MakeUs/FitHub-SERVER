@@ -8,12 +8,10 @@ import fithub.app.domain.*;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.domain.mapping.ExercisePreference;
 import fithub.app.base.exception.handler.UserException;
+import fithub.app.domain.mapping.UserReport;
+import fithub.app.repository.*;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
-import fithub.app.repository.ExerciseCategoryRepository;
-import fithub.app.repository.ExercisePreferenceRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
-import fithub.app.repository.UserExerciseRepository;
-import fithub.app.repository.UserRepository;
 import fithub.app.service.UserService;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
@@ -59,6 +57,8 @@ public class UserServiceImpl implements UserService {
     private final RecordRepository recordRepository;
 
     private final UserExerciseRepository userExerciseRepository;
+
+    private final UserReportRepository userReportRepository;
 
     @Value("${paging.size}")
     private Integer size;
@@ -254,6 +254,24 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUser(Long userId) {
         return userRepository.findById(userId).orElseThrow(()-> new UserException(Code.MEMBER_NOT_FOUND));
+    }
+
+    @Override
+    @Transactional
+    public UserReport reportUser(Long userId, User user) {
+        User target = userRepository.findById(userId).orElseThrow(() -> new UserException(Code.MEMBER_NOT_FOUND));
+        if (target.getId().equals(user.getId()))
+            throw new UserException(Code.SELF_REPORT);
+        Optional<UserReport> findReport = userReportRepository.findByUserAndReporter(target, user);
+        if(findReport.isPresent())
+            throw new UserException(Code.ALREADY_REPORT);
+        target.countReport();
+        return userReportRepository.save(
+            UserReport.builder()
+                    .reporter(user)
+                    .user(target)
+                    .build()
+        );
     }
 
     @Override

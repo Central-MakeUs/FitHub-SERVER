@@ -99,4 +99,6 @@ public class Record extends BaseEntity {
         this.comments += 1;
     }
     public void deleteComments(){this.comments -= 1;}
+
+    public void countReport(){this.reported += 1;}
 }
