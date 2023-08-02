@@ -1,6 +1,7 @@
 package fithub.app.service;
 
 import fithub.app.domain.*;
+import fithub.app.domain.mapping.UserReport;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
@@ -44,4 +45,6 @@ public interface UserService {
     UserExercise patchMainExercise(User user, Integer categoryId);
 
     User findUser(Long userId);
+
+    UserReport reportUser(Long userId, User user);
 }

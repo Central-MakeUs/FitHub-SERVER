@@ -5,6 +5,7 @@ import fithub.app.base.ResponseDto;
 import fithub.app.converter.ArticleConverter;
 import fithub.app.domain.Article;
 import fithub.app.domain.User;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.service.ArticleService;
 import fithub.app.validation.annotation.ExistArticle;
 import fithub.app.validation.annotation.ExistCategory;
@@ -203,5 +204,23 @@ public class ArticleRestController {
     public ResponseDto<ArticleResponseDto.ArticleSaveDto> scrapArticle(@PathVariable("articleId") @ExistArticle Long articleId, @AuthUser User user){
         Article article = articleService.toggleArticleSave(articleId, user);
         return ResponseDto.of(ArticleConverter.toArticleSaveDtoDto(article));
+    }
+
+    @Operation(summary = "게시글 신고하기 ✔️🔑",description = "게시글을 신고하는 API이며 이미 신고한 경우는 안된다고 응답이 갑니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4061", description = "BAD_REQUEST : 이미 신고 했습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4062", description = "BAD_REQUEST : 자신의 콘텐츠는 신고가 안됩니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "articleId", description = "게시글 아이디")
+    })
+    @PostMapping("/articles/{articleId}/report")
+    public ResponseDto<ArticleResponseDto.ArticleReportDto> reportArticle(@PathVariable(name = "articleId") Long articleId, @AuthUser User user){
+        ContentsReport reportArticle = articleService.reportArticle(articleId, user);
+        return ResponseDto.of(ArticleConverter.toArticleReportDto(reportArticle, articleId));
     }
 }

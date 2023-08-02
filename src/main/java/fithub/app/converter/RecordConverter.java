@@ -5,6 +5,7 @@ import fithub.app.base.Code;
 import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.domain.*;
 import fithub.app.domain.mapping.ArticleHashTag;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
@@ -193,6 +194,13 @@ public class RecordConverter {
                 .recordId(record.getId())
                 .newLikes(record.getLikes())
                 .isLiked(user.isLikedRecord(record))
+                .build();
+    }
+
+    public static RecordResponseDto.RecordReportDto toRecordReportDto(Long recordId, ContentsReport contentsReport){
+        return RecordResponseDto.RecordReportDto.builder()
+                .reportedRecordId(recordId)
+                .reportedAt(LocalDateTime.now())
                 .build();
     }
 }

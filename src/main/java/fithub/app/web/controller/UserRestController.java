@@ -11,6 +11,7 @@ import fithub.app.converter.RecordConverter;
 import fithub.app.converter.UserConverter;
 import fithub.app.converter.common.BaseConverter;
 import fithub.app.domain.*;
+import fithub.app.domain.mapping.UserReport;
 import fithub.app.service.AppleService;
 import fithub.app.service.UserService;
 import fithub.app.sms.dto.SmsResponseDto;
@@ -346,5 +347,22 @@ public class UserRestController {
     public ResponseDto<UserResponseDto.MainExerciseChangeDto> changeMainExercise(@PathVariable(name = "categoryId") Integer categoryId, @AuthUser User user){
         UserExercise userExercise = userService.patchMainExercise(user, categoryId);
         return ResponseDto.of(UserConverter.toMainExerciseChangeDto(userExercise));
+    }
+
+    @Operation(summary = "사용자 신고하기 API ✔️ 🔑", description = "사용자 신고하기 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4013", description = "BAD_REQUEST : 없는 유저입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4062", description = "BAD_REQUEST : 이미 신고했습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4063", description = "BADE_REQUEST : 스스로 신고는 안됩니다.",content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PostMapping("/users/{userId}/report")
+    public ResponseDto<UserResponseDto.ReportUserDto> reportUser(@PathVariable(name = "userId") Long userId,@AuthUser User user){
+        UserReport userReport = userService.reportUser(userId, user);
+        return ResponseDto.of(UserConverter.toReportUserDto(userId, userReport));
     }
 }

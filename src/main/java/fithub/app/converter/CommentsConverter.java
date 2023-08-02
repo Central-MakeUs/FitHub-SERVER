@@ -2,6 +2,7 @@ package fithub.app.converter;
 
 import fithub.app.domain.Comments;
 import fithub.app.domain.User;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.repository.CommentsRepository.CommentsRepository;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import fithub.app.web.dto.responseDto.CommentsResponseDto;
@@ -93,6 +94,13 @@ public class CommentsConverter {
                 .commentId(comments.getId())
                 .newLikes(comments.getLikes())
                 .isLiked(user.isLikedComments(comments))
+                .build();
+    }
+
+    public static CommentsResponseDto.CommentsReportDto toCommentsReportDto(Long commentId, ContentsReport contentsReport){
+        return CommentsResponseDto.CommentsReportDto.builder()
+                .reportedCommentId(commentId)
+                .reportedAt(LocalDateTime.now())
                 .build();
     }
 }

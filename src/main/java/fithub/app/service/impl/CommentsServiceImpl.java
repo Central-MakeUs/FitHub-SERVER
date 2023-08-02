@@ -8,11 +8,15 @@ import fithub.app.domain.Article;
 import fithub.app.domain.Comments;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
+import fithub.app.domain.enums.ContentsType;
 import fithub.app.domain.mapping.CommentsLikes;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.CommentsRepository.CommentsLikesRepository;
 import fithub.app.repository.CommentsRepository.CommentsRepository;
+import fithub.app.repository.ContentsReportRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
+import fithub.app.repository.UserRepository;
 import fithub.app.service.CommentsService;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +42,10 @@ public class CommentsServiceImpl implements CommentsService {
     private final CommentsLikesRepository commentsLikesRepository;
 
     Logger logger = LoggerFactory.getLogger(CommentsServiceImpl.class);
+
+    private final ContentsReportRepository contentsReportRepository;
+
+    private final UserRepository userRepository;
 
     @Value("${paging.comments.size}")
     Integer size;
@@ -188,5 +196,25 @@ public class CommentsServiceImpl implements CommentsService {
             comments.toggleLikes(false);
         }
         return comments;
+    }
+
+    @Override
+    @Transactional
+    public ContentsReport reportComments(Long commentsId, User user) {
+        Comments comments = commentsRepository.findById(commentsId).orElseThrow(()->new CommentsException(Code.COMMENT_NOT_FOUND));
+        if(comments.getUser().getId().equals(user.getId()))
+            throw new CommentsException(Code.MY_CONTENTS);
+        Optional<ContentsReport> findReport = contentsReportRepository.findByUserAndComments(user, comments);
+        if(findReport.isPresent())
+            throw new CommentsException(Code.ALREADY_REPORT);
+        User commentsOwner = userRepository.findById(comments.getUser().getId()).get();
+        commentsOwner.countReport();
+        comments.countReport();
+        return contentsReportRepository.save(ContentsReport.builder()
+                .contentsType(ContentsType.COMMENT)
+                .comments(comments)
+                .user(user)
+                .build()
+        );
     }
 }

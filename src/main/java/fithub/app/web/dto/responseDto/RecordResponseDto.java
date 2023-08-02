@@ -104,4 +104,13 @@ public class RecordResponseDto {
         Long newLikes;
         Boolean isLiked;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class RecordReportDto{
+        Long reportedRecordId;
+        LocalDateTime reportedAt;
+    }
 }

@@ -2,6 +2,7 @@ package fithub.app.service;
 
 import fithub.app.domain.Comments;
 import fithub.app.domain.User;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import io.swagger.models.auth.In;
 import org.springframework.data.domain.Page;
@@ -20,5 +21,6 @@ public interface CommentsService {
     void deleteOnRecord(Long id, Long commentsId, User user);
     Comments toggleCommentsLikeOnArticle(Long id, Long commentsId, User user);
     Comments toggleCommentsLikeOnRecord(Long id, Long commentsId, User user);
+    ContentsReport reportComments(Long commentsId, User user);
 
 }
