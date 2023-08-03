@@ -221,10 +221,11 @@ public class ArticleConverter {
                 .build();
     }
 
-    public static ArticleResponseDto.ArticleSaveDto toArticleSaveDtoDto(Article article){
+    public static ArticleResponseDto.ArticleSaveDto toArticleSaveDtoDto(Article article, User user){
         return ArticleResponseDto.ArticleSaveDto.builder()
                 .articleId(article.getId())
                 .articleSaves(article.getSaves())
+                .isSaved(user.isSavedArticle(article))
                 .build();
     }
 
