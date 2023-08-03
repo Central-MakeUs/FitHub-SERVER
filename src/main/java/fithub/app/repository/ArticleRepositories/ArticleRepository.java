@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,12 +17,16 @@ import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 
-    Page<Article> findAllByOrderByCreatedAtDesc(Pageable pageable);
-    Page<Article> findAllByExerciseCategoryOrderByCreatedAtDesc(ExerciseCategory exerciseCategory, Pageable pageable);
+    @Query("select a from Article a where a.user.id not in (select us.user.id from UserReport us where us.reporter = :reporter) order by a.createdAt desc")
+    Page<Article> findAllByOrderByCreatedAtDesc(Pageable pageable, @Param("reporter") User reporter);
+    @Query("select a from Article a where a.user.id not in (select us.user.id from UserReport us where us.reporter = :reporter) and a.exerciseCategory = :category order by a.createdAt desc ")
+    Page<Article> findAllByExerciseCategoryOrderByCreatedAtDesc(@Param("category") ExerciseCategory exerciseCategory, @Param("reporter") User reporter,Pageable pageable);
 
-    Page<Article> findAllByOrderByLikesDescCreatedAtDesc(Pageable pageable);
+    @Query("select a from Article a where a.user.id not in (select us.user.id from UserReport us where us.reporter = :reporter) order by a.likes desc , a.createdAt desc ")
+    Page<Article> findAllByOrderByLikesDescCreatedAtDesc(Pageable pageable, @Param("reporter") User reporter);
 
-    Page<Article> findAllByExerciseCategoryOrderByLikesDescCreatedAtDesc(ExerciseCategory exerciseCategory, Pageable pageable);
+    @Query("select a from Article a where a.user.id not in (select us.user.id from UserReport us where us.reporter = :reporter) and a.exerciseCategory = :category order by a.likes desc , a.createdAt desc ")
+    Page<Article> findAllByExerciseCategoryOrderByLikesDescCreatedAtDesc(@Param("category") ExerciseCategory category,@Param("reporter") User reporter, Pageable pageable);
 
     Page<Article> findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(List<Long> articleIds, LocalDateTime createdAt, Pageable pageable);
     Page<Article> findByIdInOrderByCreatedAtDesc(List<Long> articleIds, Pageable pageable);

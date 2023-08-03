@@ -54,7 +54,7 @@ public class CommentsRestController {
     })
     @GetMapping("/{type}/{id}/comments")
     public ResponseDto<CommentsResponseDto.CommentsDtoList>articleCommentList(@RequestParam(name = "pageIndex") Integer pageIndex,@PathVariable(name = "type") String type,@PathVariable(name = "id") @ExistArticle Long id, @AuthUser User user){
-        Page<Comments> comments = type.equals("articles") ? commentsService.findOnArticle(id, pageIndex) : commentsService.findOnRecord(id, pageIndex);
+        Page<Comments> comments = type.equals("articles") ? commentsService.findOnArticle(id, pageIndex, user) : commentsService.findOnRecord(id, pageIndex,user);
         return ResponseDto.of(CommentsConverter.toCommentsDtoList(comments, user));
     }
 
