@@ -124,7 +124,6 @@ public class RootController {
     public ResponseDto<ArticleResponseDto.ArticleDtoList> showSavedArticle(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
         return ResponseDto.of(ArticleConverter.toArticleDtoList(userService.findSavedArticle(categoryId,pageIndex, user),user));
     }
-
     @Operation(summary = "레벨 설명 조회 API ✔️🔑", description = "핏허브 레벨 설명 조회 API 입니다. 내 메인 운동 레벨정보와 핏허브 레벨 정보가 담깁니다.")
     @Parameters({
             @Parameter(name = "user", hidden = true),
