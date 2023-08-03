@@ -305,4 +305,12 @@ public class UserConverter {
                 .reportedAt(LocalDateTime.now())
                 .build();
     }
+
+    public static UserResponseDto.OtherUserProfileDto toOtherUserProfileDto(User user){
+        return UserResponseDto.OtherUserProfileDto.builder()
+                .profileUrl(user.getProfileUrl())
+                .nickname(user.getNickname())
+                .mainExerciseInfo(UserExerciseConverter.toUserExerciseDto(user))
+                .build();
+    }
 }
