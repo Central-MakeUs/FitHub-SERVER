@@ -51,4 +51,6 @@ public interface UserService {
     Page<Article> findUserArticle(Long userId, Integer categoryId, Integer pageIndex);
 
     Page<Record> findUserRecord(Long userId, Integer categoryId, Integer pageIndex);
+
+    Page<Article> findSavedArticle(Integer categoryId, Integer pageIndex, User user);
 }

@@ -295,6 +295,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Page<Article> findSavedArticle(Integer categoryId, Integer pageIndex, User user) {
+        ExerciseCategory exerciseCategory = null;
+        if(categoryId != 0)
+            exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new UserException(Code.CATEGORY_ERROR));
+
+        return categoryId == 0 ? articleRepository.findAllSavedArticle(user, PageRequest.of(pageIndex, size)) : articleRepository.findAllSavedArticleCategory(user,exerciseCategory,PageRequest.of(pageIndex, size));
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
