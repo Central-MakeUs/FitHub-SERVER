@@ -1,9 +1,6 @@
 package fithub.app.converter;
 
-import fithub.app.domain.BestRecorder;
-import fithub.app.domain.Grade;
-import fithub.app.domain.User;
-import fithub.app.domain.UserExercise;
+import fithub.app.domain.*;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -60,6 +57,47 @@ public class RootConverter {
                 .bestRecorderList(bestRecorderDtoList)
                 .userInfo(toHomeUserInfo(user))
                 .BestStandardDate(bestRecorderList.get(0).getStandardDate())
+                .build();
+    }
+
+    public static RootApiResponseDto.MyLevelDto toMyLevelDto(User user){
+        Grade grade = user.getMainExercise().getGrade();
+        return RootApiResponseDto.MyLevelDto.builder()
+                .levelIconUrl(grade.getGradeIcon())
+                .level(grade.getLevel())
+                .levelName(grade.getName())
+                .levelSummary(grade.getSummary())
+                .levelDescription(grade.getDescription())
+                .build();
+    }
+
+    public static RootApiResponseDto.LevelDto toLevelDto(Grade grade){
+        return RootApiResponseDto.LevelDto.builder()
+                .levelIconUrl(grade.getGradeIcon())
+                .level(grade.getLevel())
+                .levelName(grade.getName())
+                .build();
+
+    }
+
+    public static RootApiResponseDto.FithubLevelInfoDto toFithubLevelInfoDto(List<Grade> gradeList, LevelInfo levelInfo){
+        List<RootApiResponseDto.LevelDto> levelDtoList = gradeList.stream()
+                .map(grade -> toLevelDto(grade))
+                .collect(Collectors.toList());
+
+        return RootApiResponseDto.FithubLevelInfoDto.builder()
+                .FithubLevelList(levelDtoList)
+                .expSummary(levelInfo.getExpSummary())
+                .expDescription(levelInfo.getExpInfo())
+                .comboSummary(levelInfo.getComboSummary())
+                .comboDescription(levelInfo.getComboExpInfo())
+                .build();
+    }
+
+    public static RootApiResponseDto.LevelInfoDto toLevelInfoDto(User user, List<Grade> gradeList, LevelInfo levelInfo){
+        return RootApiResponseDto.LevelInfoDto.builder()
+                .myLevelInfo(toMyLevelDto(user))
+                .FithubLevelInfo(toFithubLevelInfoDto(gradeList, levelInfo))
                 .build();
     }
 }

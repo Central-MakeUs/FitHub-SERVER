@@ -55,7 +55,46 @@ public class RootApiResponseDto {
         LocalDate BestStandardDate;
     }
 
-    public static class HomeLevelDto{
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class MyLevelDto{
+        String levelIconUrl;
+        Integer level;
+        String levelName;
+        String levelSummary;
+        String levelDescription;
+    }
 
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class LevelDto{
+        String levelIconUrl;
+        Integer level;
+        String levelName;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class FithubLevelInfoDto{
+        List<LevelDto> FithubLevelList;
+        String expSummary;
+        String expDescription;
+        String comboSummary;
+        String comboDescription;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class LevelInfoDto{
+        MyLevelDto myLevelInfo;
+        FithubLevelInfoDto FithubLevelInfo;
     }
 }
