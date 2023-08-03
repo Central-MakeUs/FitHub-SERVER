@@ -4,11 +4,14 @@ import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.auth.provider.TokenProvider;
 import fithub.app.base.Code;
 import fithub.app.base.ResponseDto;
+import fithub.app.converter.ArticleConverter;
+import fithub.app.converter.RecordConverter;
 import fithub.app.converter.RootConverter;
 import fithub.app.domain.BestRecorder;
 import fithub.app.domain.User;
 import fithub.app.service.HomeService;
 import fithub.app.service.UserService;
+import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,9 +26,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
@@ -101,5 +102,21 @@ public class RootController {
     public ResponseDto<RootApiResponseDto.HomeProfileDto> getHomeProfile(@AuthUser User user){
         List<BestRecorder> bestRecorderList = homeService.findBestRecorderList();
         return ResponseDto.of(RootConverter.toHomeProfileDto(user,bestRecorderList));
+    }
+
+    @Operation(summary = "북마크 게시글 목록 조회 API ✔️🔑", description = "홈 화면 조회 API 입니다. pageIndex로 paging, 신고한 사용자는 숨김")
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "categoryId", description = "카테고리 아이디"),
+            @Parameter(name = "pageIndex", description = "페이징을 위한 페이지 번호, query String")
+    })
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 없는 카테고리 입니다..", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @GetMapping("/home/book-mark/{categoryId}")
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> showSavedArticle(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(userService.findSavedArticle(categoryId,pageIndex, user),user));
     }
 }

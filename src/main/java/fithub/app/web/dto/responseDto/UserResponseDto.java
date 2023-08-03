@@ -126,4 +126,14 @@ public class UserResponseDto {
         Long ReportedUserId;
         LocalDateTime reportedAt;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class OtherUserProfileDto{
+        String profileUrl;
+        String nickname;
+        UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
+    }
 }
