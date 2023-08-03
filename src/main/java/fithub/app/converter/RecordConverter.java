@@ -80,7 +80,10 @@ public class RecordConverter {
     public static Record toUpdateRecord(Record record, RecordRequestDto.updateRecordDto request, List<HashTag> hashTagList) throws IOException{
         ExerciseCategory exerciseCategory = staticExerciseCategoryRepository.findById(request.getCategory()).orElseThrow(() -> new ArticleException(Code.CATEGORY_ERROR));
         record.update(request, exerciseCategory);
-        if (request.getRemainImageUrl() != null)
+        boolean equals = request.getRemainImageUrl().equals("");
+        staticLogger.info("컨버터 사진 로그 : 새로 올린 사진이 있는가? : {}", request.getNewImage());
+        staticLogger.info("컨버터 사진 로그 : 그대로 둘 사진이 있는가? : {}", request.getRemainImageUrl());
+        if (request.getRemainImageUrl() != null && !request.getRemainImageUrl().equals(""))
             record.setImage(request.getRemainImageUrl());
         else{
             MultipartFile recordImage = request.getNewImage();
