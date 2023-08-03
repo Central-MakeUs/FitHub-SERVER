@@ -154,6 +154,12 @@ public class User extends BaseEntity {
                 .collect(Collectors.toList()).size() > 0;
     }
 
+    public Boolean isSavedArticle(Article article){
+        return this.savedArticleList.stream()
+                .filter(savedArticle -> savedArticle.getArticle().getId().equals(article.getId()))
+                .collect(Collectors.toList()).size() > 0;
+    }
+
     public Boolean isLikedRecord(Record record){
         return this.recordLikesList.stream()
                 .filter(recordLikes -> recordLikes.getRecord().getId().equals(record.getId()))

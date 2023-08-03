@@ -300,7 +300,7 @@ public class UserServiceImpl implements UserService {
         if(categoryId != 0)
             exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new UserException(Code.CATEGORY_ERROR));
 
-        return categoryId == 0 ? articleRepository.findAllSavedArticle(user, PageRequest.of(pageIndex, size)) : articleRepository.findAllSavedArticleCategory(user,exerciseCategory,PageRequest.of(pageIndex, size));
+        return categoryId == 0 ? articleRepository.findAllSavedArticle(user, user,PageRequest.of(pageIndex, size)) : articleRepository.findAllSavedArticleCategory(user,user,exerciseCategory,PageRequest.of(pageIndex, size));
     }
 
     @Override

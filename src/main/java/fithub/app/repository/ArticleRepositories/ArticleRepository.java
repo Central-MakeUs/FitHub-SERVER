@@ -28,11 +28,11 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query("select a from Article a where a.user.id not in (select us.user.id from UserReport us where us.reporter = :reporter) and a.exerciseCategory = :category order by a.likes desc , a.createdAt desc ")
     Page<Article> findAllByExerciseCategoryOrderByLikesDescCreatedAtDesc(@Param("category") ExerciseCategory category,@Param("reporter") User reporter, Pageable pageable);
 
-    @Query("select a from Article a where a in (select sa.article from SavedArticle sa) and a.user.id not in (select us.user.id from UserReport us where us.reporter = :reporter) and a.exerciseCategory = :category order by a.likes desc , a.createdAt desc ")
-    Page<Article> findAllSavedArticleCategory(@Param("reporter") User reporter, @Param("category") ExerciseCategory category, Pageable pageable);
+    @Query("select a from Article a where a in (select sa.article from SavedArticle sa where sa.user = :owner) and a.user.id not in (select us.user.id from UserReport us where us.reporter = :reporter) and a.exerciseCategory = :category order by a.likes desc , a.createdAt desc ")
+    Page<Article> findAllSavedArticleCategory(@Param("owner") User owner, @Param("reporter") User reporter, @Param("category") ExerciseCategory category, Pageable pageable);
 
-    @Query("select a from Article a where a in (select sa.article from SavedArticle sa) and a.user.id not in (select us.user.id from UserReport us where us.reporter = :reporter) order by a.likes desc , a.createdAt desc ")
-    Page<Article> findAllSavedArticle(@Param("reporter") User reporter, Pageable pageable);
+    @Query("select a from Article a where a in (select sa.article from SavedArticle sa where sa.user = :owner) and a.user.id not in (select us.user.id from UserReport us where us.reporter = :reporter) order by a.likes desc, a.createdAt desc")
+    Page<Article> findAllSavedArticle(@Param("owner") User owner, @Param("reporter") User reporter, Pageable pageable);
 
     Page<Article> findByIdInAndCreatedAtLessThanOrderByCreatedAtDesc(List<Long> articleIds, LocalDateTime createdAt, Pageable pageable);
     Page<Article> findByIdInOrderByCreatedAtDesc(List<Long> articleIds, Pageable pageable);

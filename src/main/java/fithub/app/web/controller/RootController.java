@@ -119,4 +119,6 @@ public class RootController {
     public ResponseDto<ArticleResponseDto.ArticleDtoList> showSavedArticle(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
         return ResponseDto.of(ArticleConverter.toArticleDtoList(userService.findSavedArticle(categoryId,pageIndex, user),user));
     }
+
+
 }

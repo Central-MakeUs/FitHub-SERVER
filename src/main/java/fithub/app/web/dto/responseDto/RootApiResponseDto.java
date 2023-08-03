@@ -54,4 +54,8 @@ public class RootApiResponseDto {
         List<BestRecorderDto> bestRecorderList;
         LocalDate BestStandardDate;
     }
+
+    public static class HomeLevelDto{
+
+    }
 }
