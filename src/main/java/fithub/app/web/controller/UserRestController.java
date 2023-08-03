@@ -365,4 +365,56 @@ public class UserRestController {
         UserReport userReport = userService.reportUser(userId, user);
         return ResponseDto.of(UserConverter.toReportUserDto(userId, userReport));
     }
+
+    @Operation(summary = "사용자 프로필 조회하기 API ✔️ 🔑", description = "사용자 프로필 조회 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4013", description = "BAD_REQUEST : 없는 유저입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "userId", description = "사용자의 아이디"),
+    })
+    @GetMapping("/users/{userId}")
+    public ResponseDto<UserResponseDto.OtherUserProfileDto> showProfile(@PathVariable(name = "userId") Long userId, @AuthUser User user){
+        User findUser = userService.findUser(userId);
+        return ResponseDto.of(UserConverter.toOtherUserProfileDto(findUser));
+    }
+
+    @Operation(summary = "조회 한 사용자의 게시글 목록 조회 API ✔️ 🔑", description = "조회 한 사용자의 게시글 목록 조회 API 입니다. 카테고리가 0이면 전체 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4013", description = "BAD_REQUEST : 없는 유저입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 없는 카테고리입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "categoryId", description = "카테고리 아이디"),
+            @Parameter(name = "userId", description = "사용자의 아이디"),
+            @Parameter(name = "pageIndex", description = "페이징을 위한 페이지 번호, query String")
+    })
+    @GetMapping("/users/{userId}/articles/{categoryId}")
+    public ResponseDto<ArticleResponseDto.ArticleDtoList> showArticleList(@PathVariable(name = "userId")Long userId, @PathVariable(name = "categoryId") Integer categoryId,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(userService.findUserArticle(userId,categoryId,pageIndex),user));
+    }
+
+    @Operation(summary = "조회 한 사용자의 운동인증 목록 조회 API ✔️ 🔑", description = "조회 한 사용자의 운동인증 목록 조회 API 입니다. 카테고리가 0이면 전체 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4013", description = "BAD_REQUEST : 없는 유저입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 없는 카테고리 입니다..", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "categoryId", description = "카테고리 아이디"),
+            @Parameter(name = "userId", description = "사용자의 아이디"),
+            @Parameter(name = "pageIndex", description = "페이징을 위한 페이지 번호, query String")
+    })
+    @GetMapping("/users/{userId}/records/{categoryId}")
+    public ResponseDto<RecordResponseDto.recordDtoList> showRecordList(@PathVariable(name = "userId")Long userId, @PathVariable(name = "categoryId") Integer categoryId,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
+        return ResponseDto.of(RecordConverter.toRecordDtoList(userService.findUserRecord(userId,categoryId,pageIndex),user));
+    }
 }

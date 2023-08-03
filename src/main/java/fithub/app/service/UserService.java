@@ -47,4 +47,8 @@ public interface UserService {
     User findUser(Long userId);
 
     UserReport reportUser(Long userId, User user);
+
+    Page<Article> findUserArticle(Long userId, Integer categoryId, Integer pageIndex);
+
+    Page<Record> findUserRecord(Long userId, Integer categoryId, Integer pageIndex);
 }
