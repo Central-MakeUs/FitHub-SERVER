@@ -118,6 +118,7 @@ public class ArticleResponseDto {
     public static class ArticleSaveDto{
         Long articleId;
         Long articleSaves;
+        Boolean isSaved;
     }
 
 

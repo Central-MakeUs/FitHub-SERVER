@@ -29,4 +29,8 @@ public class Grade extends BaseEntity {
     private Integer maxExp;
 
     private String gradeIcon;
+
+    private String summary;
+
+    private String description;
 }

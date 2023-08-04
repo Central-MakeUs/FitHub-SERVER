@@ -203,7 +203,7 @@ public class ArticleRestController {
     @PostMapping("/articles/{articleId}/scrap")
     public ResponseDto<ArticleResponseDto.ArticleSaveDto> scrapArticle(@PathVariable("articleId") @ExistArticle Long articleId, @AuthUser User user){
         Article article = articleService.toggleArticleSave(articleId, user);
-        return ResponseDto.of(ArticleConverter.toArticleSaveDtoDto(article));
+        return ResponseDto.of(ArticleConverter.toArticleSaveDtoDto(article, user));
     }
 
     @Operation(summary = "게시글 신고하기 ✔️🔑",description = "게시글을 신고하는 API이며 이미 신고한 경우는 안된다고 응답이 갑니다.")

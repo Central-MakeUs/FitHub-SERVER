@@ -8,8 +8,11 @@ import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.RecordConverter;
 import fithub.app.converter.RootConverter;
 import fithub.app.domain.BestRecorder;
+import fithub.app.domain.Grade;
+import fithub.app.domain.LevelInfo;
 import fithub.app.domain.User;
 import fithub.app.service.HomeService;
+import fithub.app.service.RootService;
 import fithub.app.service.UserService;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
@@ -42,6 +45,8 @@ public class RootController {
     private final UserService userService;
 
     private final HomeService homeService;
+
+    private final RootService rootService;
 
     private final TokenProvider tokenProvider;
 
@@ -118,5 +123,19 @@ public class RootController {
     @GetMapping("/home/book-mark/{categoryId}")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> showSavedArticle(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
         return ResponseDto.of(ArticleConverter.toArticleDtoList(userService.findSavedArticle(categoryId,pageIndex, user),user));
+    }
+    @Operation(summary = "레벨 설명 조회 API ✔️🔑", description = "핏허브 레벨 설명 조회 API 입니다. 내 메인 운동 레벨정보와 핏허브 레벨 정보가 담깁니다.")
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @GetMapping("/home/level-info")
+    public ResponseDto<RootApiResponseDto.LevelInfoDto> showLevelInfo(@AuthUser User user){
+        List<Grade> gradeList = rootService.findAllGrade();
+        LevelInfo levelInfo = rootService.findLevelInfo();
+        return ResponseDto.of(RootConverter.toLevelInfoDto(user,gradeList,levelInfo));
     }
 }
