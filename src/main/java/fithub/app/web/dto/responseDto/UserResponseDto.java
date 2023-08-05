@@ -2,6 +2,7 @@ package fithub.app.web.dto.responseDto;
 
 import fithub.app.domain.UserExercise;
 import io.swagger.annotations.ApiModelProperty;
+import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -144,5 +145,12 @@ public class UserResponseDto {
     public static class ChangeMyProfileDto {
         String changedImageUrl;
         LocalDateTime changedAt;
+    }
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class CurrentMainExerciseDto{
+        Integer currentExerciseCategory;
     }
 }

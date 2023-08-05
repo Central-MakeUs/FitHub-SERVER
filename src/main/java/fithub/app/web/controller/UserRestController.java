@@ -343,10 +343,10 @@ public class UserRestController {
             @Parameter(name = "user", hidden = true),
     })
     @PatchMapping (value = "/users/my-page/profile",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseDto<UserResponseDto.ChangeMyProfileDto> changeMyProfile(@AuthUser User user, @ModelAttribute UserRequestDto.ChangeMyProfileDto request){
-        List<UserExercise> myExercises = userService.getMyExercises(user);
-//        return ResponseDto.of(UserConverter.toChangeMyProfileDto(user, myExercises));
-        return null;
+    public ResponseDto<UserResponseDto.ChangeMyProfileDto> changeMyProfile(@AuthUser User user, @ModelAttribute UserRequestDto.ChangeMyProfileDto request) throws IOException
+    {
+        String profile = userService.changeMyProfile(user, request);
+        return ResponseDto.of(UserConverter.toChangeMyProfileDto(profile));
     }
 
     @Operation(summary = "내 메인운동 바꾸기 API ✔️ 🔑", description = "메인 운동을 바꾸는 API 입니다.")
@@ -431,5 +431,19 @@ public class UserRestController {
     @GetMapping("/users/{userId}/records/{categoryId}")
     public ResponseDto<RecordResponseDto.recordDtoList> showRecordList(@PathVariable(name = "userId")Long userId, @PathVariable(name = "categoryId") Integer categoryId,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
         return ResponseDto.of(RecordConverter.toRecordDtoList(userService.findUserRecord(userId,categoryId,pageIndex),user));
+    }
+
+    @Operation(summary = "나의 현재 메인 운동 종목 조회 API ✔️ 🔑", description = "나의 현재 메인 운동 종목 조회 API ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/users/main-exercise")
+    public ResponseDto<UserResponseDto.CurrentMainExerciseDto> showCurrentMain(@AuthUser User user){
+        User findUser = userService.findUser(user.getId());
+        return ResponseDto.of(UserConverter.toCurrentMainExerciseDto(findUser));
     }
 }
