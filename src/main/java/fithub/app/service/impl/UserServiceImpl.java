@@ -1,6 +1,7 @@
 package fithub.app.service.impl;
 
 import fithub.app.auth.provider.TokenProvider;
+import fithub.app.aws.s3.AmazonS3Manager;
 import fithub.app.base.Code;
 import fithub.app.converter.ExercisePreferenceConverter;
 import fithub.app.converter.UserConverter;
@@ -59,6 +60,7 @@ public class UserServiceImpl implements UserService {
     private final UserExerciseRepository userExerciseRepository;
 
     private final UserReportRepository userReportRepository;
+    private final AmazonS3Manager s3Manager;
 
     @Value("${paging.size}")
     private Integer size;
@@ -304,8 +306,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String changeMyProfile(User user, UserRequestDto.ChangeMyProfileDto request) {
-        return null;
+    @Transactional
+    public String changeMyProfile(User user, UserRequestDto.ChangeMyProfileDto request) throws IOException
+    {
+        User findUser = userRepository.findById(user.getId()).get();
+        Uuid uuid = s3Manager.createUUID();
+        String KeyName = s3Manager.generateRecordKeyName(uuid, request.getNewProfile().getOriginalFilename());
+        String fileUrl = s3Manager.uploadFile(KeyName, request.getNewProfile());
+        logger.info("S3에 업로드 한 파일의 url : {}", fileUrl);
+        findUser.setProfile(fileUrl);
+        return fileUrl;
     }
 
     @Override
