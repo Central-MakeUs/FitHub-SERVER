@@ -320,4 +320,10 @@ public class UserConverter {
                 .changedAt(LocalDateTime.now())
                 .build();
     }
+
+    public static UserResponseDto.CurrentMainExerciseDto toCurrentMainExerciseDto(User user){
+        return UserResponseDto.CurrentMainExerciseDto.builder()
+                .currentExerciseCategory(user.getMainExercise().getExerciseCategory().getId())
+                .build();
+    }
 }

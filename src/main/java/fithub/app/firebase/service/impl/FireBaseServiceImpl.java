@@ -17,7 +17,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +32,8 @@ public class FireBaseServiceImpl implements FireBaseService {
     Logger logger = LoggerFactory.getLogger(FireBaseServiceImpl.class);
 
     @Override
-    public void sendMessageTo(String targetToken, String title, String body) throws IOException {
-        String message = makeMessage(targetToken, title, body);
+    public void sendMessageTo(String targetToken, String title, String body, String targetView, String targetPK) throws IOException {
+        String message = makeMessage(targetToken, title, body, targetView, targetPK);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(
@@ -50,18 +52,22 @@ public class FireBaseServiceImpl implements FireBaseService {
         logger.info("fire base 푸쉬알림 결과 : {}", response.body().toString());
     }
 
-    private String makeMessage(String targeToken, String title, String body) throws JsonParseException, JsonProcessingException{
+    private String makeMessage(String targeToken, String title, String body, String targetView, String targetPK) throws JsonParseException, JsonProcessingException{
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(
                         FcmMessage.Message.builder()
-                                .token(targeToken)
-                                .notification(
+                                .token(targeToken).
+                                notification(
                                         FcmMessage.Notification.builder()
                                                 .title(title)
-                                                .body(body)
-                                                .build()
-                                ).build()
-                ).validateOnly(false).build();
+                                                .body(body).build()
+                                ).data(FcmMessage.Data.builder()
+                                        .targetView(targetView)
+                                        .targetPK(targetPK).build()
+                                ).
+                                build()
+                )
+                .validateOnly(false).build();
         return objectMapper.writeValueAsString(fcmMessage);
     }
 

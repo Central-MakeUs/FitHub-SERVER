@@ -79,4 +79,9 @@ public class ArticleRequestDto {
     public static class DeleteListArticleDto{
         List<Long> articleIdList;
     }
+
+    @Getter @Setter
+    public static class ArticleLikeAlarmDto{
+        String token;
+    }
 }

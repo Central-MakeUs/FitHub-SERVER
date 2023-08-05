@@ -216,4 +216,8 @@ public class User extends BaseEntity {
     public void countReport(){
         this.reported += 1;
     }
+
+    public void setProfile(String newProfileUrl){
+        this.profileUrl = newProfileUrl;
+    }
 }

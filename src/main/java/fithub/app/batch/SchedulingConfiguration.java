@@ -31,7 +31,7 @@
         }
 
         // 매일 수행 0 0 0 * * ?
-        @Scheduled(cron = "40 44 16 * * ?")
+        @Scheduled(cron = "20 35 14 * * ?")
         public void dailySetBestUser() throws JobExecutionException{
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("timestamp", System.currentTimeMillis())
