@@ -229,6 +229,4 @@ public class ArticleRestController {
         ContentsReport reportArticle = articleService.reportArticle(articleId, user);
         return ResponseDto.of(ArticleConverter.toArticleReportDto(reportArticle, articleId));
     }
-
-
 }
