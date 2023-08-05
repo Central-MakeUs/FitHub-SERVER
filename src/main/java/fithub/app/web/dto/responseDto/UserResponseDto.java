@@ -136,4 +136,13 @@ public class UserResponseDto {
         String nickname;
         UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ChangeMyProfileDto {
+        String changedImageUrl;
+        LocalDateTime changedAt;
+    }
 }

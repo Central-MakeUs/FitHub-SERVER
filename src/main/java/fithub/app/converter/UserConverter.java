@@ -313,4 +313,11 @@ public class UserConverter {
                 .mainExerciseInfo(UserExerciseConverter.toUserExerciseDto(user))
                 .build();
     }
+
+    public static UserResponseDto.ChangeMyProfileDto toChangeMyProfileDto(String imageUrl){
+        return UserResponseDto.ChangeMyProfileDto.builder()
+                .changedImageUrl(imageUrl)
+                .changedAt(LocalDateTime.now())
+                .build();
+    }
 }

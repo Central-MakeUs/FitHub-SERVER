@@ -149,4 +149,9 @@ public class UserRequestDto {
         private String targetPhoneNum;
         private String password;
     }
+
+    @Getter @Setter
+    public static class ChangeMyProfileDto {
+        private MultipartFile newProfile;
+    }
 }
