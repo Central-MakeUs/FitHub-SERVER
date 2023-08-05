@@ -53,4 +53,6 @@ public interface UserService {
     Page<Record> findUserRecord(Long userId, Integer categoryId, Integer pageIndex);
 
     Page<Article> findSavedArticle(Integer categoryId, Integer pageIndex, User user);
+
+    String changeMyProfile(User user,UserRequestDto.ChangeMyProfileDto request);
 }

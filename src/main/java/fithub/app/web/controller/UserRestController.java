@@ -334,6 +334,21 @@ public class UserRestController {
         return ResponseDto.of(UserConverter.toMyPageDto(user, myExercises));
     }
 
+    @Operation(summary = "마이 페이지 - 내 프로필 변경 ✔️ 🔑", description = "마이 페이지에서 프로필 변경하는 API 입니다")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PatchMapping (value = "/users/my-page/profile",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseDto<UserResponseDto.ChangeMyProfileDto> changeMyProfile(@AuthUser User user, @ModelAttribute UserRequestDto.ChangeMyProfileDto request){
+        List<UserExercise> myExercises = userService.getMyExercises(user);
+//        return ResponseDto.of(UserConverter.toChangeMyProfileDto(user, myExercises));
+        return null;
+    }
+
     @Operation(summary = "내 메인운동 바꾸기 API ✔️ 🔑", description = "메인 운동을 바꾸는 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
