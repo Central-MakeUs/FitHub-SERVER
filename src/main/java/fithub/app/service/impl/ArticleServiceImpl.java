@@ -314,4 +314,13 @@ public class ArticleServiceImpl implements ArticleService {
                 .user(user)
                 .build());
     }
+
+    @Override
+    @Transactional
+    public void alarmArticleLike(Article article, User user) {
+
+        // 알림 보내기
+
+        // 알림 테이블에 저장
+    }
 }
