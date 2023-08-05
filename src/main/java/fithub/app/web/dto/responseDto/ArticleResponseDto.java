@@ -139,4 +139,14 @@ public class ArticleResponseDto {
         Long reportedArticleId;
         LocalDateTime reportedAt;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AlarmDto{
+        String alarmTitle;
+        String alarmBody;
+        Long targetArticle;
+    }
 }
