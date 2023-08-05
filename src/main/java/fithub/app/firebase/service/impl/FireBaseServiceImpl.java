@@ -3,6 +3,7 @@ package fithub.app.firebase.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.auth.oauth2.GoogleCredentials;
+import com.google.firebase.messaging.FirebaseMessaging;
 import fithub.app.firebase.dto.FcmMessage;
 import fithub.app.firebase.service.FireBaseService;
 import lombok.RequiredArgsConstructor;
