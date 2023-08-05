@@ -77,10 +77,14 @@ public class RootController {
             result = Code.AUTO_LOGIN_NOT_MAIN;
         else{
             String token = authorizationHeader.substring(7);
-            System.out.println(token);
             userId = tokenProvider.validateAndReturnId(token);
             User user = userService.findUser(userId);
 
+            logger.info("현재 스플래시 화면의 유저 : {}", user.getId());
+            logger.info("현재 스플래시 화면의 유저 : {}", user.getNickname());
+            logger.info("현재 스플래시 화면의 유저 : {}", user.getName());
+            logger.info("현재 스플래시 화면의 유저 : {}", user.getAge());
+            logger.info("현재 스플래시 화면의 유저 : {}", user.getGender());
             if (user.getAge() == null || user.getGender() == null)
                 result = Code.AUTO_LOGIN_NOT_MAIN;
             else {

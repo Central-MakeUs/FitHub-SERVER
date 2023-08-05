@@ -304,6 +304,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public String changeMyProfile(User user, UserRequestDto.ChangeMyProfileDto request) {
+        return null;
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
