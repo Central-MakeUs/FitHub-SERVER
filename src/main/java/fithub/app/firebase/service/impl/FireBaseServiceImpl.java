@@ -51,42 +51,7 @@ public class FireBaseServiceImpl implements FireBaseService {
         logger.info("fire base 푸쉬알림 결과 : {}", response.body().toString());
     }
 
-    private String makeMessageV1(String targeToken, String title, String body, String targetView, String targetPK) throws JsonParseException, JsonProcessingException{
-        FcmMessageV1 fcmMessageV1 = FcmMessageV1.builder()
-                .message(
-                        FcmMessageV1.Message.builder()
-                                .token(targeToken).
-                                notification(FcmMessageV1.Notification.builder()
-                                        .title(title)
-                                        .body(body)
-                                        .build()
-                                ).
-                                data(FcmMessageV1.Data.builder()
-                                        .targetView(targetView)
-                                        .targetPK(targetPK).build()
-                                ).
-                                build()
-                )
-                .validateOnly(false).build();
-        return objectMapper.writeValueAsString(fcmMessageV1);
-    }
 
-    private String makeMessageV2(String targeToken, String title, String body, String targetView, String targetPK) throws JsonParseException, JsonProcessingException{
-        FcmMessageV2 fcmMessageV2 = FcmMessageV2.builder()
-                .message(
-                        FcmMessageV2.Message.builder()
-                                .token(targeToken).
-                                notification(FcmMessageV2.Notification.builder()
-                                        .title(title)
-                                        .body(body)
-                                        .targetView(targetView)
-                                        .targetPK(targetPK).build()
-                                ).
-                                build()
-                )
-                .validateOnly(false).build();
-        return objectMapper.writeValueAsString(fcmMessageV2);
-    }
 
     private String makeMessage(String targeToken, String title, String body, String targetView, String targetPK) throws JsonParseException, JsonProcessingException{
         FcmMessage fcmMessage = FcmMessage.builder()
