@@ -2,6 +2,7 @@ package fithub.app.web.controller;
 
 import fithub.app.base.ResponseDto;
 import fithub.app.firebase.service.FireBaseService;
+import fithub.app.utils.FCMType;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -25,7 +26,7 @@ public class AlarmRestController {
 
     private final FireBaseService fireBaseService;
 
-    @Operation(summary = "<테스트용> 알림 보내보기 API V1 - notification + data ✔️🔑",description = "테스트임다.")
+    @Operation(summary = "<테스트용> 알림 보내보기 API V1 - 핏 사이트 아이디5번, 제목이 게시글1인 핏 사이트로 이동 ✔️🔑",description = "테스트임다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -37,12 +38,12 @@ public class AlarmRestController {
     @PostMapping("/test-alarm/v1")
     public String testFCMV1 (@RequestBody ArticleRequestDto.ArticleLikeAlarmDto request) throws IOException
     {
-        fireBaseService.sendMessageToV1(request.getToken(),"test","test","자결","자결");
+        fireBaseService.sendMessageTo(request.getToken(),"test article","핏 사이트로 이동 테스트 알림",FCMType.ARTICLE.toString(),"5");
         return null;
     }
 
 
-    @Operation(summary = "<테스트용> 알림 보내보기 API V2 - data  (notification은 모양 조금이라도 다르면 안됨) ✔️🔑",description = "테스트임다.")
+    @Operation(summary = "<테스트용> 알림 보내보기 API V2 - 인증 아이디2번, 내용이 인증 1인 인증으로 이동  (notification은 모양 조금이라도 다르면 안됨) ✔️🔑",description = "테스트임다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
@@ -54,7 +55,7 @@ public class AlarmRestController {
     @PostMapping("/test-alarm/v2")
     public String testFCMV3(@RequestBody ArticleRequestDto.ArticleLikeAlarmDto request) throws IOException
     {
-        fireBaseService.sendMessageToV3(request.getToken(),"test","test","자결","자결");
+        fireBaseService.sendMessageTo(request.getToken(),"test record","운동인증으로 이동 테스트 알림", FCMType.RECORD.toString(),"2");
         return null;
     }
 }
