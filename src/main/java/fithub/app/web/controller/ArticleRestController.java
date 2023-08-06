@@ -192,6 +192,7 @@ public class ArticleRestController {
     @PostMapping("/articles/{articleId}/likes")
     public ResponseDto<ArticleResponseDto.ArticleLikeDto> likeArticle(@PathVariable(name = "articleId") @ExistArticle Long articleId, @AuthUser User user){
         Article article = articleService.toggleArticleLike(articleId, user);
+        // 알림 보내기
         return ResponseDto.of(ArticleConverter.toArticleLikeDto(article,user));
     }
 
@@ -227,23 +228,5 @@ public class ArticleRestController {
     public ResponseDto<ArticleResponseDto.ArticleReportDto> reportArticle(@PathVariable(name = "articleId") Long articleId, @AuthUser User user){
         ContentsReport reportArticle = articleService.reportArticle(articleId, user);
         return ResponseDto.of(ArticleConverter.toArticleReportDto(reportArticle, articleId));
-    }
-
-
-    @Operation(summary = "게시글 좋아요 알림 보내기 API ✔️🔑",description = "좋아요 눌린 게시글에 대해 푸쉬 알림을 보내는 API 입니다.")
-    @ApiResponses({
-            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
-            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
-            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
-    })
-    @Parameters({
-            @Parameter(name = "user", hidden = true),
-            @Parameter(name = "articleId", description = "게시글 아이디")
-    })
-    @PostMapping("/articles/{articleId}/likes-alarm")
-    public String testFCM(@RequestBody ArticleRequestDto.ArticleLikeAlarmDto request) throws IOException
-    {
-        fireBaseService.sendMessageTo(request.getToken(),"test","test","자결","자결");
-        return null;
     }
 }

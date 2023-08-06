@@ -36,4 +36,6 @@ public interface ArticleService {
     void deleteArticleBulk(ArticleRequestDto.DeleteListArticleDto request, User user);
 
     ContentsReport reportArticle(Long articleId, User user);
+
+    void alarmArticleLike(Article article, User user);
 }
