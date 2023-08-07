@@ -7,4 +7,6 @@ import org.springframework.data.domain.Page;
 public interface NotificationService {
 
     Page<Notification> getNotification(User user, Integer integer);
+
+    void confirmNotification(Long alarmId, User user);
 }

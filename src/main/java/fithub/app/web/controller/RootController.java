@@ -69,7 +69,7 @@ public class RootController {
 
     })
     @GetMapping("/")
-    public ResponseDto<RootApiResponseDto.AutoLoginResponseDto> AutoLogin(String authorizationHeader, HttpServletRequest request, @RequestBody @Valid RootRequestDto.AutoLoginDto fcm){
+    public ResponseDto<RootApiResponseDto.AutoLoginResponseDto> AutoLogin(String authorizationHeader, HttpServletRequest request){
 
 
         Code result = null;
