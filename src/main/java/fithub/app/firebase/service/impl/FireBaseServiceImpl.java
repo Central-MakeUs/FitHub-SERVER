@@ -52,6 +52,29 @@ public class FireBaseServiceImpl implements FireBaseService {
         logger.info("fire base 푸쉬알림 내용 : {}", message);
     }
 
+    @Override
+    public void sendMessageToV2(String targetToken, String title, String body, String targetView, String targetPK) throws IOException {
+        String message = makeMessageV2(targetToken, title, body, targetView, targetPK);
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = RequestBody.create(
+                message, MediaType.get("application/json; charset=utf-8")
+        );
+
+        Request request = new Request.Builder()
+                .url(API_URL)
+                .post(requestBody)
+                .addHeader(HttpHeaders.AUTHORIZATION, "Bearer "+ getAccessToken())
+                .addHeader(HttpHeaders.CONTENT_TYPE, "application/json; UTF-8")
+                .build();
+
+        Response response = client.newCall(request).execute();
+
+        logger.info("fire base 푸쉬알림 결과 : {}", response.code());
+        logger.info("fire base 푸쉬알림 내용 : {}", message);
+    }
+
+
 
 
     private String makeMessage(String targeToken, String title, String body, String targetView, String targetPK) throws JsonParseException, JsonProcessingException{
@@ -63,6 +86,24 @@ public class FireBaseServiceImpl implements FireBaseService {
                                         .title(title)
                                         .body(body)
                                         .targetView(targetView)
+                                        .targetPK(targetPK).build()
+                                ).
+                                build()
+                )
+                .validateOnly(false).build();
+        return objectMapper.writeValueAsString(fcmMessage);
+    }
+
+    private String makeMessageV2(String targeToken, String title, String body, String targetView, String targetPK) throws JsonParseException, JsonProcessingException{
+        FcmMessageV1 fcmMessage = FcmMessageV1.builder()
+                .message(
+                        FcmMessageV1.Message.builder()
+                                .token(targeToken).
+                                data(FcmMessageV1.Data.builder()
+                                        .title(title)
+                                        .body(body)
+                                        .targetView(targetView)
+                                        .targetImage("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/fithub-record/b1df93fe-a86d-4e64-8d50-b4dc9c89c45b")
                                         .targetPK(targetPK).build()
                                 ).
                                 build()

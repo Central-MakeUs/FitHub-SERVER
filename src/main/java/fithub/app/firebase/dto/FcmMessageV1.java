@@ -37,7 +37,10 @@ public class FcmMessageV1 {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Data{
+        private String title;
+        private String body;
         private String targetView;
         private String targetPK;
+        private String targetImage;
     }
 }

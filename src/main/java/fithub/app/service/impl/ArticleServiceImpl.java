@@ -72,7 +72,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     String alarmTitle = "FITHUB";
 
-    String alarmBody = "님이 나의 핏 사이트 글에 좋아요를 눌렀어요";
+    String alarmBodyHad = "님이 나의 [";
+
+    String alarmBodyMiddle = "]핏 사이트 글에 좋아요를 눌렀어요";
 
     @Override
     @Transactional(readOnly = false)
@@ -334,7 +336,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         // 알림 보내기
         for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
-            fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBody,FCMType.ARTICLE.toString(),article.getId().toString());
+            fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle,FCMType.ARTICLE.toString(),article.getId().toString());
         }
         // 알림 테이블에 저장
         Notification notification = notificationRepository.save(Notification.builder()
