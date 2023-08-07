@@ -189,8 +189,13 @@ public class RecordRestController {
             @Parameter(name = "recordId", description = "운동 인증 아이디"),
     })
     @PostMapping("/records/{recordId}/likes")
-    public ResponseDto<RecordResponseDto.recordLikeDto> likeRecord(@PathVariable(name = "recordId") @ExistRecord Long recordId, @AuthUser User user){
+    public ResponseDto<RecordResponseDto.recordLikeDto> likeRecord(@PathVariable(name = "recordId") @ExistRecord Long recordId, @AuthUser User user) throws IOException
+    {
         Record record = recordService.toggleRecordLike(recordId, user);
+
+        // 알림 보내기
+        if(user.isLikedRecord(record))
+            recordService.alarmRecordLike(record,user);
         return ResponseDto.of(RecordConverter.toRecordLikeDto(record, user));
     }
 

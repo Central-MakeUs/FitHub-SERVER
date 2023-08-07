@@ -35,4 +35,14 @@ public class Notification extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "record_id")
     private Record record;
+
+    private String notificationBody;
+
+    public void setUser(User user){
+        if(this.user != null){
+            user.getNotificationList().remove(this);
+        }
+        this.user = user;
+        user.getNotificationList().add(this);
+    }
 }

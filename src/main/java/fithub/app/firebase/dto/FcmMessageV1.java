@@ -17,7 +17,6 @@ public class FcmMessageV1 {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Message{
-        private Notification notification;
         private Data data;
         private String token;
     }
@@ -27,17 +26,11 @@ public class FcmMessageV1 {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Notification{
+    public static class Data{
         private String title;
         private String body;
-    }
-
-    @Builder
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Data{
         private String targetView;
         private String targetPK;
+        private String targetImage;
     }
 }

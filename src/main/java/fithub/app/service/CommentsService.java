@@ -1,12 +1,16 @@
 package fithub.app.service;
 
+import fithub.app.domain.Article;
 import fithub.app.domain.Comments;
+import fithub.app.domain.Record;
 import fithub.app.domain.User;
 import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import io.swagger.models.auth.In;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
+import java.io.IOException;
 
 public interface CommentsService {
 
@@ -22,5 +26,8 @@ public interface CommentsService {
     Comments toggleCommentsLikeOnArticle(Long id, Long commentsId, User user);
     Comments toggleCommentsLikeOnRecord(Long id, Long commentsId, User user);
     ContentsReport reportComments(Long commentsId, User user);
+
+    void commentAlarmArticle(Article article,Comments comments, User user) throws IOException;
+    void commentAlarmRecord(Record record, Comments comments,User user) throws IOException;
 
 }
