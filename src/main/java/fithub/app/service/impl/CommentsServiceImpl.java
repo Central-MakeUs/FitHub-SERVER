@@ -248,6 +248,7 @@ public class CommentsServiceImpl implements CommentsService {
                 .notificationCategory(NotificationCategory.ARTICLE)
                 .article(article)
                 .user(article.getUser())
+                .notificationBody(user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot)
                 .build());
 
         notification.setUser(article.getUser());
@@ -266,6 +267,7 @@ public class CommentsServiceImpl implements CommentsService {
                 .notificationCategory(NotificationCategory.ARTICLE)
                 .record(record)
                 .user(record.getUser())
+                .notificationBody(user.getNickname().toString() + alarmRecordBodyHead +  comments.getContents() + alarmRecordBodyMiddle)
                 .build());
 
         notification.setUser(record.getUser());

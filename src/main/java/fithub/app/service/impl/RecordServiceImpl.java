@@ -350,6 +350,7 @@ public class RecordServiceImpl implements RecordService {
                 .notificationCategory(NotificationCategory.ARTICLE)
                 .record(record)
                 .user(record.getUser())
+                .notificationBody(user.getNickname().toString() + alarmBodyHead)
                 .build());
 
         notification.setUser(record.getUser());

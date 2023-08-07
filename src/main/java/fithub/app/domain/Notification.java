@@ -36,6 +36,8 @@ public class Notification extends BaseEntity {
     @JoinColumn(name = "record_id")
     private Record record;
 
+    private String notificationBody;
+
     public void setUser(User user){
         if(this.user != null){
             user.getNotificationList().remove(this);

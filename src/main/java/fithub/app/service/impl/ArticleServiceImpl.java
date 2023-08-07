@@ -343,6 +343,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .notificationCategory(NotificationCategory.ARTICLE)
                 .article(article)
                 .user(article.getUser())
+                .notificationBody(user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle)
                 .build());
 
         notification.setUser(article.getUser());
