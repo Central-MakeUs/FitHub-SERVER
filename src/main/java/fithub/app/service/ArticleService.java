@@ -37,5 +37,5 @@ public interface ArticleService {
 
     ContentsReport reportArticle(Long articleId, User user);
 
-    void alarmArticleLike(Article article, User user);
+    void alarmArticleLike(Article article, User user) throws IOException;
 }

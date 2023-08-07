@@ -48,7 +48,8 @@ public class FireBaseServiceImpl implements FireBaseService {
 
         Response response = client.newCall(request).execute();
 
-        logger.info("fire base 푸쉬알림 결과 : {}", response.body().toString());
+        logger.info("fire base 푸쉬알림 결과 : {}", response.code());
+        logger.info("fire base 푸쉬알림 내용 : {}", message);
     }
 
 

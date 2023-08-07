@@ -5,5 +5,5 @@ import lombok.Getter;
 @Getter
 public enum NotificationCategory {
 
-    AD, RECORD, ARTICLE
+    AD, RECORD, ARTICLE,SYSTEM
 }

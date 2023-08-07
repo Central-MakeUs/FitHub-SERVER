@@ -14,6 +14,7 @@ import fithub.app.domain.User;
 import fithub.app.service.HomeService;
 import fithub.app.service.RootService;
 import fithub.app.service.UserService;
+import fithub.app.web.dto.requestDto.RootRequestDto;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
@@ -55,7 +57,7 @@ public class RootController {
         return "I'm healthy";
     }
 
-    @Operation(summary = "자동 로그인 API ✔️🔑", description = "자동 로그인 API 입니다.  스웨거 테스트 시 평소 하던 대로 토큰 넣어서 테스트 해주세요")
+    @Operation(summary = "자동 로그인 API ✔️🔑", description = "자동 로그인 API 입니다. 이제 FCM 토큰도 주셔야 합니다!")
     @Parameters({
             @Parameter(name = "user", hidden = true)
     })
@@ -67,7 +69,7 @@ public class RootController {
 
     })
     @GetMapping("/")
-    public ResponseDto<RootApiResponseDto.AutoLoginResponseDto> AutoLogin(@RequestHeader(value = "Authorization", required = false) String authorizationHeader, HttpServletRequest request){
+    public ResponseDto<RootApiResponseDto.AutoLoginResponseDto> AutoLogin(String authorizationHeader, HttpServletRequest request, @RequestBody @Valid RootRequestDto.AutoLoginDto fcm){
 
 
         Code result = null;

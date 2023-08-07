@@ -190,9 +190,13 @@ public class ArticleRestController {
             @Parameter(name = "articleId", description = "게시글 아이디")
     })
     @PostMapping("/articles/{articleId}/likes")
-    public ResponseDto<ArticleResponseDto.ArticleLikeDto> likeArticle(@PathVariable(name = "articleId") @ExistArticle Long articleId, @AuthUser User user){
+    public ResponseDto<ArticleResponseDto.ArticleLikeDto> likeArticle(@PathVariable(name = "articleId") @ExistArticle Long articleId, @AuthUser User user) throws IOException
+    {
         Article article = articleService.toggleArticleLike(articleId, user);
         // 알림 보내기
+
+        if(user.isLikedArticle(article))
+            articleService.alarmArticleLike(article,user);
         return ResponseDto.of(ArticleConverter.toArticleLikeDto(article,user));
     }
 
