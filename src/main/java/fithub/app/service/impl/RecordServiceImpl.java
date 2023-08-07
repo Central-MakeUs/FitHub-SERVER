@@ -9,9 +9,11 @@ import fithub.app.converter.HashTagConverter;
 import fithub.app.converter.RecordConverter;
 import fithub.app.domain.*;
 import fithub.app.domain.enums.ContentsType;
+import fithub.app.domain.enums.NotificationCategory;
 import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.domain.mapping.RecordLikes;
+import fithub.app.firebase.service.FireBaseService;
 import fithub.app.repository.*;
 import fithub.app.repository.HashTagRepositories.HashTagRepository;
 
@@ -19,6 +21,7 @@ import fithub.app.repository.HashTagRepositories.RecordHashTagRepository;
 import fithub.app.repository.RecordRepositories.RecordLikesRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.service.RecordService;
+import fithub.app.utils.FCMType;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -64,6 +67,10 @@ public class RecordServiceImpl implements RecordService {
 
     private final UserRepository userRepository;
 
+    private final FireBaseService fireBaseService;
+
+    private final NotificationRepository notificationRepository;
+
     @Value("${paging.size}")
     Integer size;
 
@@ -72,6 +79,10 @@ public class RecordServiceImpl implements RecordService {
 
     @Value("${recordExp.default}")
     Integer defaultExp;
+
+    String alarmTitle = "FITHUB";
+
+    String alarmBodyHead = "님이 나의 인증 글에 좋아요를 눌렀어요";
     @Override
     @Transactional(readOnly = false)
     public Record create(RecordRequestDto.CreateRecordDto request, User user, Integer categoryId) throws IOException
@@ -324,5 +335,24 @@ public class RecordServiceImpl implements RecordService {
                 .user(user)
                 .build()
         );
+    }
+
+    @Override
+    @Transactional
+    public void alarmRecordLike(Record record, User user) throws IOException
+    {
+        // 알림 보내기
+        for(FcmToken fcmToken : record.getUser().getFcmTokenList()){
+            fireBaseService.sendMessageToV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHead, FCMType.RECORD.toString(),record.getId().toString());
+        }
+        // 알림 테이블에 저장
+        Notification notification = notificationRepository.save(Notification.builder()
+                .notificationCategory(NotificationCategory.ARTICLE)
+                .record(record)
+                .user(record.getUser())
+                .notificationBody(user.getNickname().toString() + alarmBodyHead)
+                .build());
+
+        notification.setUser(record.getUser());
     }
 }

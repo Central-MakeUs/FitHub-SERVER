@@ -7,17 +7,21 @@ import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.HashTagConverter;
 import fithub.app.domain.*;
 import fithub.app.domain.enums.ContentsType;
+import fithub.app.domain.enums.NotificationCategory;
 import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ArticleLikes;
 import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.domain.mapping.SavedArticle;
+import fithub.app.firebase.service.FireBaseService;
 import fithub.app.repository.ArticleRepositories.*;
 import fithub.app.repository.ContentsReportRepository;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.HashTagRepositories.ArticleHashTagRepository;
 import fithub.app.repository.HashTagRepositories.HashTagRepository;
+import fithub.app.repository.NotificationRepository;
 import fithub.app.repository.UserRepository;
 import fithub.app.service.ArticleService;
+import fithub.app.utils.FCMType;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -61,6 +65,16 @@ public class ArticleServiceImpl implements ArticleService {
     Integer size;
 
     private final ExerciseCategoryRepository exerciseCategoryRepository;
+
+    private final FireBaseService fireBaseService;
+
+    private final NotificationRepository notificationRepository;
+
+    String alarmTitle = "FITHUB";
+
+    String alarmBodyHad = "님이 나의 [";
+
+    String alarmBodyMiddle = "]핏 사이트 글에 좋아요를 눌렀어요";
 
     @Override
     @Transactional(readOnly = false)
@@ -317,10 +331,21 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public void alarmArticleLike(Article article, User user) {
+    public void alarmArticleLike(Article article, User user) throws IOException
+    {
 
         // 알림 보내기
-
+        for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
+            fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle,FCMType.ARTICLE.toString(),article.getId().toString());
+        }
         // 알림 테이블에 저장
+        Notification notification = notificationRepository.save(Notification.builder()
+                .notificationCategory(NotificationCategory.ARTICLE)
+                .article(article)
+                .user(article.getUser())
+                .notificationBody(user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle)
+                .build());
+
+        notification.setUser(article.getUser());
     }
 }
