@@ -17,20 +17,10 @@ public class FcmMessageV1 {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class Message{
-        private Notification notification;
         private Data data;
         private String token;
     }
 
-
-    @Builder
-    @Getter
-    @AllArgsConstructor(access = AccessLevel.PROTECTED)
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class Notification{
-        private String title;
-        private String body;
-    }
 
     @Builder
     @Getter

@@ -27,6 +27,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 @Validated
 @RestController
@@ -72,8 +73,13 @@ public class CommentsRestController {
             @Parameter(name = "id", description = "게시글/운동 인증의 아이디")
     })
     @PostMapping("/{type}/{id}/comments")
-    public ResponseDto<CommentsResponseDto.CreateCommentDto> createCommentArticle(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id,@RequestBody CommentsRequestDto.CreateCommentDto request, @AuthUser User user){
+    public ResponseDto<CommentsResponseDto.CreateCommentDto> createCommentArticle(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id,@RequestBody CommentsRequestDto.CreateCommentDto request, @AuthUser User user) throws IOException
+    {
         Comments newComments = type.equals("articles") ? commentsService.createOnArticle(request,id, user) : commentsService.createOnRecord(request, id, user);
+        if(type.equals("articles"))
+            commentsService.commentAlarmArticle(newComments.getArticle(),newComments,user);
+        else
+            commentsService.commentAlarmRecord(newComments.getRecord(), newComments,user);
         return ResponseDto.of(CommentsConverter.toCreateCommentDto(newComments));
     }
 

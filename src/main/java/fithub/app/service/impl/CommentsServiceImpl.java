@@ -4,20 +4,21 @@ import fithub.app.base.Code;
 import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.base.exception.handler.CommentsException;
 import fithub.app.converter.CommentsConverter;
-import fithub.app.domain.Article;
-import fithub.app.domain.Comments;
-import fithub.app.domain.Record;
-import fithub.app.domain.User;
+import fithub.app.domain.*;
 import fithub.app.domain.enums.ContentsType;
+import fithub.app.domain.enums.NotificationCategory;
 import fithub.app.domain.mapping.CommentsLikes;
 import fithub.app.domain.mapping.ContentsReport;
+import fithub.app.firebase.service.FireBaseService;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.CommentsRepository.CommentsLikesRepository;
 import fithub.app.repository.CommentsRepository.CommentsRepository;
 import fithub.app.repository.ContentsReportRepository;
+import fithub.app.repository.NotificationRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.repository.UserRepository;
 import fithub.app.service.CommentsService;
+import fithub.app.utils.FCMType;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -28,6 +29,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -47,8 +49,23 @@ public class CommentsServiceImpl implements CommentsService {
 
     private final UserRepository userRepository;
 
+    private final FireBaseService fireBaseService;
+
+    private final NotificationRepository notificationRepository;
+
     @Value("${paging.comments.size}")
     Integer size;
+
+    String alarmTitle = "FITHUB";
+
+    String alarmBodyHad = "님이 나의 [";
+
+    String alarmBodyMiddle = "]핏 사이트 글에 [";
+
+    String alarmBodyFoot = "] 댓글을 남겼어요";
+
+    String alarmRecordBodyHead = "님이 나의 인증 글에 [";
+    String alarmRecordBodyMiddle = "] 댓글을 남겼어요";
 
     @Override
     public Page<Comments> findOnArticle(Long id, Integer pageIndex, User user) {
@@ -216,5 +233,41 @@ public class CommentsServiceImpl implements CommentsService {
                 .user(user)
                 .build()
         );
+    }
+
+    @Override
+    @Transactional
+    public void commentAlarmArticle(Article article,Comments comments, User user) throws IOException
+    {
+        // 알림 보내기
+        for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
+            fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot, FCMType.ARTICLE.toString(),article.getId().toString());
+        }
+        // 알림 테이블에 저장
+        Notification notification = notificationRepository.save(Notification.builder()
+                .notificationCategory(NotificationCategory.ARTICLE)
+                .article(article)
+                .user(article.getUser())
+                .build());
+
+        notification.setUser(article.getUser());
+    }
+
+    @Override
+    @Transactional
+    public void commentAlarmRecord(Record record, Comments comments,User user) throws IOException
+    {
+        // 알림 보내기
+        for(FcmToken fcmToken : record.getUser().getFcmTokenList()){
+            fireBaseService.sendMessageToV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmRecordBodyHead +  comments.getContents() + alarmRecordBodyMiddle, FCMType.RECORD.toString(),record.getId().toString());
+        }
+        // 알림 테이블에 저장
+        Notification notification = notificationRepository.save(Notification.builder()
+                .notificationCategory(NotificationCategory.ARTICLE)
+                .record(record)
+                .user(record.getUser())
+                .build());
+
+        notification.setUser(record.getUser());
     }
 }

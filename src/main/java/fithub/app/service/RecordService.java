@@ -35,4 +35,6 @@ public interface RecordService {
     void deleteRecordBulk(RecordRequestDto.deleteListRecordDto request, User user);
 
     ContentsReport reportRecord(Long recordId, User user);
+
+    void alarmRecordLike(Record record, User user) throws IOException;
 }
