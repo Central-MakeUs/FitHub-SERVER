@@ -334,6 +334,7 @@ public class ArticleServiceImpl implements ArticleService {
     public void alarmArticleLike(Article article, User user) throws IOException
     {
 
+
         // 알림 테이블에 저장
         Notification notification = notificationRepository.save(Notification.builder()
                 .notificationCategory(NotificationCategory.ARTICLE)
@@ -349,6 +350,5 @@ public class ArticleServiceImpl implements ArticleService {
         for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
             fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle,FCMType.ARTICLE.toString(),article.getId().toString(),notification.getId().toString());
         }
-
     }
 }

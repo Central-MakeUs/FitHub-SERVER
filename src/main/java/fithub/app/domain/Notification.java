@@ -44,6 +44,7 @@ public class Notification extends BaseEntity {
 
     private Boolean isConfirmed;
 
+
     public void setUser(User user){
         if(this.user != null){
             user.getNotificationList().remove(this);
