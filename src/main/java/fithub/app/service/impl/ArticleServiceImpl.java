@@ -334,18 +334,21 @@ public class ArticleServiceImpl implements ArticleService {
     public void alarmArticleLike(Article article, User user) throws IOException
     {
 
-        // 알림 보내기
-        for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
-            fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle,FCMType.ARTICLE.toString(),article.getId().toString());
-        }
         // 알림 테이블에 저장
         Notification notification = notificationRepository.save(Notification.builder()
                 .notificationCategory(NotificationCategory.ARTICLE)
                 .article(article)
                 .user(article.getUser())
                 .notificationBody(user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle)
+                .isConfirmed(false)
                 .build());
 
         notification.setUser(article.getUser());
+
+        // 알림 보내기
+        for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
+            fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle,FCMType.ARTICLE.toString(),article.getId().toString(),notification.getId().toString());
+        }
+
     }
 }

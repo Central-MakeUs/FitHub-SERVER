@@ -86,7 +86,11 @@ public enum Code {
     //report error
     ALREADY_REPORT(HttpStatus.BAD_REQUEST, 4061, "이미 신고 했습니다."),
     MY_CONTENTS(HttpStatus.BAD_REQUEST, 4062, "자신의 콘텐츠는 신고가 불가능합니다."),
-    SELF_REPORT(HttpStatus.BAD_REQUEST, 4063, "스스로를 신고할 수 없습니다.");
+    SELF_REPORT(HttpStatus.BAD_REQUEST, 4063, "스스로를 신고할 수 없습니다."),
+
+
+    // notification error
+    ALARM_NOT_FOUND(HttpStatus.BAD_REQUEST, 4071, "알림을 찾지 못했습니다.");
 
     private final HttpStatus httpStatus;
     private final Integer code;

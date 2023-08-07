@@ -239,37 +239,41 @@ public class CommentsServiceImpl implements CommentsService {
     @Transactional
     public void commentAlarmArticle(Article article,Comments comments, User user) throws IOException
     {
-        // 알림 보내기
-        for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
-            fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot, FCMType.ARTICLE.toString(),article.getId().toString());
-        }
         // 알림 테이블에 저장
         Notification notification = notificationRepository.save(Notification.builder()
                 .notificationCategory(NotificationCategory.ARTICLE)
                 .article(article)
                 .user(article.getUser())
                 .notificationBody(user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot)
+                .isConfirmed(false)
                 .build());
 
         notification.setUser(article.getUser());
+
+        // 알림 보내기
+        for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
+            fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot, FCMType.ARTICLE.toString(),article.getId().toString(),notification.getId().toString());
+        }
     }
 
     @Override
     @Transactional
     public void commentAlarmRecord(Record record, Comments comments,User user) throws IOException
     {
-        // 알림 보내기
-        for(FcmToken fcmToken : record.getUser().getFcmTokenList()){
-            fireBaseService.sendMessageToV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmRecordBodyHead +  comments.getContents() + alarmRecordBodyMiddle, FCMType.RECORD.toString(),record.getId().toString());
-        }
         // 알림 테이블에 저장
         Notification notification = notificationRepository.save(Notification.builder()
-                .notificationCategory(NotificationCategory.ARTICLE)
+                .notificationCategory(NotificationCategory.RECORD)
                 .record(record)
                 .user(record.getUser())
                 .notificationBody(user.getNickname().toString() + alarmRecordBodyHead +  comments.getContents() + alarmRecordBodyMiddle)
+                .isConfirmed(false)
                 .build());
 
         notification.setUser(record.getUser());
+
+        // 알림 보내기
+        for(FcmToken fcmToken : record.getUser().getFcmTokenList()){
+            fireBaseService.sendMessageToV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmRecordBodyHead +  comments.getContents() + alarmRecordBodyMiddle, FCMType.RECORD.toString(),record.getId().toString(),notification.getId().toString(),comments.getRecord().getImageUrl());
+        }
     }
 }
