@@ -1,5 +1,7 @@
 package fithub.app.service.impl;
 
+import fithub.app.base.Code;
+import fithub.app.base.exception.handler.NotificationException;
 import fithub.app.domain.Notification;
 import fithub.app.domain.User;
 import fithub.app.repository.NotificationRepository;
@@ -23,6 +25,13 @@ public class NotificationServerImpl implements NotificationService {
         if(pageIndex == null)
             pageIndex = 0;
 
-        return notificationRepository.findByUser(user, PageRequest.of(pageIndex, 12));
+        return notificationRepository.findByUserOrderByCreatedAtDesc(user, PageRequest.of(pageIndex, 12));
+    }
+
+    @Override
+    @Transactional
+    public void confirmNotification(Long alarmId, User user) {
+        Notification notification = notificationRepository.findById(alarmId).orElseThrow(() -> new NotificationException(Code.ARTICLE_NOT_FOUND));
+        notification.setIsConfirmed();
     }
 }

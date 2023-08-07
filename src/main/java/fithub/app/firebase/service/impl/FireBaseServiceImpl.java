@@ -31,7 +31,7 @@ public class FireBaseServiceImpl implements FireBaseService {
     Logger logger = LoggerFactory.getLogger(FireBaseServiceImpl.class);
 
     @Override
-    public void sendMessageTo(String targetToken, String title, String body, String targetView, String targetPK) throws IOException {
+    public void sendMessageTo(String targetToken, String title, String body, String targetView, String targetPK,String targetNotification) throws IOException {
         String message = makeMessage(targetToken, title, body, targetView, targetPK);
 
         OkHttpClient client = new OkHttpClient();
@@ -53,8 +53,8 @@ public class FireBaseServiceImpl implements FireBaseService {
     }
 
     @Override
-    public void sendMessageToV2(String targetToken, String title, String body, String targetView, String targetPK) throws IOException {
-        String message = makeMessageV2(targetToken, title, body, targetView, targetPK);
+    public void sendMessageToV2(String targetToken, String title, String body, String targetView, String targetPK,String targetNotification, String targetImage) throws IOException {
+        String message = makeMessageV2(targetToken, title, body, targetView, targetPK, targetImage);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(
@@ -94,7 +94,7 @@ public class FireBaseServiceImpl implements FireBaseService {
         return objectMapper.writeValueAsString(fcmMessage);
     }
 
-    private String makeMessageV2(String targeToken, String title, String body, String targetView, String targetPK) throws JsonParseException, JsonProcessingException{
+    private String makeMessageV2(String targeToken, String title, String body, String targetView, String targetPK, String targetImage) throws JsonParseException, JsonProcessingException{
         FcmMessageV1 fcmMessage = FcmMessageV1.builder()
                 .message(
                         FcmMessageV1.Message.builder()
@@ -103,7 +103,7 @@ public class FireBaseServiceImpl implements FireBaseService {
                                         .title(title)
                                         .body(body)
                                         .targetView(targetView)
-                                        .targetImage("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/fithub-record/b1df93fe-a86d-4e64-8d50-b4dc9c89c45b")
+                                        .targetImage(targetImage)
                                         .targetPK(targetPK).build()
                                 ).
                                 build()

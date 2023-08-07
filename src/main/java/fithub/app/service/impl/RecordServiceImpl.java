@@ -341,18 +341,20 @@ public class RecordServiceImpl implements RecordService {
     @Transactional
     public void alarmRecordLike(Record record, User user) throws IOException
     {
-        // 알림 보내기
-        for(FcmToken fcmToken : record.getUser().getFcmTokenList()){
-            fireBaseService.sendMessageToV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHead, FCMType.RECORD.toString(),record.getId().toString());
-        }
         // 알림 테이블에 저장
         Notification notification = notificationRepository.save(Notification.builder()
-                .notificationCategory(NotificationCategory.ARTICLE)
+                .notificationCategory(NotificationCategory.RECORD)
                 .record(record)
                 .user(record.getUser())
                 .notificationBody(user.getNickname().toString() + alarmBodyHead)
+                .isConfirmed(false)
                 .build());
 
         notification.setUser(record.getUser());
+
+        // 알림 보내기
+        for(FcmToken fcmToken : record.getUser().getFcmTokenList()){
+            fireBaseService.sendMessageToV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHead, FCMType.RECORD.toString(),record.getId().toString(),notification.getId().toString(), record.getImageUrl());
+        }
     }
 }

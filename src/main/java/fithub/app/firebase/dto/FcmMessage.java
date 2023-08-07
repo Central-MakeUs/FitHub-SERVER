@@ -32,5 +32,6 @@ public class FcmMessage {
         private String body;
         private String targetView;
         private String targetPK;
+        private String targetNotification;
     }
 }
