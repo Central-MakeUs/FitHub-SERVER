@@ -172,7 +172,7 @@ public class RecordRestController {
     @Parameters({
             @Parameter(name = "user", hidden = true),
     })
-    @DeleteMapping("/records")
+    @PatchMapping("/records")
     public ResponseDto<RecordResponseDto.recordDeleteDtoList> deleteListRecord(@RequestBody RecordRequestDto.deleteListRecordDto request, @AuthUser User user){
         recordService.deleteRecordBulk(request, user);
         return ResponseDto.of(RecordConverter.toRecordDeleteDtoList(request.getRecordIdList()));
