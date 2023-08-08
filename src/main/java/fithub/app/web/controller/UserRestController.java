@@ -446,4 +446,18 @@ public class UserRestController {
         User findUser = userService.findUser(user.getId());
         return ResponseDto.of(UserConverter.toCurrentMainExerciseDto(findUser));
     }
+
+    @Operation(summary = "나의 프로필 이미지 기본으로 변경 API ✔️ 🔑", description = "나의 프로필 이미지 기본으로 변경 API ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PatchMapping("/users/my-page/profile/default")
+    public ResponseDto<UserResponseDto.ChangeDefaultImageDto> changeDefault(@AuthUser User user){
+        userService.changeMyProfileDefault(user);
+        return ResponseDto.of(UserConverter.toChangeDefaultImageDto());
+    }
 }

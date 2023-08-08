@@ -229,4 +229,8 @@ public class User extends BaseEntity {
     public void setProfile(String newProfileUrl){
         this.profileUrl = newProfileUrl;
     }
+
+    public void setProfileDefault(){
+        this.profileUrl = "https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png";
+    }
 }

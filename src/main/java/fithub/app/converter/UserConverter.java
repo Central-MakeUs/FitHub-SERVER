@@ -330,4 +330,10 @@ public class UserConverter {
                 .currentExerciseCategory(user.getMainExercise().getExerciseCategory().getId())
                 .build();
     }
+
+    public static UserResponseDto.ChangeDefaultImageDto toChangeDefaultImageDto(){
+        return UserResponseDto.ChangeDefaultImageDto.builder()
+                .changedAt(LocalDateTime.now())
+                .build();
+    }
 }

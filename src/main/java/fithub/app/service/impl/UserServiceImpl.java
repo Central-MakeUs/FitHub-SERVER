@@ -321,6 +321,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void changeMyProfileDefault(User user) {
+        User findUser = userRepository.findById(user.getId()).get();
+        findUser.setProfileDefault();
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));

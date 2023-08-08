@@ -55,4 +55,6 @@ public interface UserService {
     Page<Article> findSavedArticle(Integer categoryId, Integer pageIndex, User user);
 
     String changeMyProfile(User user,UserRequestDto.ChangeMyProfileDto request) throws IOException;
+
+    void changeMyProfileDefault(User user);
 }

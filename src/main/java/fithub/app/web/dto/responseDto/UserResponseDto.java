@@ -154,4 +154,12 @@ public class UserResponseDto {
     public static class CurrentMainExerciseDto{
         Integer currentExerciseCategory;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ChangeDefaultImageDto{
+        LocalDateTime changedAt;
+    }
 }
