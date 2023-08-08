@@ -253,7 +253,7 @@ public class ArticleServiceImpl implements ArticleService {
         if(pageIndex == null)
             pageIndex = 0;
 
-        findArticle = articleRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,user,PageRequest.of(pageIndex, size));
+        findArticle = articleRepository.findAllByExerciseCategoryOrderByCreatedAtDesc(exerciseCategory,user,user,PageRequest.of(pageIndex, size));
         return findArticle;
     }
 
@@ -263,7 +263,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         if(pageIndex == null)
             pageIndex = 0;
-        findArticle = articleRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(pageIndex, size), user);
+        findArticle = articleRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(pageIndex, size), user, user);
         return findArticle;
     }
 
@@ -277,7 +277,7 @@ public class ArticleServiceImpl implements ArticleService {
         if(pageIndex == null)
             pageIndex = 0;
 
-        findArticle = articleRepository.findAllByExerciseCategoryOrderByLikesDescCreatedAtDesc(exerciseCategory,user,PageRequest.of(pageIndex, size));
+        findArticle = articleRepository.findAllByExerciseCategoryOrderByLikesDescCreatedAtDesc(exerciseCategory,user,user,PageRequest.of(pageIndex, size));
         return findArticle;
     }
 
@@ -287,7 +287,7 @@ public class ArticleServiceImpl implements ArticleService {
 
         if(pageIndex == null)
             pageIndex = 0;
-        findArticle = articleRepository.findAllByOrderByLikesDescCreatedAtDesc(PageRequest.of(pageIndex, size), user);
+        findArticle = articleRepository.findAllByOrderByLikesDescCreatedAtDesc(PageRequest.of(pageIndex, size), user, user);
         return findArticle;
     }
 

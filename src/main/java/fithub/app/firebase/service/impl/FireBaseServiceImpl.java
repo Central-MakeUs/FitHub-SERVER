@@ -32,7 +32,7 @@ public class FireBaseServiceImpl implements FireBaseService {
 
     @Override
     public void sendMessageTo(String targetToken, String title, String body, String targetView, String targetPK,String targetNotification) throws IOException {
-        String message = makeMessage(targetToken, title, body, targetView, targetPK);
+        String message = makeMessage(targetToken, title, body, targetView, targetPK, targetNotification);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(
@@ -54,7 +54,7 @@ public class FireBaseServiceImpl implements FireBaseService {
 
     @Override
     public void sendMessageToV2(String targetToken, String title, String body, String targetView, String targetPK,String targetNotification, String targetImage) throws IOException {
-        String message = makeMessageV2(targetToken, title, body, targetView, targetPK, targetImage);
+        String message = makeMessageV2(targetToken, title, body, targetView, targetPK, targetImage, targetNotification);
 
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(
@@ -77,7 +77,7 @@ public class FireBaseServiceImpl implements FireBaseService {
 
 
 
-    private String makeMessage(String targeToken, String title, String body, String targetView, String targetPK) throws JsonParseException, JsonProcessingException{
+    private String makeMessage(String targeToken, String title, String body, String targetView, String targetPK,String targetNotification) throws JsonParseException, JsonProcessingException{
         FcmMessage fcmMessage = FcmMessage.builder()
                 .message(
                         FcmMessage.Message.builder()
@@ -86,6 +86,7 @@ public class FireBaseServiceImpl implements FireBaseService {
                                         .title(title)
                                         .body(body)
                                         .targetView(targetView)
+                                        .targetNotification(targetNotification)
                                         .targetPK(targetPK).build()
                                 ).
                                 build()
@@ -94,7 +95,7 @@ public class FireBaseServiceImpl implements FireBaseService {
         return objectMapper.writeValueAsString(fcmMessage);
     }
 
-    private String makeMessageV2(String targeToken, String title, String body, String targetView, String targetPK, String targetImage) throws JsonParseException, JsonProcessingException{
+    private String makeMessageV2(String targeToken, String title, String body, String targetView, String targetPK, String targetImage,String targetNotification) throws JsonParseException, JsonProcessingException{
         FcmMessageV1 fcmMessage = FcmMessageV1.builder()
                 .message(
                         FcmMessageV1.Message.builder()
@@ -104,6 +105,7 @@ public class FireBaseServiceImpl implements FireBaseService {
                                         .body(body)
                                         .targetView(targetView)
                                         .targetImage(targetImage)
+                                        .targetNotification(targetNotification)
                                         .targetPK(targetPK).build()
                                 ).
                                 build()

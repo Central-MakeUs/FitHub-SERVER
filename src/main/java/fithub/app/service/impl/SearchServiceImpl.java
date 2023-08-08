@@ -48,7 +48,7 @@ public class SearchServiceImpl implements SearchService {
     Integer size;
 
     @Override
-    public Page<Article> searchArticleLikes(String tag, Integer pageIndex) {
+    public Page<Article> searchArticleLikes(String tag, Integer pageIndex, User user) {
         Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Article> searchResult = null;
 
@@ -56,7 +56,7 @@ public class SearchServiceImpl implements SearchService {
         if(byName.isEmpty())
             return searchResult;
         else{
-            List<ArticleHashTag> allByHashTag = articleHashTagRepository.findAllByHashTag(byName.get());
+            List<ArticleHashTag> allByHashTag = articleHashTagRepository.findAllByHashTag(byName.get(), user, user);
             List<Long> articleIds = allByHashTag.stream()
                     .map(articleHashTag -> articleHashTag.getArticle().getId())
                     .collect(Collectors.toList());
@@ -66,7 +66,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Page<Record> searchRecordCreatedAt(String tag, Integer pageIndex) {
+    public Page<Record> searchRecordCreatedAt(String tag, Integer pageIndex, User user) {
         Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Record> searchResult = null;
 
@@ -74,7 +74,7 @@ public class SearchServiceImpl implements SearchService {
         if(byName.isEmpty())
             return searchResult;
         else{
-            List<RecordHashTag> allByHashTag = recordHashTagRepository.findAllByHashTag(byName.get());
+            List<RecordHashTag> allByHashTag = recordHashTagRepository.findAllByHashTag(byName.get(), user, user);
             List<Long> recordIds = allByHashTag.stream()
                     .map(articleHashTag -> articleHashTag.getRecord().getId())
                     .collect(Collectors.toList());
@@ -84,7 +84,7 @@ public class SearchServiceImpl implements SearchService {
         return searchResult;
     }
     @Override
-    public Page<Article> searchArticleCreatedAt(String tag, Integer pageIndex) {
+    public Page<Article> searchArticleCreatedAt(String tag, Integer pageIndex,User user) {
         Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Article> searchResult = null;
 
@@ -92,7 +92,7 @@ public class SearchServiceImpl implements SearchService {
         if(byName.isEmpty())
             return searchResult;
         else{
-            List<ArticleHashTag> allByHashTag = articleHashTagRepository.findAllByHashTag(byName.get());
+            List<ArticleHashTag> allByHashTag = articleHashTagRepository.findAllByHashTag(byName.get(), user, user);
             List<Long> articleIds = allByHashTag.stream()
                     .map(articleHashTag -> articleHashTag.getArticle().getId())
                     .collect(Collectors.toList());
@@ -102,7 +102,7 @@ public class SearchServiceImpl implements SearchService {
     }
 
     @Override
-    public Page<Record> searchRecordLikes(String tag, Integer pageIndex) {
+    public Page<Record> searchRecordLikes(String tag, Integer pageIndex, User user) {
         Optional<HashTag> byName = hashTagRepository.findByName(tag);
         Page<Record> searchResult = null;
 
@@ -110,7 +110,7 @@ public class SearchServiceImpl implements SearchService {
         if(byName.isEmpty())
             return searchResult;
         else{
-            List<RecordHashTag> allByHashTag = recordHashTagRepository.findAllByHashTag(byName.get());
+            List<RecordHashTag> allByHashTag = recordHashTagRepository.findAllByHashTag(byName.get(),user, user);
             List<Long> recordIds = allByHashTag.stream()
                     .map(recordHashTag -> recordHashTag.getRecord().getId())
                     .collect(Collectors.toList());
@@ -127,12 +127,12 @@ public class SearchServiceImpl implements SearchService {
         if(byName.isEmpty())
             throw new SearchException(Code.SEARCH_NO_DATA);
         else{
-            List<RecordHashTag> recordHashTagList = recordHashTagRepository.findAllByHashTag(byName.get());
+            List<RecordHashTag> recordHashTagList = recordHashTagRepository.findAllByHashTag(byName.get(), user, user);
             List<Long> recordIds = recordHashTagList.stream()
                     .map(recordHashTag -> recordHashTag.getRecord().getId())
                     .collect(Collectors.toList());
 
-            List<ArticleHashTag> articleHashTagList = articleHashTagRepository.findAllByHashTag(byName.get());
+            List<ArticleHashTag> articleHashTagList = articleHashTagRepository.findAllByHashTag(byName.get(), user, user);
             List<Long> articleIds = articleHashTagList.stream()
                     .map(recordHashTag -> recordHashTag.getArticle().getId())
                     .collect(Collectors.toList());
