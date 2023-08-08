@@ -342,4 +342,12 @@ public class UserConverter {
                 .isRemain(flag)
                 .build();
     }
+
+    public static UserResponseDto.ShowPersonalDataDto toShowPersonalDataDto(User user){
+        return UserResponseDto.ShowPersonalDataDto.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .phoneNum(user.getPhoneNum())
+                .build();
+    }
 }

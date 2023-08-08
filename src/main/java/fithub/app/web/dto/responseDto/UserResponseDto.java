@@ -170,4 +170,14 @@ public class UserResponseDto {
     public static class AlarmRemainDto{
         Boolean isRemain;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ShowPersonalDataDto{
+        String name;
+        String email;
+        String phoneNum;
+    }
 }
