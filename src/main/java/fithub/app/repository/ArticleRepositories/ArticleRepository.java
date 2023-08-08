@@ -48,4 +48,13 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     List<Article> findByIdIn(List<Long> articleList);
     void deleteAllByIdInBatch(Iterable<Long> artilceIdList);
+
+    @Query("select count(al) from ArticleLikes al where al.article = :article and al.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and al.user not in (select ur.reporter from UserReport ur where ur.user = :target)")
+    Long countLikes(@Param("article") Article article, @Param("reporter") User reporter, @Param("target") User target);
+
+    @Query("select count(c) from Comments c where c.article = :article and c.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and c.user not in (select ur.reporter from UserReport ur where ur.user = :target)")
+    Long countComments(@Param("article") Article article, @Param("reporter") User reporter, @Param("target") User target);
+
+    @Query("select count (sa) from SavedArticle sa where sa.article = :article and sa.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and sa.user not in (select ur.reporter from UserReport ur where ur.user = :target)")
+    Long countScraps(@Param("article") Article article, @Param("reporter") User reporter, @Param("target") User target);
 }
