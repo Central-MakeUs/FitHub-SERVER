@@ -60,6 +60,8 @@ public class UserServiceImpl implements UserService {
     private final UserExerciseRepository userExerciseRepository;
 
     private final UserReportRepository userReportRepository;
+
+    private final NotificationRepository notificationRepository;
     private final AmazonS3Manager s3Manager;
 
     @Value("${paging.size}")
@@ -89,6 +91,8 @@ public class UserServiceImpl implements UserService {
                             .isSocial(true)
                             .socialId(socialId)
                             .socialType(socialType)
+                            .profileUrl("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png")
+                            .isDefaultProfile(true)
                             .build()
             );
 
@@ -319,6 +323,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void changeMyProfileDefault(User user) {
+        User findUser = userRepository.findById(user.getId()).get();
+        findUser.setProfileDefault();
+    }
+
+    @Override
+    public Long checkRemainAlarm(User user) {
+        Long remainAlarm = notificationRepository.findRemainAlarm(user);
+        return remainAlarm;
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
@@ -344,6 +361,8 @@ public class UserServiceImpl implements UserService {
                             .isSocial(true)
                             .socialId(socialId)
                             .socialType(socialType)
+                            .profileUrl("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png")
+                            .isDefaultProfile(true)
                             .build()
             );
 
