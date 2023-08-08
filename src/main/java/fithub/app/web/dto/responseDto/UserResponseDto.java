@@ -162,4 +162,12 @@ public class UserResponseDto {
     public static class ChangeDefaultImageDto{
         LocalDateTime changedAt;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AlarmRemainDto{
+        Boolean isRemain;
+    }
 }

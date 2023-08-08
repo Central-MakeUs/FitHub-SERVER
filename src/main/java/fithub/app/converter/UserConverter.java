@@ -336,4 +336,10 @@ public class UserConverter {
                 .changedAt(LocalDateTime.now())
                 .build();
     }
+
+    public static UserResponseDto.AlarmRemainDto toAlarmRemainDto(Boolean flag){
+        return UserResponseDto.AlarmRemainDto.builder()
+                .isRemain(flag)
+                .build();
+    }
 }

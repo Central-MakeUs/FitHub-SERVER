@@ -60,6 +60,8 @@ public class UserServiceImpl implements UserService {
     private final UserExerciseRepository userExerciseRepository;
 
     private final UserReportRepository userReportRepository;
+
+    private final NotificationRepository notificationRepository;
     private final AmazonS3Manager s3Manager;
 
     @Value("${paging.size}")
@@ -325,6 +327,12 @@ public class UserServiceImpl implements UserService {
     public void changeMyProfileDefault(User user) {
         User findUser = userRepository.findById(user.getId()).get();
         findUser.setProfileDefault();
+    }
+
+    @Override
+    public Long checkRemainAlarm(User user) {
+        Long remainAlarm = notificationRepository.findRemainAlarm(user);
+        return remainAlarm;
     }
 
     @Override

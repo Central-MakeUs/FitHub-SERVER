@@ -57,4 +57,6 @@ public interface UserService {
     String changeMyProfile(User user,UserRequestDto.ChangeMyProfileDto request) throws IOException;
 
     void changeMyProfileDefault(User user);
+
+    Long checkRemainAlarm(User user);
 }
