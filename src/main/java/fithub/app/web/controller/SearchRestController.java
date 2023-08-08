@@ -70,7 +70,7 @@ public class SearchRestController {
     public ResponseDto<ArticleResponseDto.ArticleDtoList> articleSearchCreatedAt(@RequestParam(name = "tag") String tag,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
         logger.info("검색 태그 : {}",tag);
         logger.info("last의 값 : {}",pageIndex);
-        Page<Article> articles = searchService.searchArticleCreatedAt(tag, pageIndex);
+        Page<Article> articles = searchService.searchArticleCreatedAt(tag, pageIndex,user);
         logger.info("검색 결과의 갯수 : {}", articles.toList().size());
         if(articles == null || articles.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
@@ -93,7 +93,7 @@ public class SearchRestController {
     public ResponseDto<ArticleResponseDto.ArticleDtoList> articleSearchLikes(@RequestParam(name = "tag") String tag,@RequestParam(name = "pageIndex", required = false) Integer pageIndex, @AuthUser User user){
         logger.info("검색 태그 : {}",tag);
         logger.info("last의 값 : {}",pageIndex);
-        Page<Article> articles = searchService.searchArticleLikes(tag, pageIndex);
+        Page<Article> articles = searchService.searchArticleLikes(tag, pageIndex,user);
         logger.info("검색 결과의 갯수 : {}", articles.toList().size());
         if(articles == null || articles.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
@@ -116,7 +116,7 @@ public class SearchRestController {
     public ResponseDto<RecordResponseDto.recordDtoList> recordSearchCreatedAt(@RequestParam(name = "tag") String tag,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
         logger.info("검색 태그 : {}",tag);
         logger.info("last의 값 : {}",pageIndex);
-        Page<Record> records = searchService.searchRecordCreatedAt(tag, pageIndex);
+        Page<Record> records = searchService.searchRecordCreatedAt(tag, pageIndex,user);
         logger.info("검색 결과의 갯수 : {}", records.toList().size());
         if(records == null || records.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
@@ -139,7 +139,7 @@ public class SearchRestController {
     public ResponseDto<RecordResponseDto.recordDtoList> recordSearchLikes(@RequestParam(name = "tag") String tag,@RequestParam(name = "pageIndex", required = false) Integer pageIndex, @AuthUser User user){
         logger.info("검색 태그 : {}",tag);
         logger.info("last의 값 : {}",pageIndex);
-        Page<Record> records = searchService.searchRecordLikes(tag, pageIndex);
+        Page<Record> records = searchService.searchRecordLikes(tag, pageIndex,user);
         logger.info("검색 결과의 갯수 : {}", records.toList().size());
         if(records == null || records.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);

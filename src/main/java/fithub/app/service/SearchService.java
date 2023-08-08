@@ -8,10 +8,10 @@ import org.springframework.data.domain.Page;
 
 public interface SearchService {
 
-    Page<Article> searchArticleCreatedAt(String tag, Integer pageIndex);
-    Page<Record> searchRecordCreatedAt(String tag, Integer pageIndex);
-    Page<Article> searchArticleLikes(String tag, Integer pageIndex);
-    Page<Record> searchRecordLikes(String tag, Integer pageIndex);
+    Page<Article> searchArticleCreatedAt(String tag, Integer pageIndex, User user);
+    Page<Record> searchRecordCreatedAt(String tag, Integer pageIndex, User user);
+    Page<Article> searchArticleLikes(String tag, Integer pageIndex, User user);
+    Page<Record> searchRecordLikes(String tag, Integer pageIndex, User user);
 
     SearchPreViewResponseDto.SearchPreViewDto searchPreview(String tag, User user);
 }

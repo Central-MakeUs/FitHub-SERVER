@@ -232,7 +232,7 @@ public class UserServiceImpl implements UserService {
 
         myExercises.add(user.getMainExercise());
 
-        List<UserExercise> userExerciseList = userExerciseRepository.findAllByUser(user);
+        List<UserExercise> userExerciseList = userExerciseRepository.findUserExercise(user);
 
         for (int i = 0; i < userExerciseList.size(); i++){
             if (userExerciseList.get(i).getExerciseCategory().getName().equals(myExercises.get(0).getExerciseCategory().getName()))

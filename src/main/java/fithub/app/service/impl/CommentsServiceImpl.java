@@ -75,7 +75,7 @@ public class CommentsServiceImpl implements CommentsService {
 
         if(pageIndex == null)
             pageIndex = 0;
-        comments = commentsRepository.findByArticleOrderByCreatedAtDesc(article, user,PageRequest.of(pageIndex, size));
+        comments = commentsRepository.findByArticleOrderByCreatedAtDesc(article, user,user,PageRequest.of(pageIndex, size));
         return comments;
     }
 
@@ -87,7 +87,7 @@ public class CommentsServiceImpl implements CommentsService {
 
         if(pageIndex == null)
             pageIndex = 0;
-        comments = commentsRepository.findByRecordOrderByCreatedAtDesc(record, user,PageRequest.of(pageIndex, size));
+        comments = commentsRepository.findByRecordOrderByCreatedAtDesc(record, user,user,PageRequest.of(pageIndex, size));
         return comments;
     }
 
