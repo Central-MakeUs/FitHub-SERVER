@@ -21,6 +21,8 @@
 
         private final Job returnMonthlyRecord;
 
+        private final Job deleteWeeklyAlarm;
+
         // 매달 첫 날 0 0 0 1 * *
         @Scheduled(cron = "0 0 0 1 * *")
         public void monthlySetRecordCounts() throws JobExecutionException {
@@ -37,5 +39,14 @@
                     .addLong("timestamp", System.currentTimeMillis())
                     .toJobParameters();
             jobLauncher.run(setBestRecorder, jobParameters);
+        }
+
+        // 7일마다 수행
+        @Scheduled(cron = "40 57 0 * * ?")
+        public void deleteWeeklyAlarm() throws JobExecutionException{
+            JobParameters jobParameters = new JobParametersBuilder()
+                    .addLong("timestamp", System.currentTimeMillis())
+                    .toJobParameters();
+            jobLauncher.run(deleteWeeklyAlarm, jobParameters);
         }
     }
