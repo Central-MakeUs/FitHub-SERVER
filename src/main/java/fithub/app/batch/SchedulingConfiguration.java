@@ -42,7 +42,7 @@
         }
 
         // 7일마다 수행
-        @Scheduled(cron = "40 57 0 * * ?")
+        @Scheduled(cron = "20 15 20 * * ?")
         public void deleteWeeklyAlarm() throws JobExecutionException{
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("timestamp", System.currentTimeMillis())
