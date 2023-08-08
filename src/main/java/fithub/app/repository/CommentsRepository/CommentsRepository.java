@@ -19,12 +19,12 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
 
     Page<Comments> findByCreatedAtLessThanAndArticleOrderByCreatedAtDesc(LocalDateTime createdAt, Article article, Pageable pageable);
 
-    @Query("select c from Comments c where c.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and c.article = :article order by c.createdAt desc ")
-    Page<Comments> findByArticleOrderByCreatedAtDesc(@Param("article") Article article, @Param("reporter") User reporter,Pageable pageable);
+    @Query("select c from Comments c where c.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and c.user.id not in (select ur.reporter from UserReport ur where ur.user = :target) and c.article = :article order by c.createdAt desc ")
+    Page<Comments> findByArticleOrderByCreatedAtDesc(@Param("article") Article article, @Param("reporter") User reporter,@Param("target") User target,Pageable pageable);
 
     Page<Comments> findByCreatedAtLessThanAndRecordOrderByCreatedAtDesc(LocalDateTime createdAt, Record record, Pageable pageable);
 
-    @Query("select c from Comments c where c.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and c.record = :record order by c.createdAt desc ")
-    Page<Comments> findByRecordOrderByCreatedAtDesc(@Param("record") Record record, @Param("reporter") User reporter,Pageable pageable);
+    @Query("select c from Comments c where c.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and c.user.id not in (select ur.reporter from UserReport ur where ur.user = :target) and c.record = :record order by c.createdAt desc ")
+    Page<Comments> findByRecordOrderByCreatedAtDesc(@Param("record") Record record, @Param("reporter") User reporter,@Param("target") User target,Pageable pageable);
     Optional<Comments> findByIdAndIsRecord(Long id, Boolean isRecord);
 }
