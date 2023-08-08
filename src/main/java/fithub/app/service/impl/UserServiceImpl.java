@@ -18,6 +18,7 @@ import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -259,7 +260,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(()-> new UserException(Code.MEMBER_NOT_FOUND));
+        return userRepository.findById(userId).orElseThrow(() -> new UserException(Code.MEMBER_NOT_FOUND));
     }
 
     @Override
@@ -306,7 +307,7 @@ public class UserServiceImpl implements UserService {
         if(categoryId != 0)
             exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new UserException(Code.CATEGORY_ERROR));
 
-        return categoryId == 0 ? articleRepository.findAllSavedArticle(user, user,PageRequest.of(pageIndex, size)) : articleRepository.findAllSavedArticleCategory(user,user,exerciseCategory,PageRequest.of(pageIndex, size));
+        return categoryId == 0 ? articleRepository.findAllSavedArticle(user, user,user,PageRequest.of(pageIndex, size)) : articleRepository.findAllSavedArticleCategory(user,user,user,exerciseCategory,PageRequest.of(pageIndex, size));
     }
 
     @Override
@@ -333,6 +334,15 @@ public class UserServiceImpl implements UserService {
     public Long checkRemainAlarm(User user) {
         Long remainAlarm = notificationRepository.findRemainAlarm(user);
         return remainAlarm;
+    }
+
+    @Override
+    public User findUserNotBlocked(Long userId, User user) {
+        User findUser = userRepository.findById(userId).orElseThrow(() -> new UserException(Code.MEMBER_NOT_FOUND));
+        Long count = userReportRepository.checkReport(findUser, user);
+        if (count > 0)
+            throw new UserException(Code.BLOCKED_USER);
+        return findUser;
     }
 
     @Override

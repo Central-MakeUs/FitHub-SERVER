@@ -40,4 +40,10 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     Page<Record> findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(User user, ExerciseCategory exerciseCategory,Pageable pageable);
 
     List<Record> findByIdIn(List<Long> recordIdList);
+
+    @Query("select count(rl) from RecordLikes rl where rl.record = :record and rl.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and rl.user not in (select ur.reporter from UserReport ur where ur.user = :target)")
+    Long countLikes(@Param("record") Record record, @Param("reporter") User reporter, @Param("target") User target);
+
+    @Query("select count(c) from Comments c where c.record = :record and c.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and c.user not in (select ur.reporter from UserReport ur where ur.user = :target)")
+    Long countComments(@Param("record") Record record, @Param("reporter") User reporter, @Param("target") User target);
 }
