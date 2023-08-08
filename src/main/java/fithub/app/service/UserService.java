@@ -7,6 +7,9 @@ import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 import io.swagger.models.auth.In;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.io.IOException;
 import java.util.List;
