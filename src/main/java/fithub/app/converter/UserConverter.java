@@ -83,6 +83,8 @@ public class UserConverter {
                 .monthlyRecordNum(0L)
                 .totalRecordNum(0L)
                 .contiguousRecordNum(0L)
+                .profileUrl("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png")
+                .isDefaultProfile(true)
                 .build();
         newUser.setUserExerciseList(toUserExerciseList(newUser));
         return newUser;
@@ -153,6 +155,7 @@ public class UserConverter {
                 .totalRecordNum(0L)
                 .contiguousRecordNum(0L)
                 .profileUrl(request.getProfileImage() == null ? "https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png" : uploadProfileImage(request.getProfileImage()))
+                .isDefaultProfile(request.getProfileImage() == null)
                 .build();
 
         newUser.setUserExerciseList(toUserExerciseList(newUser));
@@ -203,8 +206,8 @@ public class UserConverter {
         Gender gender = Integer.valueOf(genderFlag) % 2 == 0 ? Gender.FEMALE : Gender.MALE;
 
         String profileUrl = request.getProfileImage() == null ? "https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png" : uploadProfileImage(request.getProfileImage());
-
-        User updatedUser = user.updateInfo(request, age, gender, profileUrl);
+        Boolean isDefaultProfile = request.getProfileImage() == null;
+        User updatedUser = user.updateInfo(request, age, gender, profileUrl, isDefaultProfile);
         updatedUser.setUserExerciseList(toUserExerciseList(updatedUser));
         return updatedUser;
     }
@@ -230,6 +233,7 @@ public class UserConverter {
                 .ProfileUrl(user.getProfileUrl())
                 .nickname(user.getNickname())
                 .mainExerciseInfo(UserExerciseConverter.toUserExerciseDto(user))
+                .isDefaultProfile(user.getIsDefaultProfile())
                 .build();
     }
 

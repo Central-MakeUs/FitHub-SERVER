@@ -89,6 +89,8 @@ public class UserServiceImpl implements UserService {
                             .isSocial(true)
                             .socialId(socialId)
                             .socialType(socialType)
+                            .profileUrl("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png")
+                            .isDefaultProfile(true)
                             .build()
             );
 
@@ -344,6 +346,8 @@ public class UserServiceImpl implements UserService {
                             .isSocial(true)
                             .socialId(socialId)
                             .socialType(socialType)
+                            .profileUrl("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png")
+                            .isDefaultProfile(true)
                             .build()
             );
 

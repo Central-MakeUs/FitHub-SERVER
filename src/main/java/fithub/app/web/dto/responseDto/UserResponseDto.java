@@ -85,6 +85,7 @@ public class UserResponseDto {
         Long ownerId;
         String ProfileUrl;
         String nickname;
+        Boolean isDefaultProfile;
         UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
     }
 
