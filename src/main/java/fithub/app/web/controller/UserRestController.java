@@ -385,6 +385,7 @@ public class UserRestController {
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4013", description = "BAD_REQUEST : 없는 유저입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4064", description = "FORBIDDEN : 조회가 할 수 없는 사용자 입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
@@ -393,7 +394,7 @@ public class UserRestController {
     })
     @GetMapping("/users/{userId}")
     public ResponseDto<UserResponseDto.OtherUserProfileDto> showProfile(@PathVariable(name = "userId") Long userId, @AuthUser User user){
-        User findUser = userService.findUser(userId);
+        User findUser = userService.findUserNotBlocked(userId,user);
         return ResponseDto.of(UserConverter.toOtherUserProfileDto(findUser));
     }
 

@@ -62,4 +62,6 @@ public interface UserService {
     void changeMyProfileDefault(User user);
 
     Long checkRemainAlarm(User user);
+
+    User findUserNotBlocked(Long userId, User user);
 }
