@@ -64,6 +64,8 @@ public class User extends BaseEntity {
     @Column(nullable = true)
     private Boolean marketingAgree;
 
+    private Boolean isDefaultProfile;
+
     @Column(columnDefinition = "BIGINT DEFAULT 0")
     private Long totalRecordNum;
 
@@ -138,13 +140,14 @@ public class User extends BaseEntity {
         return this;
     }
 
-    public User updateInfo(UserRequestDto.UserOAuthInfo request, Integer age, Gender gender, String profileUrl){
+    public User updateInfo(UserRequestDto.UserOAuthInfo request, Integer age, Gender gender, String profileUrl, Boolean isDefaultProfile){
         this.name = request.getName();
         this.age = age;
         this.marketingAgree = request.getMarketingAgree();
         this.nickname = request.getNickname();
         this.gender = gender;
         this.profileUrl = profileUrl;
+        this.isDefaultProfile = isDefaultProfile;
         return  this;
     }
 
@@ -225,5 +228,9 @@ public class User extends BaseEntity {
 
     public void setProfile(String newProfileUrl){
         this.profileUrl = newProfileUrl;
+    }
+
+    public void setProfileDefault(){
+        this.profileUrl = "https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png";
     }
 }

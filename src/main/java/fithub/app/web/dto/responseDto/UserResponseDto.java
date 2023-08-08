@@ -85,6 +85,7 @@ public class UserResponseDto {
         Long ownerId;
         String ProfileUrl;
         String nickname;
+        Boolean isDefaultProfile;
         UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
     }
 
@@ -152,5 +153,31 @@ public class UserResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class CurrentMainExerciseDto{
         Integer currentExerciseCategory;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ChangeDefaultImageDto{
+        LocalDateTime changedAt;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AlarmRemainDto{
+        Boolean isRemain;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ShowPersonalDataDto{
+        String name;
+        String email;
+        String phoneNum;
     }
 }
