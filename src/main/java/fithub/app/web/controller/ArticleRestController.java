@@ -173,7 +173,7 @@ public class ArticleRestController {
     @Parameters({
             @Parameter(name = "user", hidden = true),
     })
-    @DeleteMapping("/articles")
+    @PatchMapping ("/articles")
     public ResponseDto<ArticleResponseDto.ArticleDeleteDtoList> deleteListArticle(@RequestBody ArticleRequestDto.DeleteListArticleDto request, @AuthUser User user){
         articleService.deleteArticleBulk(request, user);
         return ResponseDto.of(ArticleConverter.toArticleDeleteDtoList(request.getArticleIdList()));

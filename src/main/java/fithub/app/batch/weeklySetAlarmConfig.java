@@ -57,7 +57,7 @@ public class weeklySetAlarmConfig {
     @Transactional
     public ItemReader<Notification> notificationItemReader(){
         log.info("Batch Reader ===>");
-        List<Notification> allTargetNotifications = notificationRepository.findAll();
+        List<Notification> allTargetNotifications = notificationRepository.findTargetNotification();
 
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < allTargetNotifications.size(); i++)

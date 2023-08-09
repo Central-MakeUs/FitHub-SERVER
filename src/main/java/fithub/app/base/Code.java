@@ -1,5 +1,6 @@
 package fithub.app.base;
 
+import com.google.api.Http;
 import fithub.app.base.exception.GeneralException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -87,6 +88,7 @@ public enum Code {
     ALREADY_REPORT(HttpStatus.BAD_REQUEST, 4061, "이미 신고 했습니다."),
     MY_CONTENTS(HttpStatus.BAD_REQUEST, 4062, "자신의 콘텐츠는 신고가 불가능합니다."),
     SELF_REPORT(HttpStatus.BAD_REQUEST, 4063, "스스로를 신고할 수 없습니다."),
+    BLOCKED_USER(HttpStatus.FORBIDDEN, 4064, "조회 할 수 없는 사용자 입니다."),
 
 
     // notification error
