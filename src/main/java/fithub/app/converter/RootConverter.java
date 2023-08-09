@@ -100,4 +100,8 @@ public class RootConverter {
                 .FithubLevelInfo(toFithubLevelInfoDto(gradeList, levelInfo))
                 .build();
     }
+
+    public static RootApiResponseDto.SaveFacilitiesDto toSaveFacilitiesDto(Integer result){
+        return RootApiResponseDto.SaveFacilitiesDto.builder().savedFacilities(result).build();
+    }
 }

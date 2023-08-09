@@ -90,9 +90,14 @@ public enum Code {
     SELF_REPORT(HttpStatus.BAD_REQUEST, 4063, "스스로를 신고할 수 없습니다."),
     BLOCKED_USER(HttpStatus.FORBIDDEN, 4064, "조회 할 수 없는 사용자 입니다."),
 
-
     // notification error
-    ALARM_NOT_FOUND(HttpStatus.BAD_REQUEST, 4071, "알림을 찾지 못했습니다.");
+    ALARM_NOT_FOUND(HttpStatus.BAD_REQUEST, 4071, "알림을 찾지 못했습니다."),
+
+
+    //feign error
+
+    FEIGN_CLIENT_ERROR_400(HttpStatus.BAD_REQUEST, 4081, "feign client에서 400 오류가 발생했습니다."),
+    FEIGN_CLIENT_ERROR_500(HttpStatus.INTERNAL_SERVER_ERROR, 5001,"feign client에서 500 오류가 발생했습니다.");
 
     private final HttpStatus httpStatus;
     private final Integer code;
