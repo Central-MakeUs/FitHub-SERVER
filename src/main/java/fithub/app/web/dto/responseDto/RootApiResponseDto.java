@@ -97,4 +97,12 @@ public class RootApiResponseDto {
         MyLevelDto myLevelInfo;
         FithubLevelInfoDto FithubLevelInfo;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class SaveFacilitiesDto{
+        private Integer savedFacilities;
+    }
 }
