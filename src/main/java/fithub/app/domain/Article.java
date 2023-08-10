@@ -77,6 +77,9 @@ public class Article extends BaseEntity {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<ArticleLikes> articleLikesList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Notification> notificationList = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;

@@ -1,10 +1,14 @@
 package fithub.app.converter;
 
 import fithub.app.domain.*;
+import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,6 +16,14 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RootConverter {
 
+
+    private final ExerciseCategoryRepository exerciseCategoryRepository;
+    private static ExerciseCategoryRepository staticExerciseCategoryRepository;
+
+    @PostConstruct
+    public void init() {
+        staticExerciseCategoryRepository = this.exerciseCategoryRepository;
+    }
 
     public static RootApiResponseDto.AutoLoginResponseDto toAutoLoginResponseDto(Long userId, String accessToken){
         return RootApiResponseDto.AutoLoginResponseDto.builder()
@@ -103,5 +115,37 @@ public class RootConverter {
 
     public static RootApiResponseDto.SaveFacilitiesDto toSaveFacilitiesDto(Integer result){
         return RootApiResponseDto.SaveFacilitiesDto.builder().savedFacilities(result).build();
+    }
+
+    public static RootApiResponseDto.FacilitiesInfoDto toFacilitiesInfoDto(Object[] facilities){
+
+        ExerciseCategory exerciseCategory = staticExerciseCategoryRepository.findById((Integer) facilities[7]).get();
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        DecimalFormat decimalFormat2 = new DecimalFormat("#");
+        Double distance = (Double) facilities[8];
+        String dist = distance >= 1000 ? decimalFormat.format(distance / 1000) + "km" : decimalFormat2.format(distance) + 'm';
+
+        return RootApiResponseDto.FacilitiesInfoDto.builder()
+                .name(((String) facilities[0]))
+                .address((String) facilities[1])
+                .roadAddress(((String) facilities[2]))
+                .imageUrl((String) facilities[3])
+                .phoneNumber((String) facilities[4])
+                .x((String) facilities[5])
+                .y((String) facilities[6])
+                .category(exerciseCategory.getName())
+                .dist(dist)
+                .build();
+    }
+
+    public static RootApiResponseDto.FacilitiesResponseDto toFacilitiesResponseDto(List<RootApiResponseDto.FacilitiesInfoDto> facilitiesList, String x, String y, Integer categoryId){
+
+        return RootApiResponseDto.FacilitiesResponseDto.builder()
+                .userX(x)
+                .userY(y)
+                .facilitiesList(facilitiesList)
+                .size(facilitiesList.size())
+                .build();
     }
 }
