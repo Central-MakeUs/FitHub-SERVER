@@ -5,17 +5,12 @@ import fithub.app.auth.provider.TokenProvider;
 import fithub.app.base.Code;
 import fithub.app.base.ResponseDto;
 import fithub.app.converter.ArticleConverter;
-import fithub.app.converter.RecordConverter;
 import fithub.app.converter.RootConverter;
-import fithub.app.domain.BestRecorder;
-import fithub.app.domain.Grade;
-import fithub.app.domain.LevelInfo;
-import fithub.app.domain.User;
+import fithub.app.domain.*;
 import fithub.app.service.HomeService;
 import fithub.app.service.KakaoLocalService;
 import fithub.app.service.RootService;
 import fithub.app.service.UserService;
-import fithub.app.web.dto.requestDto.RootRequestDto;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,7 +21,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +28,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
 
@@ -161,5 +154,22 @@ public class RootController {
     public ResponseDto<RootApiResponseDto.SaveFacilitiesDto> saveFacilities(@RequestParam(name = "keyword") String keyword, @PathVariable(name = "categoryId") Integer categoryId){
         Integer saved = kakaoLocalService.saveFacilities(keyword, categoryId);
         return ResponseDto.of(RootConverter.toSaveFacilitiesDto(saved));
+    }
+
+    @Operation(summary = "내 주변 3km 운동 시설 검색 API ✔️🔑- 지도에서 사용", description = "내 주변 3km 운동 시설 검색 API 입니다.")
+    @Parameters({
+            @Parameter(name = "categoryId", description = "카테고리 아이디, 0이면 전체"),
+            @Parameter(name = "x", description = "사용자 x"),
+            @Parameter(name = "y", description = "사용자 y"),
+            @Parameter(name = "keyword", description = "검색 키워드"),
+    })
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @GetMapping("/home/facilities/{categoryId}")
+    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "x") String x, @RequestParam(name = "y")String y, @RequestParam(name = "keyword") String keyword){
+        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilities(categoryId, x, y, keyword);
+        return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y,categoryId));
     }
 }
