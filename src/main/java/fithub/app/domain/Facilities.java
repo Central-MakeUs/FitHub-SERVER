@@ -11,15 +11,23 @@ import javax.persistence.*;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class Facilites extends BaseEntity {
+public class Facilities extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String address;
+    private String roadAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category")
     private ExerciseCategory exerciseCategory;
+
+    private String name;
+
+    private String phoneNum;
+    private String imageUrl;
+    private String y;
+    private String x;
 }

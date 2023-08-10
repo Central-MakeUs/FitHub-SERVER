@@ -12,6 +12,7 @@ import fithub.app.domain.Grade;
 import fithub.app.domain.LevelInfo;
 import fithub.app.domain.User;
 import fithub.app.service.HomeService;
+import fithub.app.service.KakaoLocalService;
 import fithub.app.service.RootService;
 import fithub.app.service.UserService;
 import fithub.app.web.dto.requestDto.RootRequestDto;
@@ -51,6 +52,8 @@ public class RootController {
     private final RootService rootService;
 
     private final TokenProvider tokenProvider;
+
+    private final KakaoLocalService kakaoLocalService;
 
     @GetMapping("/health")
     public String health() {
@@ -143,5 +146,20 @@ public class RootController {
         List<Grade> gradeList = rootService.findAllGrade();
         LevelInfo levelInfo = rootService.findLevelInfo();
         return ResponseDto.of(RootConverter.toLevelInfoDto(user,gradeList,levelInfo));
+    }
+
+    @Operation(summary = "디비에 운동시설 저장하기, 서버 개발자가 사용함", description = "운동 시설 디비 저장 용, 쓰지 마세여")
+    @Parameters({
+            @Parameter(name = "keyword", description = "카카오 로컬 키워드"),
+            @Parameter(name = "categoryId", description = "카테고리 아이디"),
+    })
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @PostMapping("/home/facilities/{categoryId}")
+    public ResponseDto<RootApiResponseDto.SaveFacilitiesDto> saveFacilities(@RequestParam(name = "keyword") String keyword, @PathVariable(name = "categoryId") Integer categoryId){
+        Integer saved = kakaoLocalService.saveFacilities(keyword, categoryId);
+        return ResponseDto.of(RootConverter.toSaveFacilitiesDto(saved));
     }
 }

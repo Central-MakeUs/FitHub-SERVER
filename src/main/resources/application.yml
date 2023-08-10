@@ -105,3 +105,18 @@ fcm:
 recordExp:
   default : 100
   combo: 20
+
+kakao:
+  localUrl : ${KAKAO_LOCAL_BASE_URL}
+  apiKey : ${KAKAO_API_KEY}
+  localApiKey : ${KAKAO_LOCAL_KEY}
+# 마포구청
+  centerX : 126.9019551411
+  centerY : 37.5662141901015
+# 강남구청
+#  centerX: 127.047377408384
+#  centerY: 37.51733192586
+# 마포구청
+  radius : 9500
+# 강남구청
+#  radius : 5000
