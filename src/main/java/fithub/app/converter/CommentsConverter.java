@@ -4,6 +4,7 @@ import fithub.app.domain.Comments;
 import fithub.app.domain.User;
 import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.repository.CommentsRepository.CommentsRepository;
+import fithub.app.utils.TimeConverter;
 import fithub.app.web.dto.requestDto.CommentsRequestDto;
 import fithub.app.web.dto.responseDto.CommentsResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,14 @@ public class CommentsConverter {
     private final CommentsRepository commentsRepository;
     private static CommentsRepository staticCommentsRepository;
 
+    private final TimeConverter timeConverter;
+
+    private static TimeConverter staticTimeConverter;
+
     @PostConstruct
     public void init() {
         staticCommentsRepository = this.commentsRepository;
+        staticTimeConverter = this.timeConverter;
     }
 
     public static Comments toCommentsArticle(CommentsRequestDto.CreateCommentDto request){
@@ -47,7 +53,7 @@ public class CommentsConverter {
                 .contents(comments.getContents())
                 .likes(comments.getLikes())
                 .isLiked(user.isLikedCommentsFind(comments))
-                .createdAt(comments.getCreatedAt())
+                .createdAt(staticTimeConverter.convertTime(comments.getCreatedAt()))
                 .build();
     }
 
