@@ -9,6 +9,7 @@ import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
+import fithub.app.utils.TimeConverter;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +45,10 @@ public class RecordConverter {
     private static AmazonS3Manager staticAmazonS3Manager;
 
     private static Logger staticLogger;
+
+    private final TimeConverter timeConverter;
+
+    private static TimeConverter staticTimeConverter;
 
     @PostConstruct
     public void init() {
@@ -123,7 +128,7 @@ public class RecordConverter {
                 .contents(record.getContents())
                 .pictureImage(record.getImageUrl())
                 .comments(staticRecordRepository.countComments(record,user,user))
-                .createdAt(record.getCreatedAt())
+                .createdAt(staticTimeConverter.convertTime(record.getCreatedAt()))
                 .Hashtags(HashTagConverter.toHashtagDtoListRecord(record.getRecordHashTagList()))
                 .likes(staticRecordRepository.countLikes(record,user,user))
                 .isLiked(isLiked)
@@ -136,7 +141,7 @@ public class RecordConverter {
                 .pictureUrl(record.getImageUrl())
                 .likes(staticRecordRepository.countLikes(record,user,user))
                 .isLiked(user.isLikedRecord(record))
-                .createdAt(record.getCreatedAt())
+                .createdAt(staticTimeConverter.convertTime(record.getCreatedAt()))
                 .build();
     }
 

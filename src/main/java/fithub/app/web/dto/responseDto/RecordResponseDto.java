@@ -22,7 +22,7 @@ public class RecordResponseDto {
         String contents;
         String pictureImage;
         Long comments;
-        LocalDateTime createdAt;
+        String createdAt;
         HashTagResponseDto.HashtagDtoList Hashtags;
         Long likes;
         Boolean isLiked;
@@ -40,7 +40,7 @@ public class RecordResponseDto {
         @Schema(description = "좋아요 갯수")
         Long likes;
         @Schema(description = "작성 시간")
-        LocalDateTime createdAt;
+        String createdAt;
 
         Boolean isLiked;
     }

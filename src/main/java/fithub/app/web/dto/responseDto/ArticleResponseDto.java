@@ -22,7 +22,7 @@ public class ArticleResponseDto {
         String title;
         String contents;
         PictureResponseDto.PictureDtoList articlePictureList;
-        LocalDateTime createdAt;
+        String createdAt;
         HashTagResponseDto.HashtagDtoList Hashtags;
         Long likes;
         Long comments;
@@ -46,7 +46,7 @@ public class ArticleResponseDto {
         Long likes;
         Long comments;
         Boolean isLiked;
-        LocalDateTime createdAt;
+        String createdAt;
     }
 
     @Builder
