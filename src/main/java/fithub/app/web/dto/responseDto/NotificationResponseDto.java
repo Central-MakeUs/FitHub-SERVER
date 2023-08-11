@@ -17,7 +17,7 @@ public class NotificationResponseDto {
         Long targetId;
         Long alarmId;
         Boolean isConfirmed;
-        LocalDateTime createdAt;
+        String createdAt;
     }
 
     @Builder
