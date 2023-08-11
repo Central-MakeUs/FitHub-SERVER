@@ -136,7 +136,7 @@ public class UserResponseDto {
     public static class OtherUserProfileDto{
         String profileUrl;
         String nickname;
-        UserExerciseResponseDto.UserExerciseDto mainExerciseInfo;
+        UserResponseDto.UserExerciseDto mainExerciseInfo;
     }
 
     @Builder
