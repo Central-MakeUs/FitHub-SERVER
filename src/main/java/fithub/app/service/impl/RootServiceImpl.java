@@ -48,11 +48,25 @@ public class RootServiceImpl implements RootService {
     public List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(Integer categoryId, String x, String y, String keyword) {
 
         ExerciseCategory exerciseCategory = null;
+        String queryKeyword = null;
+        List<Object[]> facilitiesList = null;
         if(categoryId != 0)
             exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new RecordException(Code.CATEGORY_ERROR));
-        String queryKeyword = "%" + keyword + "%";
+        if(keyword != null)
+            queryKeyword = "%" + keyword + "%";
 
-        List<Object[]> facilitiesList = categoryId == 0 ? facilitiesRepository.findFacilitiesAll(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(x), Float.parseFloat(y), maxDistance, queryKeyword, queryKeyword, queryKeyword): facilitiesRepository.findFacilitiesCategory(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(x), Float.parseFloat(y), maxDistance, categoryId, queryKeyword, queryKeyword, queryKeyword);
+        if(categoryId == 0) {
+            if(keyword != null)
+                facilitiesList = facilitiesRepository.findFacilitiesAllKeyword(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(x), Float.parseFloat(y), maxDistance, queryKeyword, queryKeyword, queryKeyword);
+            else
+                facilitiesList = facilitiesRepository.findFacilitiesAll(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(x), Float.parseFloat(y), maxDistance);
+        }
+        else {
+            if(keyword != null)
+                facilitiesList = facilitiesRepository.findFacilitiesCategory(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(x), Float.parseFloat(y), maxDistance, categoryId, queryKeyword, queryKeyword, queryKeyword);
+            else
+                facilitiesList = facilitiesRepository.findFacilitiesCategoryAll(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(x), Float.parseFloat(y), maxDistance,categoryId);
+        }
 
         List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()
                 .map(facilities -> RootConverter.toFacilitiesInfoDto(facilities)).collect(Collectors.toList());

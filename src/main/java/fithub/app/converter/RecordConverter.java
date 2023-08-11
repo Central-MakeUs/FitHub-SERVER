@@ -56,6 +56,7 @@ public class RecordConverter {
         staticExerciseCategoryRepository = this.exerciseCategoryRepository;
         staticAmazonS3Manager = this.amazonS3Manager;
         staticLogger = this.logger;
+        staticTimeConverter = this.timeConverter;
     }
 
     public static Record toRecord(RecordRequestDto.CreateRecordDto request, User user, List<HashTag> hashTagList, Integer categoryId) throws IOException
