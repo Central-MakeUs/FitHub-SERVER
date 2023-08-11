@@ -7,6 +7,7 @@ import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.domain.mapping.RecordLikes;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import lombok.*;
+import org.aspectj.weaver.ast.Not;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -63,6 +64,9 @@ public class Record extends BaseEntity {
 
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
     private List<RecordLikes> commentsLikesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
+    private List<Notification> notificationList = new ArrayList<>();
 
     public Record setImage(String imageUrl){
         this.imageUrl = imageUrl;

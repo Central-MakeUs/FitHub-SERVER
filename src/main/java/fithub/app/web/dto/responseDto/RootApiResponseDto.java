@@ -1,5 +1,6 @@
 package fithub.app.web.dto.responseDto;
 
+import fithub.app.domain.ExerciseCategory;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -104,5 +105,32 @@ public class RootApiResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class SaveFacilitiesDto{
         private Integer savedFacilities;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class FacilitiesInfoDto {
+        private  String name;
+        private  String address;
+        private  String roadAddress;
+        private  String imageUrl;
+        private  String phoneNumber;
+        private  String category;
+        private  String x;
+        private  String y;
+        private  String dist;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class FacilitiesResponseDto{
+        List<FacilitiesInfoDto> facilitiesList;
+        private Integer size;
+        private String userX;
+        private String userY;
     }
 }
