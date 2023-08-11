@@ -314,7 +314,7 @@ public class UserConverter {
         return UserResponseDto.OtherUserProfileDto.builder()
                 .profileUrl(user.getProfileUrl())
                 .nickname(user.getNickname())
-                .mainExerciseInfo(UserExerciseConverter.toUserExerciseDto(user))
+                .mainExerciseInfo(UserConverter.toUserExerciseDto(user.getMainExercise()))
                 .build();
     }
 

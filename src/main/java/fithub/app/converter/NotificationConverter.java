@@ -3,11 +3,13 @@ package fithub.app.converter;
 import fithub.app.domain.Notification;
 import fithub.app.domain.enums.NotificationCategory;
 import fithub.app.utils.FCMType;
+import fithub.app.utils.TimeConverter;
 import fithub.app.web.dto.responseDto.NotificationResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,6 +17,14 @@ import java.util.stream.Collectors;
 @Component
 @RequiredArgsConstructor
 public class NotificationConverter {
+
+    private final TimeConverter timeConverter;
+    private static TimeConverter staticTimeConverter;
+
+    @PostConstruct
+    public void init() {
+        this.staticTimeConverter = this.timeConverter;
+    }
 
     public static NotificationResponseDto.NotificationDto toNotificationDto(Notification notification){
 
@@ -25,7 +35,7 @@ public class NotificationConverter {
                 .alarmBody(notification.getNotificationBody())
                 .isConfirmed(notification.getIsConfirmed())
                 .alarmId(notification.getId())
-                .createdAt(notification.getCreatedAt())
+                .createdAt(staticTimeConverter.convertTime(notification.getCreatedAt()))
                 .targetId(targetId)
                 .build();
 

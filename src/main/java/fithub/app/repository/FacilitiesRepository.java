@@ -15,6 +15,12 @@ public interface FacilitiesRepository extends JpaRepository<Facilities, Long> {
     @Query(value = "select name, address, road_address, image_url, phone_num, x, y, category, ROUND(ST_Distance_Sphere(POINT(facilities.x, facilities.y), Point(?,?))) as distance from facilities where ST_Distance_Sphere(Point(cast(facilities.x as float), cast(facilities.y as float )), Point(?, ?)) <= ? and category = ? and (name like ? or address like ? or road_address like ?) order by  distance;",nativeQuery = true)
     List<Object[]> findFacilitiesCategory(Float targetX, Float targetY, Float targetX2,Float targetY2,Integer maxDistance, Integer category, String keyword1, String keyword2,String keyword3);
 
+    @Query(value = "select name, address, road_address, image_url, phone_num, x, y, category, ROUND(ST_Distance_Sphere(POINT(facilities.x, facilities.y), Point(?,?))) as distance from facilities where ST_Distance_Sphere(Point(cast(facilities.x as float), cast(facilities.y as float )), Point(?, ?)) <= ? and category = ? order by  distance;",nativeQuery = true)
+    List<Object[]> findFacilitiesCategoryAll(Float targetX, Float targetY, Float targetX2,Float targetY2,Integer maxDistance, Integer category);
+
     @Query(value = "select name, address, road_address, image_url, phone_num, x, y, category, ROUND(ST_Distance_Sphere(POINT(facilities.x, facilities.y), Point(?,?))) as distance from facilities where ST_Distance_Sphere(Point(cast(facilities.x as float), cast(facilities.y as float )), Point(?, ?)) <= ? and (name like ? or address like ? or road_address like ?) order by  distance;",nativeQuery = true)
-    List<Object[]> findFacilitiesAll(Float targetX, Float targetY, Float targetX2,Float targetY2,Integer maxDistance, String keyword1, String keyword2,String keyword3);
+    List<Object[]> findFacilitiesAllKeyword(Float targetX, Float targetY, Float targetX2,Float targetY2,Integer maxDistance, String keyword1, String keyword2,String keyword3);
+
+    @Query(value = "select name, address, road_address, image_url, phone_num, x, y, category, ROUND(ST_Distance_Sphere(POINT(facilities.x, facilities.y), Point(?,?))) as distance from facilities where ST_Distance_Sphere(Point(cast(facilities.x as float), cast(facilities.y as float )), Point(?, ?)) <= ?  order by  distance;",nativeQuery = true)
+    List<Object[]> findFacilitiesAll(Float targetX, Float targetY, Float targetX2,Float targetY2,Integer maxDistance);
 }

@@ -8,6 +8,7 @@ import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.ExerciseCategoryRepository;
+import fithub.app.utils.TimeConverter;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -45,12 +46,17 @@ public class ArticleConverter {
 
     private static String pattern = "https://cmc-fithub\\.s3\\.ap-northeast-2\\.amazonaws\\.com(.*)";
 
+    private final TimeConverter timeConverter;
+
+    private static TimeConverter staticTimeConverter;
+
 
     @PostConstruct
     public void init() {
         staticArticleRepository = this.articleRepository;
         staticExerciseCategoryRepository = this.exerciseCategoryRepository;
         staticAmazonS3Manager = this.amazonS3Manager;
+        staticTimeConverter = this.timeConverter;
         staticLogger = this.logger;
     }
 
@@ -136,7 +142,7 @@ public class ArticleConverter {
                 .contents(article.getContents())
                 .comments(staticArticleRepository.countComments(article, user, user))
                 .articlePictureList(PictureConverter.toPictureDtoList(article.getArticleImageList()))
-                .createdAt(article.getCreatedAt())
+                .createdAt(staticTimeConverter.convertTime(article.getCreatedAt()))
                 .Hashtags(HashTagConverter.toHashtagDtoList(article.getArticleHashTagList()))
                 .likes(staticArticleRepository.countLikes(article,user,user))
                 .scraps(staticArticleRepository.countScraps(article,user,user))
@@ -157,7 +163,7 @@ public class ArticleConverter {
                 .likes(staticArticleRepository.countLikes(article, user,user))
                 .comments(staticArticleRepository.countComments(article,user,user))
                 .isLiked(user.isLikedArticle(article))
-                .createdAt(article.getCreatedAt())
+                .createdAt(staticTimeConverter.convertTime(article.getCreatedAt()))
                 .build();
     }
 

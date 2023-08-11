@@ -156,7 +156,7 @@ public class RootController {
         return ResponseDto.of(RootConverter.toSaveFacilitiesDto(saved));
     }
 
-    @Operation(summary = "내 주변 3km 운동 시설 검색 API ✔️🔑- 지도에서 사용", description = "내 주변 3km 운동 시설 검색 API 입니다.")
+    @Operation(summary = "원하는 지역 주변 3km 운동 시설 검색 API ✔️🔑- 지도에서 사용", description = "내 주변 3km 운동 시설 검색 API 입니다. 키워드 없으면 그냥 카테고리로 찾음 카테고리도 없으면 그냥 다 찾음")
     @Parameters({
             @Parameter(name = "categoryId", description = "카테고리 아이디, 0이면 전체"),
             @Parameter(name = "x", description = "사용자 x"),
@@ -168,7 +168,7 @@ public class RootController {
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @GetMapping("/home/facilities/{categoryId}")
-    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "x") String x, @RequestParam(name = "y")String y, @RequestParam(name = "keyword") String keyword){
+    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "x") String x, @RequestParam(name = "y")String y, @RequestParam(name = "keyword", required = false) String keyword){
         List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilities(categoryId, x, y, keyword);
         return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y,categoryId));
     }

@@ -17,7 +17,7 @@ public class CommentsResponseDto {
         String contents;
         Long likes;
         Boolean isLiked;
-        LocalDateTime createdAt;
+        String createdAt;
     }
 
     @Builder
