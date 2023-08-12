@@ -139,7 +139,7 @@ public class RootConverter {
                 .build();
     }
 
-    public static RootApiResponseDto.FacilitiesResponseDto toFacilitiesResponseDto(List<RootApiResponseDto.FacilitiesInfoDto> facilitiesList, String x, String y, Integer categoryId){
+    public static RootApiResponseDto.FacilitiesResponseDto toFacilitiesResponseDto(List<RootApiResponseDto.FacilitiesInfoDto> facilitiesList, String x, String y){
 
         return RootApiResponseDto.FacilitiesResponseDto.builder()
                 .userX(x)
@@ -148,6 +148,8 @@ public class RootConverter {
                 .size(facilitiesList.size())
                 .build();
     }
+
+
 
     public static RootApiResponseDto.SaveAsImageUrlDto toSaveAsImageUrlDto(String s){
         return RootApiResponseDto.SaveAsImageUrlDto.builder()

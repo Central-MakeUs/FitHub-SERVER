@@ -176,7 +176,7 @@ public class RootController {
     @GetMapping("/home/facilities/{categoryId}")
     public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "x") String x, @RequestParam(name = "y")String y, @RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY){
         List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.exploreFacilities(categoryId, x, y, userX, userY);
-        return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y,categoryId));
+        return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y));
     }
 
     @Operation(summary = "🚧 운동시설 사진 파일 to AWS S3 Url API, 서버 개발자만 사용함! 🚧", description = "이힣히힣힣 노가다 히힣힣")
@@ -189,6 +189,24 @@ public class RootController {
     {
         String s = rootService.saveAsImageUrl(request);
         return ResponseDto.of(RootConverter.toSaveAsImageUrlDto(s));
+    }
+
+    @Operation(summary = "지도에서 검색해서 조회하기 ✔️🔑- 지도에서 사용", description = "검색 키워드가 도로명 주소, 주소, 이름에 포함된 시설을 거리순으로 최대 15개 보여줍니다. 지도에서 보기를 눌러 좌표가 변경 될 경우를 대비 하여 중심 좌표를 선택으로 받습니다.")
+    @Parameters({
+            @Parameter(name = "x", description = "중심 x"),
+            @Parameter(name = "y", description = "중심 y"),
+            @Parameter(name = "userX", description = "사용자 X"),
+            @Parameter(name = "userY", description = "사용자 Y"),
+            @Parameter(name = "keyword", description = "검색어"),
+    })
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @GetMapping("/home/facilities")
+    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@RequestParam(name = "x",required = false) String x, @RequestParam(name = "y",required = false)String y, @RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY, @RequestParam(name = "keyword") String keyword){
+        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilities( x, y, userX, userY, keyword);
+        return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y));
     }
 //
 //    @GetMapping("/home/temp")
