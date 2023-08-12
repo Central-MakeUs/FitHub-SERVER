@@ -133,4 +133,12 @@ public class RootApiResponseDto {
         private String userX;
         private String userY;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class SaveAsImageUrlDto{
+        String SavedImageUrl;
+    }
 }

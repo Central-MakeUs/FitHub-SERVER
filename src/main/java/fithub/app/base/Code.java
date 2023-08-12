@@ -97,7 +97,9 @@ public enum Code {
     //feign error
 
     FEIGN_CLIENT_ERROR_400(HttpStatus.BAD_REQUEST, 4081, "feign client에서 400 오류가 발생했습니다."),
-    FEIGN_CLIENT_ERROR_500(HttpStatus.INTERNAL_SERVER_ERROR, 5001,"feign client에서 500 오류가 발생했습니다.");
+    FEIGN_CLIENT_ERROR_500(HttpStatus.INTERNAL_SERVER_ERROR, 5001,"feign client에서 500 오류가 발생했습니다."),
+
+    NOT_FOUND_FACILITY(HttpStatus.BAD_REQUEST, 4091, "운동시설 없어");
 
     private final HttpStatus httpStatus;
     private final Integer code;
