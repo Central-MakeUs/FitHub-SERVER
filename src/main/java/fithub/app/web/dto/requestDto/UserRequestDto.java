@@ -158,4 +158,9 @@ public class UserRequestDto {
     public static class ChangeMyProfileDto {
         private MultipartFile newProfile;
     }
+
+    @Getter @Setter
+    public static class FcmTokenDto{
+        private String fcmToken;
+    }
 }

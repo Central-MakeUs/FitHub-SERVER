@@ -349,4 +349,10 @@ public class UserConverter {
                 .phoneNum(user.getPhoneNum())
                 .build();
     }
+
+    public static UserResponseDto.FcmTokenUpdateDto toFcmTokenUpdateDto(){
+        return UserResponseDto.FcmTokenUpdateDto.builder()
+                .addedAt(LocalDateTime.now())
+                .build();
+    }
 }

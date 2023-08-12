@@ -359,6 +359,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void addFcmToken(User user, String token) {
+        FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
+                .user(user)
+                .token(token)
+                .build());
+        fcmToken.setUser(user);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
