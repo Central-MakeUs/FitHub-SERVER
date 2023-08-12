@@ -7,6 +7,11 @@ import fithub.app.base.exception.handler.RootException;
 import fithub.app.converter.ArticleImageConverter;
 import fithub.app.converter.RootConverter;
 import fithub.app.domain.*;
+import fithub.app.feign.kakaoLocal.KakaoLocalConverter;
+import fithub.app.feign.kakaoLocal.dto.KakaoLocalParam;
+import fithub.app.feign.kakaoLocal.dto.KakaoLocalResponseDto;
+import fithub.app.feign.kakaoLocal.dto.KakaoLocalResultDto;
+import fithub.app.feign.kakaoLocal.service.KakaoLocalFeign;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.FacilitiesRepository;
 import fithub.app.repository.GradeRepository;
@@ -15,11 +20,14 @@ import fithub.app.service.RootService;
 import fithub.app.web.dto.requestDto.RootRequestDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -38,6 +46,23 @@ public class RootServiceImpl implements RootService {
     private final AmazonS3Manager amazonS3Manager;
 
     private Integer maxDistance = 1500;
+
+    @Value("${kakao.localApiKey}")
+    private String kakaoLocalApiKey;
+
+    @Value("${kakao.centerX}")
+    private String centerX;
+
+    @Value("${kakao.centerY}")
+    private String centerY;
+
+    @Value("${kakao.radius}")
+    private Integer radius;
+    private String x;
+
+    private String y;
+
+    private final KakaoLocalFeign kakaoLocalFeign;
 
     @Override
     public List<Grade> findAllGrade() {
@@ -105,5 +130,58 @@ public class RootServiceImpl implements RootService {
                     }).collect(Collectors.toList());
 
         return "hi!";
+    }
+
+    @Override
+    @Transactional
+    public Integer test() {
+
+        List<Facilities> all = facilitiesRepository.findAll();
+
+        List<String> keywords = new ArrayList<>();
+
+        keywords.add("테니스");
+        keywords.add("크로스핏");
+        keywords.add("폴댄스");
+        keywords.add("수영");
+        keywords.add("스케이트");
+        keywords.add("클라이밍");
+
+        Integer totalUpdated = 0;
+
+        for(String keyword : keywords){
+
+            Integer page = 1;
+            KakaoLocalResultDto.FacilityInfoListDto facilityInfoListDto = null;
+            do {
+                KakaoLocalParam build = KakaoLocalParam.builder()
+                        .query(keyword)
+                        .page(page)
+                        .x(centerX)
+                        .y(centerY)
+                        .radius(radius)
+                        .build();
+
+                KakaoLocalResponseDto kakaoLocalFeignLocalInfo = kakaoLocalFeign.getLocalInfo(kakaoLocalApiKey, build);
+                facilityInfoListDto = KakaoLocalConverter.toFacilityInfoListDto(kakaoLocalFeignLocalInfo);
+
+                List<Facilities> facilitiesList = facilityInfoListDto.getFacilityInfoDtoList().stream()
+                        .map(facilityInfoDto -> {
+                                for(int i = 0; i < all.size(); i++){
+                                    if(all.get(i).getName().equals(facilityInfoDto.getName())) {
+                                        all.get(i).setKakaoId(facilityInfoDto.getKakaoId());
+                                        return all.get(i);
+                                    }
+                                }
+                                return null;
+                                }
+                        ).filter(Objects::nonNull).collect(Collectors.toList());
+
+                totalUpdated += facilitiesList.size();
+                page++;
+            }while (!facilityInfoListDto.getIsEnd());
+        }
+
+        return totalUpdated;
     }
 }

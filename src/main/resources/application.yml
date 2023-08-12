@@ -87,6 +87,7 @@ cloud:
         fithub-article: fithub-article
         fithub-record : fithub-record
         fithub-profile : profile
+        fithub-facilities : facilities
     region:
       static: ap-northeast-2
     stack:
@@ -114,12 +115,12 @@ kakao:
   apiKey : ${KAKAO_API_KEY}
   localApiKey : ${KAKAO_LOCAL_KEY}
 # 마포구청
-  centerX : 126.9019551411
-  centerY : 37.5662141901015
+#  centerX : 126.9019551411
+#  centerY : 37.5662141901015
 # 강남구청
-#  centerX: 127.047377408384
-#  centerY: 37.51733192586
+  centerX: 127.047377408384
+  centerY: 37.51733192586
 # 마포구청
-  radius : 9500
+#  radius : 9500
 # 강남구청
-#  radius : 5000
+  radius : 5000

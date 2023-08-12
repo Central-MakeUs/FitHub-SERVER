@@ -18,4 +18,6 @@ public interface RootService {
     List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(Integer categoryId, String x, String y, String keyword,String userX ,String userY);
 
     String saveAsImageUrl(RootRequestDto.SaveImageAsUrlDto request) throws IOException;
+
+    Integer test();
 }
