@@ -12,5 +12,5 @@ public interface RootService {
 
     LevelInfo findLevelInfo();
 
-    List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(Integer categoryId, String x, String y, String keyword);
+    List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(Integer categoryId, String x, String y, String keyword,String userX ,String userY);
 }
