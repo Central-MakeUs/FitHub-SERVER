@@ -15,6 +15,7 @@ public class KakaoLocalResultDto {
         private String address;
         private String roadAddress;
         private String phoneNum;
+        private String kakaoId;
         private String Y;
         private String X;
     }

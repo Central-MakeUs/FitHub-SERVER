@@ -17,6 +17,7 @@ public class KakaoLocalConverter {
                 .roadAddress(kakaoLocalDocumentsDto.getRoad_address_name())
                 .phoneNum(kakaoLocalDocumentsDto.getPhone())
                 .X(kakaoLocalDocumentsDto.getX())
+                .kakaoId(kakaoLocalDocumentsDto.getId())
                 .Y(kakaoLocalDocumentsDto.getY())
                 .build();
     }

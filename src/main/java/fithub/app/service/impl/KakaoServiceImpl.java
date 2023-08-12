@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,19 +64,28 @@ public class KakaoServiceImpl implements KakaoLocalService {
             facilityInfoListDto = KakaoLocalConverter.toFacilityInfoListDto(kakaoLocalFeignLocalInfo);
 
             List<Facilities> facilitiesList = facilityInfoListDto.getFacilityInfoDtoList().stream()
-                    .map(facilityInfoDto ->
-                            facilitiesRepository.save(
+                    .map(facilityInfoDto -> {
+
+                        Optional<Facilities> byKakaoId = facilitiesRepository.findByKakaoId(facilityInfoDto.getKakaoId());
+
+                        if (byKakaoId.isEmpty())
+                            return facilitiesRepository.save(
                                     Facilities.builder()
                                             .phoneNum(facilityInfoDto.getPhoneNum())
                                             .roadAddress(facilityInfoDto.getRoadAddress())
                                             .address(facilityInfoDto.getAddress())
                                             .name(facilityInfoDto.getName())
+                                            .kakaoId(facilityInfoDto.getKakaoId())
                                             .x(facilityInfoDto.getX())
                                             .y(facilityInfoDto.getY())
                                             .exerciseCategory(exerciseCategory)
                                             .build()
-                            )
-                    ).collect(Collectors.toList());
+                            );
+                        else
+                            return null;
+                    }
+
+                    ).filter(Objects::nonNull).collect(Collectors.toList());
 
             totalSaved += facilitiesList.size();
             page++;

@@ -27,11 +27,18 @@ public class Facilities extends BaseEntity {
     private String name;
 
     private String phoneNum;
+
+    private String kakaoId;
     private String imageUrl;
     private String y;
     private String x;
 
     public void setImage(String image){
         this.imageUrl = image;
+    }
+
+    public Facilities setKakaoId(String kakaoId){
+        this.kakaoId = kakaoId;
+        return this;
     }
 }
