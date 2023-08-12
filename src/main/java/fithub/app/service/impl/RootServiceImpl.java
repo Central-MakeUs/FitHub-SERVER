@@ -45,7 +45,7 @@ public class RootServiceImpl implements RootService {
     }
 
     @Override
-    public List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(Integer categoryId, String x, String y, String keyword) {
+    public List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(Integer categoryId, String x, String y, String keyword, String userX, String userY) {
 
         ExerciseCategory exerciseCategory = null;
         String queryKeyword = null;
@@ -57,15 +57,15 @@ public class RootServiceImpl implements RootService {
 
         if(categoryId == 0) {
             if(keyword != null && !keyword.equals(""))
-                facilitiesList = facilitiesRepository.findFacilitiesAllKeyword(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(x), Float.parseFloat(y), maxDistance, queryKeyword, queryKeyword, queryKeyword);
+                facilitiesList = facilitiesRepository.findFacilitiesAllKeyword(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance, queryKeyword, queryKeyword, queryKeyword);
             else
-                facilitiesList = facilitiesRepository.findFacilitiesAll(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(x), Float.parseFloat(y), maxDistance);
+                facilitiesList = facilitiesRepository.findFacilitiesAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance);
         }
         else {
             if(keyword != null && !keyword.equals(""))
-                facilitiesList = facilitiesRepository.findFacilitiesCategory(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(x), Float.parseFloat(y), maxDistance, categoryId, queryKeyword, queryKeyword, queryKeyword);
+                facilitiesList = facilitiesRepository.findFacilitiesCategory(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance, categoryId, queryKeyword, queryKeyword, queryKeyword);
             else
-                facilitiesList = facilitiesRepository.findFacilitiesCategoryAll(Float.parseFloat(x), Float.parseFloat(y), Float.parseFloat(x), Float.parseFloat(y), maxDistance,categoryId);
+                facilitiesList = facilitiesRepository.findFacilitiesCategoryAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance,categoryId);
         }
 
         List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()
