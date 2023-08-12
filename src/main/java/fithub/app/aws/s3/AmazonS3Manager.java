@@ -47,15 +47,19 @@ public class AmazonS3Manager{
     }
 
     public String generateArticleKeyName(Uuid uuid, String originalFilename) {
-        return amazonConfig.getFithubArticle() + '/' + uuid.getUuid();
+        return amazonConfig.getFithubArticle() + '/' + uuid.getUuid() + '_' + originalFilename;
     }
 
     public String generateRecordKeyName(Uuid uuid, String originalFilename) {
-        return amazonConfig.getFithubRecord() + '/' + uuid.getUuid();
+        return amazonConfig.getFithubRecord() + '/' + uuid.getUuid() + '_' + originalFilename;
     }
 
     public String generateProfileName(Uuid uuid, String originalFilename){
-        return amazonConfig.getFithubProfile() + '/' + uuid.getUuid();
+        return amazonConfig.getFithubProfile() + '/' + uuid.getUuid() +'_' + originalFilename;
+    }
+
+    public String generateFacilitiesName(Uuid uuid, String orginalFilename){
+        return amazonConfig.getFacilities() + '/' + uuid.getUuid() + '_' + orginalFilename;
     }
 
     // 중복된 UUID가 있다면 중복이 없을때까지 재귀적으로 동작

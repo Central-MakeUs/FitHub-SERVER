@@ -25,5 +25,5 @@ public interface FacilitiesRepository extends JpaRepository<Facilities, Long> {
     @Query(value = "select name, address, road_address, image_url, phone_num, x, y, category, ROUND(ST_Distance_Sphere(POINT(facilities.x, facilities.y), Point(?,?))) as distance from facilities where ST_Distance_Sphere(Point(cast(facilities.x as float), cast(facilities.y as float )), Point(?, ?)) <= ?  order by  distance;",nativeQuery = true)
     List<Object[]> findFacilitiesAll(Float targetX, Float targetY, Float targetX2,Float targetY2,Integer maxDistance);
 
-    Optional<Facilities> findByName(String name);
+    Optional<Facilities> findByKakaoId(String kakaoId);
 }

@@ -190,4 +190,10 @@ public class RootController {
         String s = rootService.saveAsImageUrl(request);
         return ResponseDto.of(RootConverter.toSaveAsImageUrlDto(s));
     }
+//
+//    @GetMapping("/home/temp")
+//    public Integer temp(){
+//        Integer test = rootService.test();
+//        return test;
+//    }
 }
