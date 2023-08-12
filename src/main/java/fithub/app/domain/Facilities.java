@@ -30,4 +30,8 @@ public class Facilities extends BaseEntity {
     private String imageUrl;
     private String y;
     private String x;
+
+    public void setImage(String image){
+        this.imageUrl = image;
+    }
 }

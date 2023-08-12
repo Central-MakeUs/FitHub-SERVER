@@ -11,6 +11,7 @@ import fithub.app.service.HomeService;
 import fithub.app.service.KakaoLocalService;
 import fithub.app.service.RootService;
 import fithub.app.service.UserService;
+import fithub.app.web.dto.requestDto.RootRequestDto;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,11 +25,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.serial.SerialStruct;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -142,7 +145,7 @@ public class RootController {
         return ResponseDto.of(RootConverter.toLevelInfoDto(user,gradeList,levelInfo));
     }
 
-    @Operation(summary = "디비에 운동시설 저장하기, 서버 개발자가 사용함", description = "운동 시설 디비 저장 용, 쓰지 마세여")
+    @Operation(summary = "🚧 디비에 운동시설 저장하기, 서버 개발자가 사용함 🚧", description = "운동 시설 디비 저장 용, 쓰지 마세여")
     @Parameters({
             @Parameter(name = "keyword", description = "카카오 로컬 키워드"),
             @Parameter(name = "categoryId", description = "카테고리 아이디"),
@@ -174,5 +177,17 @@ public class RootController {
     public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "x") String x, @RequestParam(name = "y")String y, @RequestParam(name = "keyword", required = false) String keyword, @RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY){
         List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilities(categoryId, x, y, keyword, userX, userY);
         return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y,categoryId));
+    }
+
+    @Operation(summary = "🚧 운동시설 사진 파일 to AWS S3 Url API, 서버 개발자만 사용함! 🚧", description = "이힣히힣힣 노가다 히힣힣")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @PostMapping(value = "/home/facilities",consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public ResponseDto<RootApiResponseDto.SaveAsImageUrlDto> saveAsImageUrl(@ModelAttribute RootRequestDto.SaveImageAsUrlDto request) throws IOException
+    {
+        String s = rootService.saveAsImageUrl(request);
+        return ResponseDto.of(RootConverter.toSaveAsImageUrlDto(s));
     }
 }
