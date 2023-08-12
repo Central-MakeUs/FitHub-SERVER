@@ -55,6 +55,8 @@ public class UserRequestDto {
         private Integer preferExercises;
         @Nullable
         private MultipartFile profileImage;
+
+        private String fcmToken;
     }
 
     @Getter @Setter
@@ -85,6 +87,8 @@ public class UserRequestDto {
         private Integer preferExercises;
         @Nullable
         private MultipartFile profileImage;
+
+        private String fcmToken;
     }
 
     @Getter @Setter
@@ -153,5 +157,10 @@ public class UserRequestDto {
     @Getter @Setter
     public static class ChangeMyProfileDto {
         private MultipartFile newProfile;
+    }
+
+    @Getter @Setter
+    public static class FcmTokenDto{
+        private String fcmToken;
     }
 }

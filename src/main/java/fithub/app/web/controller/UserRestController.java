@@ -488,4 +488,18 @@ public class UserRestController {
     public ResponseDto<UserResponseDto.ShowPersonalDataDto> showPersonalData(@AuthUser User user){
         return ResponseDto.of(UserConverter.toShowPersonalDataDto(userService.findUser(user.getId())));
     }
+
+    @Operation(summary = "이미 가입은 완료된 상태에서 fcm token 추가 API ✔️ 🔑", description = "앱을 다시 설치 할 경우 fcm 토큰 추가를 위한 API입니다. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PostMapping("/users/fcm-token")
+    public ResponseDto<UserResponseDto.FcmTokenUpdateDto> AddFcmToken(@RequestBody UserRequestDto.FcmTokenDto request, @AuthUser User user){
+        userService.addFcmToken(user, request.getFcmToken());
+        return ResponseDto.of(UserConverter.toFcmTokenUpdateDto());
+    }
 }
