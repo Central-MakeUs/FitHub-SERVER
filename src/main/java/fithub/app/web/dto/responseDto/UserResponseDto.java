@@ -180,4 +180,12 @@ public class UserResponseDto {
         String email;
         String phoneNum;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class FcmTokenUpdateDto{
+        LocalDateTime addedAt;
+    }
 }

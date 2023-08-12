@@ -65,6 +65,8 @@ public class UserServiceImpl implements UserService {
     private final NotificationRepository notificationRepository;
     private final AmazonS3Manager s3Manager;
 
+    private final FcmTokenRepository fcmTokenRepository;
+
     @Value("${paging.size}")
     private Integer size;
 
@@ -93,6 +95,7 @@ public class UserServiceImpl implements UserService {
                             .socialId(socialId)
                             .socialType(socialType)
                             .profileUrl("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png")
+                            .fcmTokenList(new ArrayList<>())
                             .isDefaultProfile(true)
                             .build()
             );
@@ -136,8 +139,13 @@ public class UserServiceImpl implements UserService {
         ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(savedUser, exerciseCategory);
         exercisePreferenceRepository.save(exercisePreference);
 
+        FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
+                .token(request.getFcmToken())
+                .user(savedUser)
+                .build()
+        );
 
-
+        fcmToken.setUser(savedUser);
         return UserConverter.toCompleteUser(savedUser, exerciseCategory);
     }
 
@@ -182,7 +190,12 @@ public class UserServiceImpl implements UserService {
         ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(updatedUser, exerciseCategory);
         exercisePreferenceRepository.save(exercisePreference);
 
+        FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
+                .token(request.getFcmToken())
+                .user(user)
+                .build());
 
+        fcmToken.setUser(user);
         return UserConverter.toCompleteUser(updatedUser, exerciseCategory);
     }
 
@@ -346,6 +359,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void addFcmToken(User user, String token) {
+        FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
+                .user(user)
+                .token(token)
+                .build());
+        fcmToken.setUser(user);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
@@ -372,6 +395,7 @@ public class UserServiceImpl implements UserService {
                             .socialId(socialId)
                             .socialType(socialType)
                             .profileUrl("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png")
+                            .fcmTokenList(new ArrayList<>())
                             .isDefaultProfile(true)
                             .build()
             );

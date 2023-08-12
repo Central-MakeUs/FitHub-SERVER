@@ -64,4 +64,6 @@ public interface UserService {
     Long checkRemainAlarm(User user);
 
     User findUserNotBlocked(Long userId, User user);
+
+    void addFcmToken(User user, String token);
 }
