@@ -160,22 +160,22 @@ public class RootController {
         return ResponseDto.of(RootConverter.toSaveFacilitiesDto(saved));
     }
 
-    @Operation(summary = "원하는 지역 주변 3km 운동 시설 검색 API ✔️🔑- 지도에서 사용", description = "내 주변 3km 운동 시설 검색 API 입니다. 키워드 없으면 그냥 카테고리로 찾음 카테고리도 없으면 그냥 다 찾음")
+    @Operation(summary = "지도에서 카테고리별로 시설 조회하기, 검색X ✔️🔑- 지도에서 사용", description = "내 주변 1.5km 운동 시설 둘러보기 입니다. 내 좌표와 중심 좌표(=이 지역 재탐색 시 사용 최초는 중심 좌표와 내 좌표 동일), 그리고 카테고리 아이디를 주세요 카테고리는 0이면 전체와 동일")
     @Parameters({
             @Parameter(name = "categoryId", description = "카테고리 아이디, 0이면 전체"),
-            @Parameter(name = "x", description = "검색 x"),
-            @Parameter(name = "y", description = "검색 y"),
-            @Parameter(name = "keyword", description = "검색 키워드"),
+            @Parameter(name = "x", description = "중심 x"),
+            @Parameter(name = "y", description = "중심 y"),
             @Parameter(name = "userX", description = "사용자 X"),
             @Parameter(name = "userY", description = "사용자 Y"),
     })
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @GetMapping("/home/facilities/{categoryId}")
-    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "x") String x, @RequestParam(name = "y")String y, @RequestParam(name = "keyword", required = false) String keyword, @RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY){
-        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilities(categoryId, x, y, keyword, userX, userY);
+    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "x") String x, @RequestParam(name = "y")String y, @RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY){
+        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.exploreFacilities(categoryId, x, y, userX, userY);
         return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y,categoryId));
     }
 

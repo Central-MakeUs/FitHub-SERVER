@@ -75,27 +75,19 @@ public class RootServiceImpl implements RootService {
     }
 
     @Override
-    public List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(Integer categoryId, String x, String y, String keyword, String userX, String userY) {
+    public List<RootApiResponseDto.FacilitiesInfoDto> exploreFacilities(Integer categoryId, String x, String y, String userX, String userY) {
 
         ExerciseCategory exerciseCategory = null;
         String queryKeyword = null;
         List<Object[]> facilitiesList = null;
         if(categoryId != 0)
             exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new RecordException(Code.CATEGORY_ERROR));
-        if(keyword != null && !keyword.equals(""))
-            queryKeyword = "%" + keyword + "%";
 
         if(categoryId == 0) {
-            if(keyword != null && !keyword.equals(""))
-                facilitiesList = facilitiesRepository.findFacilitiesAllKeyword(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance, queryKeyword, queryKeyword, queryKeyword);
-            else
-                facilitiesList = facilitiesRepository.findFacilitiesAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance);
+            facilitiesList = facilitiesRepository.findFacilitiesAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance);
         }
         else {
-            if(keyword != null && !keyword.equals(""))
-                facilitiesList = facilitiesRepository.findFacilitiesCategory(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance, categoryId, queryKeyword, queryKeyword, queryKeyword);
-            else
-                facilitiesList = facilitiesRepository.findFacilitiesCategoryAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance,categoryId);
+            facilitiesList = facilitiesRepository.findFacilitiesCategoryAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance,categoryId);
         }
 
         List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()
@@ -103,6 +95,36 @@ public class RootServiceImpl implements RootService {
 
         return facilitiesInfoDtoList;
     }
+
+//    @Override
+//    public List<RootApiResponseDto.FacilitiesInfoDto> exploreFacilities(Integer categoryId, String x, String y, String userX, String userY) {
+//
+//        ExerciseCategory exerciseCategory = null;
+//        String queryKeyword = null;
+//        List<Object[]> facilitiesList = null;
+//        if(categoryId != 0)
+//            exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new RecordException(Code.CATEGORY_ERROR));
+//        if(keyword != null && !keyword.equals(""))
+//            queryKeyword = "%" + keyword + "%";
+//
+//        if(categoryId == 0) {
+//            if(keyword != null && !keyword.equals(""))
+//                facilitiesList = facilitiesRepository.findFacilitiesAllKeyword(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance, queryKeyword, queryKeyword, queryKeyword);
+//            else
+//                facilitiesList = facilitiesRepository.findFacilitiesAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance);
+//        }
+//        else {
+//            if(keyword != null && !keyword.equals(""))
+//                facilitiesList = facilitiesRepository.findFacilitiesCategory(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance, categoryId, queryKeyword, queryKeyword, queryKeyword);
+//            else
+//                facilitiesList = facilitiesRepository.findFacilitiesCategoryAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance,categoryId);
+//        }
+//
+//        List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()
+//                .map(facilities -> RootConverter.toFacilitiesInfoDto(facilities)).collect(Collectors.toList());
+//
+//        return facilitiesInfoDtoList;
+//    }
 
     @Override
     @Transactional
