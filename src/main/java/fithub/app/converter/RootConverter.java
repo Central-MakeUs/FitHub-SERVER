@@ -148,4 +148,10 @@ public class RootConverter {
                 .size(facilitiesList.size())
                 .build();
     }
+
+    public static RootApiResponseDto.SaveAsImageUrlDto toSaveAsImageUrlDto(String s){
+        return RootApiResponseDto.SaveAsImageUrlDto.builder()
+                .SavedImageUrl(s)
+                .build();
+    }
 }

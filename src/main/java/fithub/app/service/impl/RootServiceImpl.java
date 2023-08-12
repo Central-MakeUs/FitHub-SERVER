@@ -1,21 +1,24 @@
 package fithub.app.service.impl;
 
+import fithub.app.aws.s3.AmazonS3Manager;
 import fithub.app.base.Code;
 import fithub.app.base.exception.handler.RecordException;
+import fithub.app.base.exception.handler.RootException;
+import fithub.app.converter.ArticleImageConverter;
 import fithub.app.converter.RootConverter;
-import fithub.app.domain.ExerciseCategory;
-import fithub.app.domain.Grade;
-import fithub.app.domain.LevelInfo;
+import fithub.app.domain.*;
 import fithub.app.repository.ExerciseCategoryRepository;
 import fithub.app.repository.FacilitiesRepository;
 import fithub.app.repository.GradeRepository;
 import fithub.app.repository.LevelInfoRepository;
 import fithub.app.service.RootService;
+import fithub.app.web.dto.requestDto.RootRequestDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,8 @@ public class RootServiceImpl implements RootService {
     private final FacilitiesRepository facilitiesRepository;
 
     private final ExerciseCategoryRepository exerciseCategoryRepository;
+
+    private final AmazonS3Manager amazonS3Manager;
 
     private Integer maxDistance = 1500;
 
@@ -72,5 +77,33 @@ public class RootServiceImpl implements RootService {
                 .map(facilities -> RootConverter.toFacilitiesInfoDto(facilities)).collect(Collectors.toList());
 
         return facilitiesInfoDtoList;
+    }
+
+    @Override
+    @Transactional
+    public String saveAsImageUrl(RootRequestDto.SaveImageAsUrlDto request) throws IOException
+    {
+
+            request.getImage().stream()
+                    .map(image->{
+                        Facilities facilities = null;
+                        try {
+                            String[] split = image.getOriginalFilename().split("\\.");
+                            String name = null;
+                            if(split.length > 0)
+                                name = split[0];
+                            facilities = facilitiesRepository.findById(Long.parseLong(name)).orElseThrow(() -> new RootException(Code.NOT_FOUND_FACILITY));
+                            Uuid uuid = amazonS3Manager.createUUID();
+                            String KeyName = amazonS3Manager.generateArticleKeyName(uuid, image.getOriginalFilename());
+                            String fileUrl = amazonS3Manager.uploadFile(KeyName, image);
+                            facilities.setImage(fileUrl);
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return facilities;
+                    }).collect(Collectors.toList());
+
+        return "hi!";
     }
 }

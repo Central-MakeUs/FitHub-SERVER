@@ -2,6 +2,7 @@ package fithub.app.auth.provider;
 
 import fithub.app.base.Code;
 import fithub.app.base.exception.handler.JwtAuthenticationException;
+//import fithub.app.redis.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
@@ -31,11 +32,13 @@ public class TokenProvider implements InitializingBean {
 
     private final String AUTHORITIES_KEY;
 
-        public static final String AUTHORIZATION_HEADER = "Authorization";
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     private final String secret;
 
     private final long accessTokenValidityInMilliseconds;
+
+//    private final RefreshTokenRepository refreshTokenRepository;
 
     private Key key;
 
@@ -49,6 +52,7 @@ public class TokenProvider implements InitializingBean {
         this.secret = secret;
         this.AUTHORITIES_KEY = authoritiesKey;
         this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
+//        this.refreshTokenRepository = refreshTokenRepository;
     }
 
     @Override

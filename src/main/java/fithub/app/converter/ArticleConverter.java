@@ -65,7 +65,7 @@ public class ArticleConverter {
         ExerciseCategory exerciseCategory= staticExerciseCategoryRepository.findById(categoryId).get();
         Article article = Article.builder()
                 .title(request.getTitle())
-                .contents(request.getTitle())
+                .contents(request.getContents())
                 .user(user)
                 .articleHashTagList(new ArrayList<>())
                 .articleImageList(new ArrayList<>())
