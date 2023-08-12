@@ -8,10 +8,7 @@ import fithub.app.domain.enums.Gender;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.base.exception.handler.UserException;
 import fithub.app.domain.mapping.UserReport;
-import fithub.app.repository.ExerciseCategoryRepository;
-import fithub.app.repository.GradeRepository;
-import fithub.app.repository.UserExerciseRepository;
-import fithub.app.repository.UserRepository;
+import fithub.app.repository.*;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
@@ -27,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -148,6 +146,7 @@ public class UserConverter {
                 .name(request.getName())
                 .isSocial(false)
                 .nickname(request.getNickname())
+                .fcmTokenList(new ArrayList<>())
                 .password(staticPasswordEncoder.encode(request.getPassword()))
                 .age(age)
                 .gender(gender)

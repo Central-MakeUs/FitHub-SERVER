@@ -22,4 +22,11 @@ public class FcmToken {
     private User user;
 
     private String token;
+
+    public void setUser(User user){
+        if(this.user != null)
+            user.getFcmTokenList().remove(this);
+        this.user = user;
+        user.getFcmTokenList().add(this);
+    }
 }
