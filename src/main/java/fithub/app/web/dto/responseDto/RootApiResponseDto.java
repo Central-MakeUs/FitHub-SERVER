@@ -141,4 +141,23 @@ public class RootApiResponseDto {
     public static class SaveAsImageUrlDto{
         String SavedImageUrl;
     }
+
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class NotificationPermitDto{
+        Boolean communityPermit;
+        Boolean marketingPermit;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class NotificationChangeDto{
+        Boolean newCommunityPermit;
+        Boolean newMarketingPermit;
+    }
 }
