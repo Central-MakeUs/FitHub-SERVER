@@ -142,6 +142,7 @@ public class UserConverter {
 
         User newUser = User.builder()
                 .marketingAgree(request.getMarketingAgree())
+                .communityPermit(Boolean.TRUE)
                 .phoneNum(request.getPhoneNumber())
                 .name(request.getName())
                 .isSocial(false)
