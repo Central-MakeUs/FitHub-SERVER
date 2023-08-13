@@ -12,10 +12,7 @@ import fithub.app.feign.kakaoLocal.dto.KakaoLocalParam;
 import fithub.app.feign.kakaoLocal.dto.KakaoLocalResponseDto;
 import fithub.app.feign.kakaoLocal.dto.KakaoLocalResultDto;
 import fithub.app.feign.kakaoLocal.service.KakaoLocalFeign;
-import fithub.app.repository.ExerciseCategoryRepository;
-import fithub.app.repository.FacilitiesRepository;
-import fithub.app.repository.GradeRepository;
-import fithub.app.repository.LevelInfoRepository;
+import fithub.app.repository.*;
 import fithub.app.service.RootService;
 import fithub.app.web.dto.requestDto.RootRequestDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
@@ -44,6 +41,8 @@ public class RootServiceImpl implements RootService {
     private final ExerciseCategoryRepository exerciseCategoryRepository;
 
     private final AmazonS3Manager amazonS3Manager;
+
+    private final RecommendFacilitiesKeywordRepository recommendFacilitiesKeywordRepository;
 
     private Integer maxDistance = 1500;
 
@@ -202,5 +201,10 @@ public class RootServiceImpl implements RootService {
     @Transactional
     public User changePermit(User user, RootRequestDto.NotificationChangeDto request) {
         return user.setPermit(request.getMarketingPermit(), request.getCommunityPermit());
+    }
+
+    @Override
+    public List<RecommendFacilitiesKeyword>getRecommend() {
+        return recommendFacilitiesKeywordRepository.findTop10ByOrderById();
     }
 }

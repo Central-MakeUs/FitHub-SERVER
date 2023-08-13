@@ -212,7 +212,18 @@ public class RootController {
         return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y));
     }
 
-
+    @Operation(summary = "추천 검색어 조회 API ✔️ 🔑", description = "추천 검색어 조회 API 입니다. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/home/facilities/keywords")
+    public ResponseDto<RootApiResponseDto.FacilitiesKeywordRecommendDto> getRecommend(){
+        return ResponseDto.of(RootConverter.toFacilitiesKeywordRecommendDto(rootService.getRecommend()));
+    }
 
 
     @Operation(summary = "내 알림 허용 여부 확인 API ✔️ 🔑", description = "내 알림 허용 여부 확인 API입니다. ")
