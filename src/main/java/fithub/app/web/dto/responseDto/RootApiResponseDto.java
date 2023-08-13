@@ -160,4 +160,13 @@ public class RootApiResponseDto {
         Boolean newCommunityPermit;
         Boolean newMarketingPermit;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class FacilitiesKeywordRecommendDto{
+        List<String> keywordList;
+        Integer size;
+    }
 }
