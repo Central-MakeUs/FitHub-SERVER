@@ -2,6 +2,7 @@ package fithub.app.service;
 
 import fithub.app.domain.Grade;
 import fithub.app.domain.LevelInfo;
+import fithub.app.domain.User;
 import fithub.app.web.dto.requestDto.RootRequestDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import lombok.extern.java.Log;
@@ -22,4 +23,6 @@ public interface RootService {
     String saveAsImageUrl(RootRequestDto.SaveImageAsUrlDto request) throws IOException;
 
     Integer test();
+
+    User changePermit(User user, RootRequestDto.NotificationChangeDto request);
 }

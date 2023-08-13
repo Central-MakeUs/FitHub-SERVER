@@ -156,4 +156,18 @@ public class RootConverter {
                 .SavedImageUrl(s)
                 .build();
     }
+
+    public static RootApiResponseDto.NotificationPermitDto toNotificationPermitDto(User user){
+        return RootApiResponseDto.NotificationPermitDto.builder()
+                .marketingPermit(user.getMarketingAgree())
+                .communityPermit(user.getCommunityPermit())
+                .build();
+    }
+
+    public static RootApiResponseDto.NotificationChangeDto toNotificationChangeDto(User user){
+        return RootApiResponseDto.NotificationChangeDto.builder()
+                .newCommunityPermit(user.getCommunityPermit())
+                .newMarketingPermit(user.getMarketingAgree())
+                .build();
+    }
 }
