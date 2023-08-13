@@ -197,4 +197,10 @@ public class RootServiceImpl implements RootService {
 
         return totalUpdated;
     }
+
+    @Override
+    @Transactional
+    public User changePermit(User user, RootRequestDto.NotificationChangeDto request) {
+        return user.setPermit(request.getMarketingPermit(), request.getCommunityPermit());
+    }
 }

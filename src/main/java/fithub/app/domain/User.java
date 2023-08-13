@@ -64,6 +64,8 @@ public class User extends BaseEntity {
     @Column(nullable = true)
     private Boolean marketingAgree;
 
+    private Boolean communityPermit;
+
     private Boolean isDefaultProfile;
 
     @Column(columnDefinition = "BIGINT DEFAULT 0")

@@ -6,6 +6,7 @@ import fithub.app.base.Code;
 import fithub.app.base.ResponseDto;
 import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.RootConverter;
+import fithub.app.converter.UserConverter;
 import fithub.app.domain.*;
 import fithub.app.service.HomeService;
 import fithub.app.service.KakaoLocalService;
@@ -14,6 +15,7 @@ import fithub.app.service.UserService;
 import fithub.app.web.dto.requestDto.RootRequestDto;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
+import fithub.app.web.dto.responseDto.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -29,6 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.serial.SerialStruct;
 import java.io.IOException;
@@ -207,6 +210,36 @@ public class RootController {
     public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@RequestParam(name = "x",required = false) String x, @RequestParam(name = "y",required = false)String y, @RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY, @RequestParam(name = "keyword") String keyword){
         List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilities( x, y, userX, userY, keyword);
         return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y));
+    }
+
+
+
+
+    @Operation(summary = "내 알림 허용 여부 확인 API ✔️ 🔑", description = "내 알림 허용 여부 확인 API입니다. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/home/notification-permit")
+    public ResponseDto<RootApiResponseDto.NotificationPermitDto> getNotificationPermit(@AuthUser User user){
+        return ResponseDto.of(RootConverter.toNotificationPermitDto(user));
+    }
+
+    @Operation(summary = "내 알림 허용 변경 API ✔️ 🔑", description = "내 알림 변경 API입니다. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PatchMapping("/home/notification-permit")
+    public ResponseDto<RootApiResponseDto.NotificationChangeDto> changeNotificationPermit(@RequestBody RootRequestDto.NotificationChangeDto request, @AuthUser User user){
+        User changedUser = rootService.changePermit(user, request);
+        return ResponseDto.of(RootConverter.toNotificationChangeDto(changedUser));
     }
 //
 //    @GetMapping("/home/temp")
