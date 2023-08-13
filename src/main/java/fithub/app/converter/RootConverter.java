@@ -170,4 +170,14 @@ public class RootConverter {
                 .newMarketingPermit(user.getMarketingAgree())
                 .build();
     }
+
+    public static RootApiResponseDto.FacilitiesKeywordRecommendDto toFacilitiesKeywordRecommendDto(List<RecommendFacilitiesKeyword> list){
+        List<String> stringList = list.stream()
+                .map(keyword -> keyword.getKeyword()).collect(Collectors.toList());
+
+        return RootApiResponseDto.FacilitiesKeywordRecommendDto.builder()
+                .keywordList(stringList)
+                .size(stringList.size())
+                .build();
+    }
 }
