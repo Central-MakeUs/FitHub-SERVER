@@ -6,6 +6,7 @@ import fithub.app.base.Code;
 import fithub.app.base.ResponseDto;
 import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.RootConverter;
+import fithub.app.converter.UserConverter;
 import fithub.app.domain.*;
 import fithub.app.service.HomeService;
 import fithub.app.service.KakaoLocalService;
@@ -14,6 +15,7 @@ import fithub.app.service.UserService;
 import fithub.app.web.dto.requestDto.RootRequestDto;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
+import fithub.app.web.dto.responseDto.UserResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -29,6 +31,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.Root;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.rowset.serial.SerialStruct;
 import java.io.IOException;
@@ -160,23 +163,23 @@ public class RootController {
         return ResponseDto.of(RootConverter.toSaveFacilitiesDto(saved));
     }
 
-    @Operation(summary = "원하는 지역 주변 3km 운동 시설 검색 API ✔️🔑- 지도에서 사용", description = "내 주변 3km 운동 시설 검색 API 입니다. 키워드 없으면 그냥 카테고리로 찾음 카테고리도 없으면 그냥 다 찾음")
+    @Operation(summary = "지도에서 카테고리별로 시설 조회하기, 검색X ✔️🔑- 지도에서 사용", description = "내 주변 1.5km 운동 시설 둘러보기 입니다. 내 좌표와 중심 좌표(=이 지역 재탐색 시 사용 최초는 중심 좌표와 내 좌표 동일), 그리고 카테고리 아이디를 주세요 카테고리는 0이면 전체와 동일")
     @Parameters({
             @Parameter(name = "categoryId", description = "카테고리 아이디, 0이면 전체"),
-            @Parameter(name = "x", description = "검색 x"),
-            @Parameter(name = "y", description = "검색 y"),
-            @Parameter(name = "keyword", description = "검색 키워드"),
+            @Parameter(name = "x", description = "중심 x"),
+            @Parameter(name = "y", description = "중심 y"),
             @Parameter(name = "userX", description = "사용자 X"),
             @Parameter(name = "userY", description = "사용자 Y"),
     })
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 카테고리가 잘못되었습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @GetMapping("/home/facilities/{categoryId}")
-    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "x") String x, @RequestParam(name = "y")String y, @RequestParam(name = "keyword", required = false) String keyword, @RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY){
-        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilities(categoryId, x, y, keyword, userX, userY);
-        return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y,categoryId));
+    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@PathVariable(name = "categoryId") Integer categoryId, @RequestParam(name = "x") String x, @RequestParam(name = "y")String y, @RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY){
+        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.exploreFacilities(categoryId, x, y, userX, userY);
+        return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y));
     }
 
     @Operation(summary = "🚧 운동시설 사진 파일 to AWS S3 Url API, 서버 개발자만 사용함! 🚧", description = "이힣히힣힣 노가다 히힣힣")
@@ -189,6 +192,65 @@ public class RootController {
     {
         String s = rootService.saveAsImageUrl(request);
         return ResponseDto.of(RootConverter.toSaveAsImageUrlDto(s));
+    }
+
+    @Operation(summary = "지도에서 검색해서 조회하기 ✔️🔑- 지도에서 사용", description = "검색 키워드가 도로명 주소, 주소, 이름에 포함된 시설을 거리순으로 최대 15개 보여줍니다. 지도에서 보기를 눌러 좌표가 변경 될 경우를 대비 하여 중심 좌표를 선택으로 받습니다.")
+    @Parameters({
+            @Parameter(name = "x", description = "중심 x"),
+            @Parameter(name = "y", description = "중심 y"),
+            @Parameter(name = "userX", description = "사용자 X"),
+            @Parameter(name = "userY", description = "사용자 Y"),
+            @Parameter(name = "keyword", description = "검색어"),
+    })
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @GetMapping("/home/facilities")
+    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@RequestParam(name = "x",required = false) String x, @RequestParam(name = "y",required = false)String y, @RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY, @RequestParam(name = "keyword") String keyword){
+        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilities( x, y, userX, userY, keyword);
+        return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y));
+    }
+
+    @Operation(summary = "추천 검색어 조회 API ✔️ 🔑", description = "추천 검색어 조회 API 입니다. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/home/facilities/keywords")
+    public ResponseDto<RootApiResponseDto.FacilitiesKeywordRecommendDto> getRecommend(){
+        return ResponseDto.of(RootConverter.toFacilitiesKeywordRecommendDto(rootService.getRecommend()));
+    }
+
+
+    @Operation(summary = "내 알림 허용 여부 확인 API ✔️ 🔑", description = "내 알림 허용 여부 확인 API입니다. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/home/notification-permit")
+    public ResponseDto<RootApiResponseDto.NotificationPermitDto> getNotificationPermit(@AuthUser User user){
+        return ResponseDto.of(RootConverter.toNotificationPermitDto(user));
+    }
+
+    @Operation(summary = "내 알림 허용 변경 API ✔️ 🔑", description = "내 알림 변경 API입니다. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PatchMapping("/home/notification-permit")
+    public ResponseDto<RootApiResponseDto.NotificationChangeDto> changeNotificationPermit(@RequestBody RootRequestDto.NotificationChangeDto request, @AuthUser User user){
+        User changedUser = rootService.changePermit(user, request);
+        return ResponseDto.of(RootConverter.toNotificationChangeDto(changedUser));
     }
 //
 //    @GetMapping("/home/temp")

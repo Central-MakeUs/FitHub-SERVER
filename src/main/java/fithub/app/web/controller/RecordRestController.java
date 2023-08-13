@@ -194,7 +194,7 @@ public class RecordRestController {
         Record record = recordService.toggleRecordLike(recordId, user);
 
         // 알림 보내기
-        if(user.isLikedRecord(record))
+        if(user.isLikedRecord(record) && record.getUser().getCommunityPermit())
             recordService.alarmRecordLike(record,user);
         return ResponseDto.of(RecordConverter.toRecordLikeDto(record, user));
     }

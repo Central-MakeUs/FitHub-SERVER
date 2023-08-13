@@ -139,7 +139,7 @@ public class RootConverter {
                 .build();
     }
 
-    public static RootApiResponseDto.FacilitiesResponseDto toFacilitiesResponseDto(List<RootApiResponseDto.FacilitiesInfoDto> facilitiesList, String x, String y, Integer categoryId){
+    public static RootApiResponseDto.FacilitiesResponseDto toFacilitiesResponseDto(List<RootApiResponseDto.FacilitiesInfoDto> facilitiesList, String x, String y){
 
         return RootApiResponseDto.FacilitiesResponseDto.builder()
                 .userX(x)
@@ -149,9 +149,35 @@ public class RootConverter {
                 .build();
     }
 
+
+
     public static RootApiResponseDto.SaveAsImageUrlDto toSaveAsImageUrlDto(String s){
         return RootApiResponseDto.SaveAsImageUrlDto.builder()
                 .SavedImageUrl(s)
+                .build();
+    }
+
+    public static RootApiResponseDto.NotificationPermitDto toNotificationPermitDto(User user){
+        return RootApiResponseDto.NotificationPermitDto.builder()
+                .marketingPermit(user.getMarketingAgree())
+                .communityPermit(user.getCommunityPermit())
+                .build();
+    }
+
+    public static RootApiResponseDto.NotificationChangeDto toNotificationChangeDto(User user){
+        return RootApiResponseDto.NotificationChangeDto.builder()
+                .newCommunityPermit(user.getCommunityPermit())
+                .newMarketingPermit(user.getMarketingAgree())
+                .build();
+    }
+
+    public static RootApiResponseDto.FacilitiesKeywordRecommendDto toFacilitiesKeywordRecommendDto(List<RecommendFacilitiesKeyword> list){
+        List<String> stringList = list.stream()
+                .map(keyword -> keyword.getKeyword()).collect(Collectors.toList());
+
+        return RootApiResponseDto.FacilitiesKeywordRecommendDto.builder()
+                .keywordList(stringList)
+                .size(stringList.size())
                 .build();
     }
 }

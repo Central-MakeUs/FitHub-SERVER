@@ -251,9 +251,10 @@ public class CommentsServiceImpl implements CommentsService {
         notification.setUser(article.getUser());
 
         // 알림 보내기
-        for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
-            fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot, FCMType.ARTICLE.toString(),article.getId().toString(),notification.getId().toString());
-        }
+        if(article.getUser().getCommunityPermit())
+            for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
+                fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot, FCMType.ARTICLE.toString(),article.getId().toString(),notification.getId().toString());
+            }
     }
 
     @Override
@@ -272,8 +273,9 @@ public class CommentsServiceImpl implements CommentsService {
         notification.setUser(record.getUser());
 
         // 알림 보내기
-        for(FcmToken fcmToken : record.getUser().getFcmTokenList()){
-            fireBaseService.sendMessageToV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmRecordBodyHead +  comments.getContents() + alarmRecordBodyMiddle, FCMType.RECORD.toString(),record.getId().toString(),notification.getId().toString(),comments.getRecord().getImageUrl());
-        }
+        if(record.getUser().getCommunityPermit())
+            for(FcmToken fcmToken : record.getUser().getFcmTokenList()){
+                fireBaseService.sendMessageToV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmRecordBodyHead +  comments.getContents() + alarmRecordBodyMiddle, FCMType.RECORD.toString(),record.getId().toString(),notification.getId().toString(),comments.getRecord().getImageUrl());
+            }
     }
 }

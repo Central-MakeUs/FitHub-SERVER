@@ -11,6 +11,7 @@ import fithub.app.domain.mapping.UserReport;
 import fithub.app.repository.*;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
+import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
+import javax.persistence.criteria.Root;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -142,6 +144,7 @@ public class UserConverter {
 
         User newUser = User.builder()
                 .marketingAgree(request.getMarketingAgree())
+                .communityPermit(Boolean.TRUE)
                 .phoneNum(request.getPhoneNumber())
                 .name(request.getName())
                 .isSocial(false)

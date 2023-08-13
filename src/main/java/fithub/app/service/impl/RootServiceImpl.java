@@ -12,10 +12,7 @@ import fithub.app.feign.kakaoLocal.dto.KakaoLocalParam;
 import fithub.app.feign.kakaoLocal.dto.KakaoLocalResponseDto;
 import fithub.app.feign.kakaoLocal.dto.KakaoLocalResultDto;
 import fithub.app.feign.kakaoLocal.service.KakaoLocalFeign;
-import fithub.app.repository.ExerciseCategoryRepository;
-import fithub.app.repository.FacilitiesRepository;
-import fithub.app.repository.GradeRepository;
-import fithub.app.repository.LevelInfoRepository;
+import fithub.app.repository.*;
 import fithub.app.service.RootService;
 import fithub.app.web.dto.requestDto.RootRequestDto;
 import fithub.app.web.dto.responseDto.RootApiResponseDto;
@@ -44,6 +41,8 @@ public class RootServiceImpl implements RootService {
     private final ExerciseCategoryRepository exerciseCategoryRepository;
 
     private final AmazonS3Manager amazonS3Manager;
+
+    private final RecommendFacilitiesKeywordRepository recommendFacilitiesKeywordRepository;
 
     private Integer maxDistance = 1500;
 
@@ -75,28 +74,41 @@ public class RootServiceImpl implements RootService {
     }
 
     @Override
-    public List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(Integer categoryId, String x, String y, String keyword, String userX, String userY) {
+    public List<RootApiResponseDto.FacilitiesInfoDto> exploreFacilities(Integer categoryId, String x, String y, String userX, String userY) {
 
         ExerciseCategory exerciseCategory = null;
         String queryKeyword = null;
         List<Object[]> facilitiesList = null;
         if(categoryId != 0)
             exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(() -> new RecordException(Code.CATEGORY_ERROR));
-        if(keyword != null && !keyword.equals(""))
-            queryKeyword = "%" + keyword + "%";
 
         if(categoryId == 0) {
-            if(keyword != null && !keyword.equals(""))
-                facilitiesList = facilitiesRepository.findFacilitiesAllKeyword(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance, queryKeyword, queryKeyword, queryKeyword);
-            else
-                facilitiesList = facilitiesRepository.findFacilitiesAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance);
+            facilitiesList = facilitiesRepository.findFacilitiesAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance);
         }
         else {
-            if(keyword != null && !keyword.equals(""))
-                facilitiesList = facilitiesRepository.findFacilitiesCategory(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance, categoryId, queryKeyword, queryKeyword, queryKeyword);
-            else
-                facilitiesList = facilitiesRepository.findFacilitiesCategoryAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance,categoryId);
+            facilitiesList = facilitiesRepository.findFacilitiesCategoryAll(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance,categoryId);
         }
+
+        List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()
+                .map(facilities -> RootConverter.toFacilitiesInfoDto(facilities)).collect(Collectors.toList());
+
+        return facilitiesInfoDtoList;
+    }
+
+    @Override
+    public List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(String x, String y, String userX, String userY, String keyword) {
+
+
+        String queryKeyword = null;
+        List<Object[]> facilitiesList = null;
+
+        queryKeyword = "%" + keyword + "%";
+
+        if((x == null || x.equals(""))  && (y == null || y.equals("")))
+            facilitiesList = facilitiesRepository.findFacilitiesMyLoc(Float.parseFloat(userX), Float.parseFloat(userY),queryKeyword, queryKeyword, queryKeyword,Float.parseFloat(userX), Float.parseFloat(userY));
+        else
+            facilitiesList = facilitiesRepository.findFacilities(Float.parseFloat(userX), Float.parseFloat(userY), queryKeyword, queryKeyword, queryKeyword, Float.parseFloat(x), Float.parseFloat(y));
+
 
         List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()
                 .map(facilities -> RootConverter.toFacilitiesInfoDto(facilities)).collect(Collectors.toList());
@@ -183,5 +195,16 @@ public class RootServiceImpl implements RootService {
         }
 
         return totalUpdated;
+    }
+
+    @Override
+    @Transactional
+    public User changePermit(User user, RootRequestDto.NotificationChangeDto request) {
+        return user.setPermit(request.getMarketingPermit(), request.getCommunityPermit());
+    }
+
+    @Override
+    public List<RecommendFacilitiesKeyword>getRecommend() {
+        return recommendFacilitiesKeywordRepository.findTop10ByOrderById();
     }
 }

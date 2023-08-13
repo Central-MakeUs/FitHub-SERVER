@@ -20,4 +20,10 @@ public class RootRequestDto {
     public static class SaveImageAsUrlDto{
         List<MultipartFile> image;
     }
+
+    @Getter @Setter
+    public static class NotificationChangeDto{
+        Boolean communityPermit;
+        Boolean marketingPermit;
+    }
 }
