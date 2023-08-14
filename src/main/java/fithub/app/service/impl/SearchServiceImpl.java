@@ -3,16 +3,14 @@ package fithub.app.service.impl;
 import fithub.app.base.Code;
 import fithub.app.base.exception.handler.SearchException;
 import fithub.app.converter.SearchConverter;
-import fithub.app.domain.Article;
-import fithub.app.domain.HashTag;
-import fithub.app.domain.Record;
-import fithub.app.domain.User;
+import fithub.app.domain.*;
 import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.HashTagRepositories.ArticleHashTagRepository;
 import fithub.app.repository.HashTagRepositories.HashTagRepository;
 import fithub.app.repository.HashTagRepositories.RecordHashTagRepository;
+import fithub.app.repository.RecommendArticleKeywordRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.service.SearchService;
 import fithub.app.web.dto.responseDto.SearchPreViewResponseDto;
@@ -41,6 +39,8 @@ public class SearchServiceImpl implements SearchService {
     private final ArticleHashTagRepository articleHashTagRepository;
 
     private final RecordHashTagRepository recordHashTagRepository;
+
+    private final RecommendArticleKeywordRepository recommendArticleKeywordRepository;
 
     private Logger logger = LoggerFactory.getLogger(SearchServiceImpl.class);
 
@@ -145,5 +145,11 @@ public class SearchServiceImpl implements SearchService {
         }
 
         return SearchConverter.toSearchPreViewDto(searchArticle,searchRecord,user);
+    }
+
+
+    @Override
+    public List<RecommendArticleKeyword> getRecommendArticleKeyword() {
+        return recommendArticleKeywordRepository.findTop10ByOrderById();
     }
 }

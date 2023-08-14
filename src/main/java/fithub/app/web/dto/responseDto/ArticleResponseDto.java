@@ -149,4 +149,13 @@ public class ArticleResponseDto {
         String alarmBody;
         Long targetArticle;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class ArticleRecommendKeywordDto{
+        List<String> keywordList;
+        Integer size;
+    }
 }

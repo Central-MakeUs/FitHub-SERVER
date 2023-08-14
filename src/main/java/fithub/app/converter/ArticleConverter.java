@@ -253,4 +253,14 @@ public class ArticleConverter {
                 .reportedAt(LocalDateTime.now())
                 .build();
     }
+
+    public static ArticleResponseDto.ArticleRecommendKeywordDto toArticleRecommendKeywordDto(List<RecommendArticleKeyword> articleKeywordList){
+        List<String> stringList = articleKeywordList.stream()
+                .map(recommendArticleKeyword -> recommendArticleKeyword.getKeyword()).collect(Collectors.toList());
+
+        return ArticleResponseDto.ArticleRecommendKeywordDto.builder()
+                .keywordList(stringList)
+                .size(stringList.size())
+                .build();
+    }
 }
