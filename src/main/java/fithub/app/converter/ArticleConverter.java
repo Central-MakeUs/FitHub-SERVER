@@ -151,7 +151,7 @@ public class ArticleConverter {
                 .build();
     }
 
-    public static ArticleResponseDto.ArticleDto toArticleDto(Article article, User user){
+    public static ArticleResponseDto.ArticleDto toArticleDto(Article article, User user, Boolean isAll){
         return ArticleResponseDto.ArticleDto.builder()
                 .articleId(article.getId())
                 .userInfo(UserConverter.toCommunityUserInfo(article.getUser()))
@@ -159,7 +159,7 @@ public class ArticleConverter {
                 .title(article.getTitle())
                 .contents(article.getContents())
                 .pictureUrl(article.getArticleImageList().size() == 0 ? null : article.getArticleImageList().get(0).getImageUrl())
-                .exerciseTag(article.getExerciseCategory().getName())
+                .exerciseTag(!isAll ? null : article.getExerciseCategory().getName())
                 .likes(staticArticleRepository.countLikes(article, user,user))
                 .comments(staticArticleRepository.countComments(article,user,user))
                 .isLiked(user.isLikedArticle(article))
@@ -167,10 +167,10 @@ public class ArticleConverter {
                 .build();
     }
 
-    public static ArticleResponseDto.ArticleDtoList toArticleDtoList(Page<Article> articleList, User user){
+    public static ArticleResponseDto.ArticleDtoList toArticleDtoList(Page<Article> articleList, User user, Boolean isAll){
         List<ArticleResponseDto.ArticleDto> articleDtoList =
                 articleList.stream()
-                        .map(article -> toArticleDto(article, user))
+                        .map(article -> toArticleDto(article, user, isAll))
                         .collect(Collectors.toList());
 
         return ArticleResponseDto.ArticleDtoList.builder()

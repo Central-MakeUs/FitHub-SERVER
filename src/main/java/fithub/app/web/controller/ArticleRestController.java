@@ -83,7 +83,7 @@ public class ArticleRestController {
             articles = articleService.findArticlePagingCategoryAndCreatedAt(user, categoryId, pageIndex);
         else
             articles = articleService.findArticlePagingCreatedAt(user,pageIndex);
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user, categoryId.equals(0)));
     }
 
     @Operation(summary = "게시글 목록 조회 API - 인기순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
@@ -105,7 +105,7 @@ public class ArticleRestController {
         else
             articles = articleService.findArticlePagingLikes(user,pageIndex);
 
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user,categoryId.equals(0)));
     }
 
     @Operation(summary = "게시글 추가 API ✔️🔑", description = "게시글 추가 API 입니다. 사진 여러 장을 한번에 보내 주세요")

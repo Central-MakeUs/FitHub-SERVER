@@ -78,7 +78,7 @@ public class SearchRestController {
         if(articles == null || articles.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
-            return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
+            return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user,false));
     }
 
     @Operation(summary = "게시글 검색 API - 인기순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
@@ -101,7 +101,7 @@ public class SearchRestController {
         if(articles == null || articles.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
-            return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
+            return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user,false));
     }
 
     @Operation(summary = "인증 검색 API - 최신순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")

@@ -285,7 +285,7 @@ public class UserRestController {
     @GetMapping("/users/articles/{categoryId}")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> myArticles(@RequestParam(name = "pageIndex", required = false) Integer pageIndex,@PathVariable(name = "categoryId") Integer categoryId ,@AuthUser User user){
         Page<Article> articles = categoryId.equals(0) ? userService.getMyArticlesNoCategory(pageIndex,user) : userService.getMyArticles(pageIndex, user,categoryId);
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user,categoryId.equals(0)));
     }
 
     @Operation(summary = "내가 적은 운동 인증 목록 조회 API ✔️🔑- 최신순 ", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
@@ -414,7 +414,7 @@ public class UserRestController {
     })
     @GetMapping("/users/{userId}/articles/{categoryId}")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> showArticleList(@PathVariable(name = "userId")Long userId, @PathVariable(name = "categoryId") Integer categoryId,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(userService.findUserArticle(userId,categoryId,pageIndex),user));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(userService.findUserArticle(userId,categoryId,pageIndex),user,categoryId.equals(0)));
     }
 
     @Operation(summary = "조회 한 사용자의 운동인증 목록 조회 API ✔️ 🔑", description = "조회 한 사용자의 운동인증 목록 조회 API 입니다. 카테고리가 0이면 전체 조회")
