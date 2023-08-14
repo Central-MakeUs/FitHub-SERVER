@@ -41,6 +41,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 
+import javax.swing.plaf.PanelUI;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -501,5 +502,22 @@ public class UserRestController {
     public ResponseDto<UserResponseDto.FcmTokenUpdateDto> AddFcmToken(@RequestBody UserRequestDto.FcmTokenDto request, @AuthUser User user){
         userService.addFcmToken(user, request.getFcmToken());
         return ResponseDto.of(UserConverter.toFcmTokenUpdateDto());
+    }
+
+    @Operation(summary = "비밀번호 확인 API ✔️ 🔑", description = "비밀번호 변경 전, 비밀번호 확인을 위한 API입니다. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "2022", description = "OK : 비밀번호가 일치합니다."),
+            @ApiResponse(responseCode = "2023", description = "OK : 비밀번호가 일치하지 않습니다."),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PostMapping("/users/check-pass")
+    public ResponseDto checkPass(@RequestBody UserRequestDto.CheckPassDto request, @AuthUser User user){
+        Boolean checkPass = userService.checkPass(user, request);
+        Code result = checkPass ? Code.PASSWORD_CORRECT : Code.PASSWORD_INCORRECT;
+        return ResponseDto.of(result,null);
     }
 }

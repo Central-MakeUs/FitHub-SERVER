@@ -66,4 +66,6 @@ public interface UserService {
     User findUserNotBlocked(Long userId, User user);
 
     void addFcmToken(User user, String token);
+
+    Boolean checkPass(User user, UserRequestDto.CheckPassDto request);
 }

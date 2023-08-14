@@ -163,4 +163,9 @@ public class UserRequestDto {
     public static class FcmTokenDto{
         private String fcmToken;
     }
+
+    @Getter @Setter
+    public static class CheckPassDto{
+        String password;
+    }
 }
