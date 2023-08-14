@@ -262,10 +262,11 @@ public class UserConverter {
                 .build();
     }
 
-    public static UserResponseDto.LoginResultDto toLoginDto(String jwt, User user){
+    public static UserResponseDto.LoginResultDto toLoginDto(String jwt, String refreshToken,User user){
         return UserResponseDto.LoginResultDto.builder()
                 .accessToken(jwt)
                 .userId(user.getId())
+                .refreshToken(refreshToken)
                 .build();
     }
 
@@ -356,6 +357,12 @@ public class UserConverter {
     public static UserResponseDto.FcmTokenUpdateDto toFcmTokenUpdateDto(){
         return UserResponseDto.FcmTokenUpdateDto.builder()
                 .addedAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static UserResponseDto.LogOutDto toLogOutDto(){
+        return UserResponseDto.LogOutDto.builder()
+                .logoutTime(LocalDateTime.now())
                 .build();
     }
 }

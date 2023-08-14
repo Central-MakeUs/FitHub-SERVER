@@ -60,9 +60,10 @@ public class RootController {
         return "I'm healthy";
     }
 
-    @Operation(summary = "자동 로그인 API ✔️🔑", description = "자동 로그인 API 입니다. 이제 FCM 토큰도 주셔야 합니다!")
+    @Operation(summary = "자동 로그인 API ✔️🔑", description = "자동 로그인 API 입니다.")
     @Parameters({
-            @Parameter(name = "user", hidden = true)
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "authorizationHeader", hidden = true)
     })
     @ApiResponses({
             @ApiResponse(responseCode = "2008", description = "OK : 정상응답, 바로 홈 화면으로 이동해도 될 경우" ,content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -72,7 +73,7 @@ public class RootController {
 
     })
     @GetMapping("/")
-    public ResponseDto<RootApiResponseDto.AutoLoginResponseDto> AutoLogin(String authorizationHeader, HttpServletRequest request){
+    public ResponseDto<RootApiResponseDto.AutoLoginResponseDto> AutoLogin(@RequestHeader("Authorization") String authorizationHeader){
 
 
         Code result = null;

@@ -2,6 +2,7 @@ package fithub.app.service;
 
 import fithub.app.domain.*;
 import fithub.app.domain.mapping.UserReport;
+import fithub.app.utils.LoginResult;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
@@ -33,7 +34,7 @@ public interface UserService {
 
     void findByPhoneNumPassChange(String phoneNum);
 
-    String login(User user, String password);
+    LoginResult.LoginResultDto login(User user, String password);
 
     User socialInfoComplete(UserRequestDto.UserOAuthInfo request, User user) throws IOException;
 
@@ -66,4 +67,6 @@ public interface UserService {
     User findUserNotBlocked(Long userId, User user);
 
     void addFcmToken(User user, String token);
+
+    void LogOut(String accessToken);
 }

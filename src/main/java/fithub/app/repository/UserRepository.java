@@ -20,6 +20,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findTop5ByOrderByTotalRecordNumDesc();
 
+    Optional<User> findBySocialId(String socialId);
+
     @Modifying
     @Query("UPDATE User u SET u.monthlyRecordNum = 0 WHERE u.id = :id")
     void resetMonthlyRecordForUsers(@Param("id") Long id);

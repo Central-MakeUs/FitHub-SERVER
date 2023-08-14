@@ -37,6 +37,9 @@ public enum Code {
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 5000, "Internal server Error"),
 
     //Common
+
+    JWT_FORBIDDEN(HttpStatus.FORBIDDEN, 4002, "로그아웃 된 토큰 입니다."),
+
     FORBIDDEN(HttpStatus.FORBIDDEN, 4003, "접근 권한이 없습니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED,4004 ,"인증정보가 유효하지 않습니다."),
     BAD_REQUEST(HttpStatus.BAD_REQUEST,4005 ,"잘못된 요청 입니다."),

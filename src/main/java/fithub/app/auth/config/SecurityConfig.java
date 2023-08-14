@@ -3,6 +3,7 @@ package fithub.app.auth.config;
 import fithub.app.auth.handler.JwtAccessDeniedHandler;
 import fithub.app.auth.handler.JwtAuthenticationEntryPoint;
 import fithub.app.auth.provider.TokenProvider;
+import fithub.app.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -27,6 +28,8 @@ public class SecurityConfig {
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 
     private final TokenProvider tokenProvider;
+
+    private final RedisService redisService;
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -72,7 +75,7 @@ public class SecurityConfig {
 
 
                 .and()
-                    .apply(new JwtSecurityConfig(tokenProvider))
+                    .apply(new JwtSecurityConfig(tokenProvider, redisService))
                 .and().build();
     }
 }

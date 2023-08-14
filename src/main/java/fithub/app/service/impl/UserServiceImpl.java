@@ -10,10 +10,12 @@ import fithub.app.domain.enums.SocialType;
 import fithub.app.domain.mapping.ExercisePreference;
 import fithub.app.base.exception.handler.UserException;
 import fithub.app.domain.mapping.UserReport;
+import fithub.app.redis.RedisService;
 import fithub.app.repository.*;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.service.UserService;
+import fithub.app.utils.LoginResult;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import io.swagger.models.auth.In;
@@ -67,6 +69,8 @@ public class UserServiceImpl implements UserService {
 
     private final FcmTokenRepository fcmTokenRepository;
 
+    private final RedisService redisService;
+
     @Value("${paging.size}")
     private Integer size;
 
@@ -83,6 +87,7 @@ public class UserServiceImpl implements UserService {
 
         Boolean isLogin = true;
         String accessToken = null;
+        String refreshToken = null;
         Optional<User> userOptional = userRepository.findBySocialIdAndSocialType(socialId, socialType);
 
         User user;
@@ -102,6 +107,8 @@ public class UserServiceImpl implements UserService {
             );
 
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
+            redisService.saveLoginStatus(user.getId(), accessToken);
+            refreshToken = redisService.createRefreshOAuth(socialId).getRefreshToken();
         }
         else{
             user = userOptional.get();
@@ -114,6 +121,7 @@ public class UserServiceImpl implements UserService {
                 .isLogin(isLogin)
                 .accessToken(accessToken)
                 .userId(user.getId())
+                .refreshToken(refreshToken)
                 .build();
 
     }
@@ -170,14 +178,21 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(User user, String password) {
+    public LoginResult.LoginResultDto login(User user, String password) {
         System.out.println(password);
         String jwt = null;
+        String refreshToken = null;
         if(!passwordEncoder.matches(password, user.getPassword()))
             throw new UserException(Code.PASSWORD_ERROR);
-        else
+        else {
             jwt = tokenProvider.createAccessToken(user.getId(), user.getPhoneNum(), Arrays.asList(new SimpleGrantedAuthority("USER")));
-        return jwt;
+            redisService.saveLoginStatus(user.getId(), jwt);
+            refreshToken = redisService.createRefresh(user.getPhoneNum()).getRefreshToken();
+        }
+        return LoginResult.LoginResultDto.builder()
+                .refreshToken(refreshToken)
+                .jwt(jwt)
+                .build();
     }
 
     @Override
@@ -370,6 +385,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void LogOut(String accessToken) {
+        redisService.logoutLoginStatus(accessToken);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
@@ -384,6 +405,7 @@ public class UserServiceImpl implements UserService {
 
         Boolean isLogin = true;
         String accessToken = null;
+        String refreshToken = null;
         User user;
 
         Optional<User> userOptional = userRepository.findBySocialIdAndSocialType(socialId, socialType);
@@ -403,6 +425,8 @@ public class UserServiceImpl implements UserService {
             );
 
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
+            redisService.saveLoginStatus(user.getId(), accessToken);
+            refreshToken = redisService.createRefreshOAuth(socialId).getRefreshToken();
         }
         else{
             user = userOptional.get();
@@ -414,6 +438,7 @@ public class UserServiceImpl implements UserService {
         return OAuthResult.OAuthResultDto.builder()
                 .isLogin(isLogin)
                 .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .userId(user.getId())
                 .build();
     }

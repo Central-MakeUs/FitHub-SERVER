@@ -16,6 +16,7 @@ import fithub.app.service.AppleService;
 import fithub.app.service.UserService;
 import fithub.app.sms.dto.SmsResponseDto;
 import fithub.app.sms.service.SmsService;
+import fithub.app.utils.LoginResult;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.common.BaseDto;
 import fithub.app.web.dto.requestDto.UserRequestDto;
@@ -41,6 +42,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -264,10 +266,10 @@ public class UserRestController {
     @PostMapping("/users/sign-in")
     public ResponseDto<UserResponseDto.LoginResultDto> login(@RequestBody UserRequestDto.LoginDto request){
         User user = userService.findByPhoneNum(request.getTargetPhoneNum());
-        String jwt = userService.login(user,request.getPassword());
-        logger.info("로그인 토큰 : {}", jwt);
+        LoginResult.LoginResultDto loginResult = userService.login(user,request.getPassword());
+        logger.info("로그인 토큰 : {}", loginResult.getJwt());
 
-        return ResponseDto.of(UserConverter.toLoginDto(jwt, user));
+        return ResponseDto.of(UserConverter.toLoginDto(loginResult.getJwt(), loginResult.getRefreshToken(),user));
     }
 
     @Operation(summary = "내가 적은 게시글 목록 조회 API ✔️🔑- 최신순  ", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
@@ -501,5 +503,21 @@ public class UserRestController {
     public ResponseDto<UserResponseDto.FcmTokenUpdateDto> AddFcmToken(@RequestBody UserRequestDto.FcmTokenDto request, @AuthUser User user){
         userService.addFcmToken(user, request.getFcmToken());
         return ResponseDto.of(UserConverter.toFcmTokenUpdateDto());
+    }
+
+    @Operation(summary = "로그아웃 API ✔️ 🔑", description = "로그아웃을 해 가지고 있던 토큰으로 로그인이 안되도록 처리합니다, 클라이언트도 토큰 비워주세요. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "authorizationHeader", hidden = true)
+    })
+    @PostMapping("/users/logout")
+    public ResponseDto<UserResponseDto.LogOutDto> logout(@AuthUser User user,@RequestHeader("Authorization") String authorizationHeader){
+        String token = authorizationHeader.substring(7);
+        userService.LogOut(token);
+        return ResponseDto.of(UserConverter.toLogOutDto());
     }
 }

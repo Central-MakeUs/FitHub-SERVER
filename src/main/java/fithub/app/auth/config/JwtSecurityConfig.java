@@ -3,6 +3,7 @@ package fithub.app.auth.config;
 import fithub.app.auth.filter.JwtRequestFilter;
 import fithub.app.auth.handler.JwtAuthenticationExceptionHandler;
 import fithub.app.auth.provider.TokenProvider;
+import fithub.app.redis.RedisService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,9 +15,11 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
 
     private final TokenProvider tokenProvider;
 
+    private final RedisService redisService;
+
     @Override
     public void configure(HttpSecurity http)throws Exception{
-        JwtRequestFilter jwtFilter = new JwtRequestFilter(tokenProvider);
+        JwtRequestFilter jwtFilter = new JwtRequestFilter(tokenProvider, redisService);
         JwtAuthenticationExceptionHandler jwtAuthenticationExceptionHandler = new JwtAuthenticationExceptionHandler();
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         http.addFilterBefore(jwtAuthenticationExceptionHandler, JwtRequestFilter.class);

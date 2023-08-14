@@ -74,6 +74,7 @@ public class UserResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class LoginResultDto{
         private String accessToken;
+        private String refreshToken;
         private Long userId;
     }
 
@@ -187,5 +188,13 @@ public class UserResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class FcmTokenUpdateDto{
         LocalDateTime addedAt;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class LogOutDto{
+        LocalDateTime logoutTime;
     }
 }

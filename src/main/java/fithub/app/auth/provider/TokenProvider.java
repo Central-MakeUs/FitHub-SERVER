@@ -3,6 +3,11 @@ package fithub.app.auth.provider;
 import fithub.app.base.Code;
 import fithub.app.base.exception.handler.JwtAuthenticationException;
 //import fithub.app.redis.repository.RefreshTokenRepository;
+import fithub.app.base.exception.handler.UserException;
+import fithub.app.redis.RedisService;
+import fithub.app.redis.RefreshToken;
+import fithub.app.redis.repository.RefreshTokenRepository;
+import fithub.app.repository.UserRepository;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
@@ -19,10 +24,9 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.Collection;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -38,7 +42,9 @@ public class TokenProvider implements InitializingBean {
 
     private final long accessTokenValidityInMilliseconds;
 
-//    private final RefreshTokenRepository refreshTokenRepository;
+    private final UserRepository userRepository;
+
+    private final RedisService redisService;
 
     private Key key;
 
@@ -48,11 +54,12 @@ public class TokenProvider implements InitializingBean {
 
     public TokenProvider(@Value("${jwt.secret}") String secret,
                          @Value("${jwt.authorities-key}") String authoritiesKey,
-                         @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidityInMilliseconds){
+                         @Value("${jwt.access-token-validity-in-seconds}") long accessTokenValidityInMilliseconds, RedisService redisService, UserRepository userRepository){
         this.secret = secret;
         this.AUTHORITIES_KEY = authoritiesKey;
         this.accessTokenValidityInMilliseconds = accessTokenValidityInMilliseconds;
-//        this.refreshTokenRepository = refreshTokenRepository;
+        this.redisService = redisService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -74,6 +81,15 @@ public class TokenProvider implements InitializingBean {
                 .setExpiration(validity)
                 .compact();
     }
+
+    public String createRefreshTokenOAuth(String socialId){
+        return redisService.createRefreshOAuth(socialId).getToken();
+    }
+
+    public String createRefreshToken(String phoneNum){
+        return redisService.createRefresh(phoneNum).getToken();
+    }
+
 
     public String createAccessToken(Long userId,String phoneNum, Collection<? extends GrantedAuthority> authorities){
         long now = (new Date()).getTime();
