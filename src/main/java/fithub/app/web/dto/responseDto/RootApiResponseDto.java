@@ -21,6 +21,7 @@ public class RootApiResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class BestRecorderDto{
+        private Long id;
         private Integer ranking;
         private String rankingStatus;
         private String recorderNickName;
