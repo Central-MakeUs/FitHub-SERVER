@@ -33,6 +33,9 @@ public enum Code {
     NICKNAME_OK(HttpStatus.OK,2011, "사용 가능한 닉네임 입니다."),
 
     SEARCH_NO_DATA(HttpStatus.OK, 2021, "검색 결과가 없습니다."),
+
+    PASSWORD_CORRECT(HttpStatus.OK, 2022, "비밀번호가 일치합니다"),
+    PASSWORD_INCORRECT(HttpStatus.OK, 2023, "비밀번호가 일치하지 않습니다"),
     // Error Code
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 5000, "Internal server Error"),
 

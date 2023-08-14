@@ -41,6 +41,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestClientException;
 
+import javax.swing.plaf.PanelUI;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -284,7 +285,7 @@ public class UserRestController {
     @GetMapping("/users/articles/{categoryId}")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> myArticles(@RequestParam(name = "pageIndex", required = false) Integer pageIndex,@PathVariable(name = "categoryId") Integer categoryId ,@AuthUser User user){
         Page<Article> articles = categoryId.equals(0) ? userService.getMyArticlesNoCategory(pageIndex,user) : userService.getMyArticles(pageIndex, user,categoryId);
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user,categoryId.equals(0)));
     }
 
     @Operation(summary = "내가 적은 운동 인증 목록 조회 API ✔️🔑- 최신순 ", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
@@ -413,7 +414,7 @@ public class UserRestController {
     })
     @GetMapping("/users/{userId}/articles/{categoryId}")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> showArticleList(@PathVariable(name = "userId")Long userId, @PathVariable(name = "categoryId") Integer categoryId,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
-        return ResponseDto.of(ArticleConverter.toArticleDtoList(userService.findUserArticle(userId,categoryId,pageIndex),user));
+        return ResponseDto.of(ArticleConverter.toArticleDtoList(userService.findUserArticle(userId,categoryId,pageIndex),user,categoryId.equals(0)));
     }
 
     @Operation(summary = "조회 한 사용자의 운동인증 목록 조회 API ✔️ 🔑", description = "조회 한 사용자의 운동인증 목록 조회 API 입니다. 카테고리가 0이면 전체 조회")
@@ -501,5 +502,22 @@ public class UserRestController {
     public ResponseDto<UserResponseDto.FcmTokenUpdateDto> AddFcmToken(@RequestBody UserRequestDto.FcmTokenDto request, @AuthUser User user){
         userService.addFcmToken(user, request.getFcmToken());
         return ResponseDto.of(UserConverter.toFcmTokenUpdateDto());
+    }
+
+    @Operation(summary = "비밀번호 확인 API ✔️ 🔑", description = "비밀번호 변경 전, 비밀번호 확인을 위한 API입니다. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "2022", description = "OK : 비밀번호가 일치합니다."),
+            @ApiResponse(responseCode = "2023", description = "OK : 비밀번호가 일치하지 않습니다."),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PostMapping("/users/check-pass")
+    public ResponseDto checkPass(@RequestBody UserRequestDto.CheckPassDto request, @AuthUser User user){
+        Boolean checkPass = userService.checkPass(user, request);
+        Code result = checkPass ? Code.PASSWORD_CORRECT : Code.PASSWORD_INCORRECT;
+        return ResponseDto.of(result,null);
     }
 }
