@@ -130,9 +130,6 @@ public class User extends BaseEntity {
     private UserExercise bestRecordExercise;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private BestRecorder bestRecorder;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private UserReport userReport;
 
     public User update(String name){

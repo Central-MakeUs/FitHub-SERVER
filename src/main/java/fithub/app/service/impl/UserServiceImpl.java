@@ -375,6 +375,13 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void quitMember(User user) {
         User quitUser = userRepository.findById(user.getId()).orElseThrow(()->new UserException(Code.MEMBER_NOT_FOUND));
+//        Optional<BestRecorder> byUserId = bestRecorderRepository.findByUserId(user.getId());
+//        if(byUserId.isPresent())
+//
+        Optional<UserReport> userReport = userReportRepository.findByReporter(user);
+        if(userReport.isPresent())
+            userReportRepository.delete(userReport.get());
+        userReportRepository.flush();
         userRepository.delete(quitUser);
     }
 

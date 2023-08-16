@@ -14,5 +14,5 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
     @Query("SELECT COUNT(ur) FROM UserReport ur WHERE (ur.user = :target AND ur.reporter = :reporter) OR (ur.reporter = :target AND ur.user = :reporter)")
     Long checkReport (@Param("reporter") User reporter, @Param("target") User target);
 
-    Optional<UserReport> findByUser(User user);
+    Optional<UserReport> findByReporter(User user);
 }

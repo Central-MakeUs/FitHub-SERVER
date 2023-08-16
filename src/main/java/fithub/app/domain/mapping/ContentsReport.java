@@ -23,7 +23,7 @@ public class ContentsReport extends BaseEntity {
 
     private String  reason;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_user")
     private User user;
 

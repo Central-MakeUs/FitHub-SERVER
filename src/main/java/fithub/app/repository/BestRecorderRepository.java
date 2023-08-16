@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface BestRecorderRepository extends JpaRepository<BestRecorder, Long> {
 
-    Optional<BestRecorder> findByUser(User user);
+    Optional<BestRecorder> findByUserId(Long userId);
 }
