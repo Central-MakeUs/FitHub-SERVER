@@ -45,6 +45,7 @@ public class RootApiResponseDto {
         private Integer maxExp;
         private Long monthRecordCount;
         private Long contiguousRecordCount;
+        private Boolean isSocial;
     }
 
     @Builder

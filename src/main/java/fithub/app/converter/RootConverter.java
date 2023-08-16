@@ -51,6 +51,7 @@ public class RootConverter {
         return RootApiResponseDto.HomeUserInfo.builder()
                 .userNickname(user.getNickname())
                 .GradeName(mainGrade.getName())
+                .isSocial(user.getIsSocial())
                 .GradeImageUrl(mainGrade.getGradeIcon())
                 .category(user.getMainExercise().getExerciseCategory().getName())
                 .exp(user.getMainExercise().getExp())
