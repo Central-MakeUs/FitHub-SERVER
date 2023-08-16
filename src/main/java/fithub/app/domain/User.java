@@ -5,10 +5,7 @@ import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.enums.Gender;
 import fithub.app.domain.enums.SocialType;
 import fithub.app.domain.enums.Status;
-import fithub.app.domain.mapping.ArticleLikes;
-import fithub.app.domain.mapping.CommentsLikes;
-import fithub.app.domain.mapping.RecordLikes;
-import fithub.app.domain.mapping.SavedArticle;
+import fithub.app.domain.mapping.*;
 import fithub.app.web.dto.requestDto.UserRequestDto;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -118,6 +115,12 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Notification> notificationList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ContentsReport> contentsReportList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<ExercisePreference> exercisePreferenceList = new ArrayList<>();
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "main_exercise")
     private UserExercise mainExercise;
@@ -125,6 +128,9 @@ public class User extends BaseEntity {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "best_exercise")
     private UserExercise bestRecordExercise;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserReport userReport;
 
     public User update(String name){
         this.name = name;

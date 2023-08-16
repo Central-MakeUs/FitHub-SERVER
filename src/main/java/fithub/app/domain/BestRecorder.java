@@ -23,7 +23,21 @@ public class BestRecorder {
     @Enumerated(EnumType.STRING)
     private RankingStatus rankingStatus;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private Long userId;
+
+    private String nickname;
+
+    private String exerciseName;
+
+    private Integer level;
+
+    private String gradeName;
+
+    private Long recordCount;
+
+    private String profileUrl;
+
+    void setUserId(Long userId){
+
+    }
 }

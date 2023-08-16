@@ -3,6 +3,7 @@ package fithub.app.domain;
 
 import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.mapping.CommentsLikes;
+import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.domain.mapping.RecordLikes;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
@@ -67,6 +68,9 @@ public class Record extends BaseEntity {
 
     @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
     private List<Notification> notificationList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "record", cascade = CascadeType.ALL)
+    private List<ContentsReport> contentsReportList = new ArrayList<>();
 
     public Record setImage(String imageUrl){
         this.imageUrl = imageUrl;
