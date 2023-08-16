@@ -502,4 +502,18 @@ public class UserRestController {
         userService.addFcmToken(user, request.getFcmToken());
         return ResponseDto.of(UserConverter.toFcmTokenUpdateDto());
     }
+
+    @Operation(summary = "회원탈퇴 API", description = "회원탈퇴 API입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK, 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true)
+    })
+    @PostMapping("/users/quit")
+    public ResponseDto<UserResponseDto.MemberQuitDto> quitMember(@AuthUser User user){
+        userService.quitMember(user);
+        return ResponseDto.of(UserConverter.toMemberQuitDto());
+    }
 }

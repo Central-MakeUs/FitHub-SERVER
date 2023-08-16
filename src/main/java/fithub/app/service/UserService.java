@@ -66,4 +66,6 @@ public interface UserService {
     User findUserNotBlocked(Long userId, User user);
 
     void addFcmToken(User user, String token);
+
+    void quitMember(User user);
 }

@@ -4,6 +4,7 @@ package fithub.app.domain;
 import com.amazonaws.services.ec2.model.LocalGateway;
 import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.mapping.CommentsLikes;
+import fithub.app.domain.mapping.ContentsReport;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -54,6 +55,9 @@ public class Comments extends BaseEntity {
 
     @OneToMany(mappedBy = "comments", cascade = CascadeType.ALL)
     List<CommentsLikes> commentsLikesList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "comments", cascade = CascadeType.ALL)
+    List<ContentsReport> contentsReportList = new ArrayList<>();
 
     public void setUser(User user){
         if(this.user != null)

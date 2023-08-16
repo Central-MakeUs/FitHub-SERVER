@@ -67,6 +67,8 @@ public class UserServiceImpl implements UserService {
 
     private final FcmTokenRepository fcmTokenRepository;
 
+    private final BestRecorderRepository bestRecorderRepository;
+
     @Value("${paging.size}")
     private Integer size;
 
@@ -367,6 +369,13 @@ public class UserServiceImpl implements UserService {
                 .token(token)
                 .build());
         fcmToken.setUser(user);
+    }
+
+    @Override
+    @Transactional
+    public void quitMember(User user) {
+        User quitUser = userRepository.findById(user.getId()).orElseThrow(()->new UserException(Code.MEMBER_NOT_FOUND));
+        userRepository.delete(quitUser);
     }
 
     @Override
