@@ -152,6 +152,7 @@ public class UserRequestDto {
     public static class LoginDto{
         private String targetPhoneNum;
         private String password;
+        private String fcmToken;
     }
 
     @Getter @Setter

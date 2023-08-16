@@ -265,7 +265,7 @@ public class UserRestController {
     @PostMapping("/users/sign-in")
     public ResponseDto<UserResponseDto.LoginResultDto> login(@RequestBody UserRequestDto.LoginDto request){
         User user = userService.findByPhoneNum(request.getTargetPhoneNum());
-        String jwt = userService.login(user,request.getPassword());
+        String jwt = userService.login(user,request.getPassword(), request.getFcmToken());
         logger.info("로그인 토큰 : {}", jwt);
 
         return ResponseDto.of(UserConverter.toLoginDto(jwt, user));
