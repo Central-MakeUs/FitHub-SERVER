@@ -385,6 +385,13 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(quitUser);
     }
 
+    public Boolean checkPass(User user, UserRequestDto.CheckPassDto request) {
+        String password = user.getPassword();
+        if (!passwordEncoder.matches(request.getPassword(), password))
+            return false;
+        return true;
+    }
+
     @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {

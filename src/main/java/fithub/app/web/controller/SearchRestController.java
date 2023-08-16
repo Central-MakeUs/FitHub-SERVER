@@ -6,6 +6,7 @@ import fithub.app.base.ResponseDto;
 import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.RecordConverter;
 import fithub.app.domain.Article;
+import fithub.app.domain.RecommendArticleKeyword;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
 import fithub.app.service.SearchService;
@@ -28,6 +29,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Validated
 @RestController
@@ -75,7 +78,7 @@ public class SearchRestController {
         if(articles == null || articles.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
-            return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
+            return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user,false));
     }
 
     @Operation(summary = "게시글 검색 API - 인기순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
@@ -98,7 +101,7 @@ public class SearchRestController {
         if(articles == null || articles.getTotalElements() == 0)
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
-            return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user));
+            return ResponseDto.of(ArticleConverter.toArticleDtoList(articles, user,false));
     }
 
     @Operation(summary = "인증 검색 API - 최신순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
@@ -124,7 +127,7 @@ public class SearchRestController {
             return ResponseDto.of(RecordConverter.toRecordDtoList(records, user));
     }
 
-    @Operation(summary = "인증 검색 API - 인기순 ✔️", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
+    @Operation(summary = "인증 검색 API - 인기순 ✔️🔑", description = "categoryId를 0으로 주면 카테고리 무관 전체 조회, pageIndex를 queryString으로 줘서 페이징 사이즈는 12개 ❗주의, 첫 페이지는 0번 입니다 아시겠죠?❗")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "2021", description = "OK : 검색결과 없음",content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -145,5 +148,20 @@ public class SearchRestController {
             return ResponseDto.of(Code.SEARCH_NO_DATA, null);
         else
             return ResponseDto.of(RecordConverter.toRecordDtoList(records, user));
+    }
+
+
+    @Operation(summary = "게시글 검색 추천 해시태그 조회 API 🔑✔️", description = "게시글 검색 추천 해시태그 조회 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/search/articles/recommend-keyword")
+    public ResponseDto<ArticleResponseDto.ArticleRecommendKeywordDto> getRecommendKeyword(){
+        List<RecommendArticleKeyword> recommendArticleKeywordList = searchService.getRecommendArticleKeyword();
+        return ResponseDto.of(ArticleConverter.toArticleRecommendKeywordDto(recommendArticleKeywordList));
     }
 }

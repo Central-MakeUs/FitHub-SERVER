@@ -67,5 +67,8 @@ public interface UserService {
 
     void addFcmToken(User user, String token);
 
+
     void quitMember(User user);
+
+    Boolean checkPass(User user, UserRequestDto.CheckPassDto request);
 }

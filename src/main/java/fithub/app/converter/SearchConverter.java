@@ -12,7 +12,7 @@ public class SearchConverter {
 
     public static SearchPreViewResponseDto.SearchPreViewDto toSearchPreViewDto(Page<Article> articleList, Page<Record> recordList, User user){
         return SearchPreViewResponseDto.SearchPreViewDto.builder()
-                .articlePreview(ArticleConverter.toArticleDtoList(articleList,user))
+                .articlePreview(ArticleConverter.toArticleDtoList(articleList,user,false))
                 .recordPreview(RecordConverter.toRecordDtoList(recordList,user))
                 .build();
     }
