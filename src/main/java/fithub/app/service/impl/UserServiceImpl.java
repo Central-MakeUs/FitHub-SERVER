@@ -370,6 +370,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public Boolean checkPass(User user, UserRequestDto.CheckPassDto request) {
+        String password = user.getPassword();
+        if(!passwordEncoder.matches(request.getPassword(), password))
+            return false;
+        return true;
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));

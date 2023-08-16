@@ -35,6 +35,7 @@ public class RootConverter {
     public static RootApiResponseDto.BestRecorderDto toBestRecorderDto(BestRecorder bestRecorder){
         UserExercise bestRecordExercise = bestRecorder.getUser().getBestRecordExercise();
         return RootApiResponseDto.BestRecorderDto.builder()
+                .id(bestRecorder.getUser().getId())
                 .ranking(bestRecorder.getRanking())
                 .rankingStatus(bestRecorder.getRankingStatus().toString())
                 .recorderNickName(bestRecorder.getUser().getNickname())
