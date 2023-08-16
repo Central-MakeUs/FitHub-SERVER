@@ -358,4 +358,10 @@ public class UserConverter {
                 .addedAt(LocalDateTime.now())
                 .build();
     }
+
+    public static UserResponseDto.MemberQuitDto toMemberQuitDto(){
+        return UserResponseDto.MemberQuitDto.builder()
+                .quitAt(LocalDateTime.now())
+                .build();
+    }
 }

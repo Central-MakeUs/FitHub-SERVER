@@ -34,13 +34,13 @@ public class BestRecoderReader extends StepExecutionListenerSupport implements I
         }
 
         List<Long> bestIds = allBestRecorder.stream()
-                .map(bestRecorder -> bestRecorder.getUser().getId()).collect(Collectors.toList());
+                .map(bestRecorder -> bestRecorder.getUserId()).collect(Collectors.toList());
 
         StepExecution stepExecution = StepSynchronizationManager.getContext().getStepExecution();
         stepExecution.getJobExecution().getExecutionContext().put("bestRecorders", bestIds);
 
         for(BestRecorder b : allBestRecorder)
-            logger.info("이번의 베스트 인증러 : {}", b.getUser().getId());
+            logger.info("이번의 베스트 인증러 : {}", b.getNickname());
         return null;
     }
 

@@ -33,17 +33,16 @@ public class RootConverter {
     }
 
     public static RootApiResponseDto.BestRecorderDto toBestRecorderDto(BestRecorder bestRecorder){
-        UserExercise bestRecordExercise = bestRecorder.getUser().getBestRecordExercise();
         return RootApiResponseDto.BestRecorderDto.builder()
-                .id(bestRecorder.getUser().getId())
+                .id(bestRecorder.getUserId())
                 .ranking(bestRecorder.getRanking())
                 .rankingStatus(bestRecorder.getRankingStatus().toString())
-                .recorderNickName(bestRecorder.getUser().getNickname())
-                .category(bestRecordExercise.getExerciseCategory().getName())
-                .GradeName(bestRecordExercise.getGrade().getName())
-                .level(bestRecordExercise.getGrade().getLevel())
-                .profileUrl(bestRecorder.getUser().getProfileUrl())
-                .recordCount(bestRecordExercise.getRecords())
+                .recorderNickName(bestRecorder.getNickname())
+                .category(bestRecorder.getExerciseName())
+                .GradeName(bestRecorder.getGradeName())
+                .level(bestRecorder.getLevel())
+                .profileUrl(bestRecorder.getProfileUrl())
+                .recordCount(bestRecorder.getRecordCount())
                 .build();
     }
 

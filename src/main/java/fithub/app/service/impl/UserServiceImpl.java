@@ -67,6 +67,8 @@ public class UserServiceImpl implements UserService {
 
     private final FcmTokenRepository fcmTokenRepository;
 
+    private final BestRecorderRepository bestRecorderRepository;
+
     @Value("${paging.size}")
     private Integer size;
 
@@ -370,9 +372,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void quitMember(User user) {
+        User quitUser = userRepository.findById(user.getId()).orElseThrow(()->new UserException(Code.MEMBER_NOT_FOUND));
+//        Optional<BestRecorder> byUserId = bestRecorderRepository.findByUserId(user.getId());
+//        if(byUserId.isPresent())
+//
+        Optional<UserReport> userReport = userReportRepository.findByReporter(user);
+        if(userReport.isPresent())
+            userReportRepository.delete(userReport.get());
+        userReportRepository.flush();
+        userRepository.delete(quitUser);
+    }
+
     public Boolean checkPass(User user, UserRequestDto.CheckPassDto request) {
         String password = user.getPassword();
-        if(!passwordEncoder.matches(request.getPassword(), password))
+        if (!passwordEncoder.matches(request.getPassword(), password))
             return false;
         return true;
     }

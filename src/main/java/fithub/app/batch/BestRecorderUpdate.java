@@ -41,10 +41,18 @@ public class BestRecorderUpdate implements ItemProcessor<User, BestRecorder> {
         bestRecorderRepository.deleteAll();
 
         if(bestRecorders == null || bestRecorders.size() == 0){
+            logger.error("최고인증러가 없어!");
             for (int i = 0; i < bestUsers.size(); i++){
+                User user = bestUsers.get(i);
                 bestRecorderRepository.save(BestRecorder.builder()
-                        .user(bestUsers.get(i))
+                        .userId(user.getId())
                         .ranking(i + 1)
+                        .gradeName(user.getBestRecordExercise().getGrade().getName())
+                        .level(user.getBestRecordExercise().getGrade().getLevel())
+                        .profileUrl(user.getProfileUrl())
+                        .recordCount(user.getBestRecordExercise().getRecords())
+                        .exerciseName(user.getBestRecordExercise().getExerciseCategory().getName())
+                        .nickname(user.getNickname())
                         .rankingStatus(RankingStatus.NEW)
                         .standardDate(LocalDate.now())
                         .build());
@@ -62,24 +70,42 @@ public class BestRecorderUpdate implements ItemProcessor<User, BestRecorder> {
                     isfound = true;
                     if (i == j) {
                         bestRecorderRepository.save(BestRecorder.builder()
-                                .user(user)
+                                .userId(user.getId())
                                 .ranking(i + 1)
+                                .gradeName(user.getBestRecordExercise().getGrade().getName())
+                                .level(user.getBestRecordExercise().getGrade().getLevel())
+                                .profileUrl(user.getProfileUrl())
+                                .recordCount(user.getBestRecordExercise().getRecords())
+                                .exerciseName(user.getBestRecordExercise().getExerciseCategory().getName())
+                                .nickname(user.getNickname())
                                 .rankingStatus(RankingStatus.KEEP)
                                 .standardDate(LocalDate.now())
                                 .build());
                     }
                     else if (i < j) {
                         bestRecorderRepository.save(BestRecorder.builder()
-                                .user(user)
+                                .userId(user.getId())
                                 .ranking(i + 1)
+                                .gradeName(user.getBestRecordExercise().getGrade().getName())
+                                .level(user.getBestRecordExercise().getGrade().getLevel())
+                                .profileUrl(user.getProfileUrl())
+                                .recordCount(user.getBestRecordExercise().getRecords())
+                                .exerciseName(user.getBestRecordExercise().getExerciseCategory().getName())
+                                .nickname(user.getNickname())
                                 .rankingStatus(RankingStatus.UP)
                                 .standardDate(LocalDate.now())
                                 .build());
                     }
                     else {
                         bestRecorderRepository.save(BestRecorder.builder()
-                                .user(user)
+                                .userId(user.getId())
                                 .ranking(i + 1)
+                                .gradeName(user.getBestRecordExercise().getGrade().getName())
+                                .level(user.getBestRecordExercise().getGrade().getLevel())
+                                .profileUrl(user.getProfileUrl())
+                                .recordCount(user.getBestRecordExercise().getRecords())
+                                .exerciseName(user.getBestRecordExercise().getExerciseCategory().getName())
+                                .nickname(user.getNickname())
                                 .rankingStatus(RankingStatus.DOWN)
                                 .standardDate(LocalDate.now())
                                 .build());
@@ -88,8 +114,14 @@ public class BestRecorderUpdate implements ItemProcessor<User, BestRecorder> {
             }
             if(!isfound) {
                 bestRecorderRepository.save(BestRecorder.builder()
-                        .user(user)
+                        .userId(user.getId())
                         .ranking(i + 1)
+                        .gradeName(user.getBestRecordExercise().getGrade().getName())
+                        .level(user.getBestRecordExercise().getGrade().getLevel())
+                        .profileUrl(user.getProfileUrl())
+                        .recordCount(user.getBestRecordExercise().getRecords())
+                        .exerciseName(user.getBestRecordExercise().getExerciseCategory().getName())
+                        .nickname(user.getNickname())
                         .rankingStatus(RankingStatus.NEW)
                         .standardDate(LocalDate.now())
                         .build());
