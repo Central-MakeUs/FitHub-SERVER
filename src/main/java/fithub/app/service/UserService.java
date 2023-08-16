@@ -71,4 +71,6 @@ public interface UserService {
     void quitMember(User user);
 
     Boolean checkPass(User user, UserRequestDto.CheckPassDto request);
+
+    void checkBlock(User user, Long userId);
 }

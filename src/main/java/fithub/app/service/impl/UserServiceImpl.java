@@ -404,6 +404,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void checkBlock(User user, Long userId) {
+        Optional<UserReport> findResult = userReportRepository.findByReporterAndUser(user, userRepository.findById(userId).get());
+        if(findResult.isPresent())
+            throw new UserException(Code.BLOCKED_USER);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
