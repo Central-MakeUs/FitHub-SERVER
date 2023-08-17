@@ -159,8 +159,8 @@ public class RootApiResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class NotificationChangeDto{
-        Boolean newCommunityPermit;
-        Boolean newMarketingPermit;
+        Boolean CommunityPermit;
+        Boolean MarketingPermit;
     }
 
     @Builder

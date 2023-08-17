@@ -167,8 +167,8 @@ public class RootConverter {
 
     public static RootApiResponseDto.NotificationChangeDto toNotificationChangeDto(User user){
         return RootApiResponseDto.NotificationChangeDto.builder()
-                .newCommunityPermit(user.getCommunityPermit())
-                .newMarketingPermit(user.getMarketingAgree())
+                .CommunityPermit(user.getCommunityPermit())
+                .MarketingPermit(user.getMarketingAgree())
                 .build();
     }
 
