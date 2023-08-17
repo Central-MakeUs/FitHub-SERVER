@@ -60,7 +60,7 @@ public class RootController {
         return "I'm healthy";
     }
 
-    @Operation(summary = "자동 로그인 API ✔️🔑", description = "자동 로그인 API 입니다. 이제 FCM 토큰도 주셔야 합니다!")
+    @Operation(summary = "자동 로그인 API ✔️🔑", description = "자동 로그인 API 입니다. 스웨거에 authorizationHeader는 무시해주세요 스웨거에서는 옆 자물쇠에 토큰 넣어주세요! 평소대로 헤더에 토큰 넣어서 주시면 됩니다")
     @Parameters({
             @Parameter(name = "user", hidden = true)
     })
@@ -72,7 +72,7 @@ public class RootController {
 
     })
     @GetMapping("/")
-    public ResponseDto<RootApiResponseDto.AutoLoginResponseDto> AutoLogin(String authorizationHeader, HttpServletRequest request){
+    public ResponseDto<RootApiResponseDto.AutoLoginResponseDto> AutoLogin(@RequestHeader(value = "Authorization", required = false) String authorizationHeader){
 
 
         Code result = null;
