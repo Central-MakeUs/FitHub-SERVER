@@ -33,7 +33,7 @@ public interface UserService {
 
     void findByPhoneNumPassChange(String phoneNum);
 
-    String login(User user, String password);
+    String login(User user, String password, String fcmToken);
 
     User socialInfoComplete(UserRequestDto.UserOAuthInfo request, User user) throws IOException;
 
@@ -71,4 +71,6 @@ public interface UserService {
     void quitMember(User user);
 
     Boolean checkPass(User user, UserRequestDto.CheckPassDto request);
+
+    void checkBlock(User user, Long userId);
 }
