@@ -142,13 +142,14 @@ public class UserServiceImpl implements UserService {
         ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(savedUser, exerciseCategory);
         exercisePreferenceRepository.save(exercisePreference);
 
-        FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
+        Optional<FcmToken> token = fcmTokenRepository.findByToken(request.getFcmToken());
+        if(token.isEmpty()) {
+            FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
                 .token(request.getFcmToken())
                 .user(savedUser)
-                .build()
-        );
-
-        fcmToken.setUser(savedUser);
+                .build());
+            fcmToken.setUser(savedUser);
+        }
         return UserConverter.toCompleteUser(savedUser, exerciseCategory);
     }
 
@@ -204,12 +205,17 @@ public class UserServiceImpl implements UserService {
         ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(updatedUser, exerciseCategory);
         exercisePreferenceRepository.save(exercisePreference);
 
-        FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
-                .token(request.getFcmToken())
-                .user(user)
-                .build());
+        Optional<FcmToken> token = fcmTokenRepository.findByToken(request.getFcmToken());
 
-        fcmToken.setUser(user);
+        if(token.isEmpty()) {
+            FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
+                    .token(request.getFcmToken())
+                    .user(user)
+                    .build());
+
+            fcmToken.setUser(user);
+        }
+
         return UserConverter.toCompleteUser(updatedUser, exerciseCategory);
     }
 
