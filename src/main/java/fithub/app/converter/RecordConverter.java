@@ -12,6 +12,7 @@ import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.utils.TimeConverter;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
+import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -209,6 +210,12 @@ public class RecordConverter {
         return RecordResponseDto.RecordReportDto.builder()
                 .reportedRecordId(recordId)
                 .reportedAt(LocalDateTime.now())
+                .build();
+    }
+
+    public static RecordResponseDto.RecordLimitDto toRecordLimitDto(Boolean isWrite){
+        return RecordResponseDto.RecordLimitDto.builder()
+                .isWrite(isWrite)
                 .build();
     }
 }

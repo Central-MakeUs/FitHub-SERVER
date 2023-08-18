@@ -357,4 +357,22 @@ public class RecordServiceImpl implements RecordService {
             fireBaseService.sendMessageToV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHead, FCMType.RECORD.toString(),record.getId().toString(),notification.getId().toString(), record.getImageUrl());
         }
     }
+
+    @Override
+    public Boolean checkWriteRecord(User user) {
+        User findUser = userRepository.findById(user.getId()).get();
+
+        Boolean isWrite = false;
+
+        for( UserExercise userExercise :  findUser.getUserExerciseList()){
+            if(userExercise.getRecentRecord() == null)
+                continue;
+            if(userExercise.getRecentRecord().isEqual(LocalDate.now())){
+                isWrite = true;
+                break;
+            }
+        }
+
+        return isWrite;
+    }
 }

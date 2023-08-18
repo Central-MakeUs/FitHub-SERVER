@@ -4,6 +4,7 @@ import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.base.ResponseDto;
 import fithub.app.converter.ArticleConverter;
 import fithub.app.converter.RecordConverter;
+import fithub.app.converter.UserConverter;
 import fithub.app.domain.Article;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
@@ -13,6 +14,7 @@ import fithub.app.validation.annotation.ExistCategory;
 import fithub.app.validation.annotation.ExistRecord;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
+import fithub.app.web.dto.responseDto.UserResponseDto;
 import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -215,5 +217,19 @@ public class RecordRestController {
     public ResponseDto<RecordResponseDto.RecordReportDto> reportRecord(@PathVariable(name = "recordId")Long recordId, @AuthUser User user){
         ContentsReport contentsReport = recordService.reportRecord(recordId, user);
         return ResponseDto.of(RecordConverter.toRecordReportDto(recordId, contentsReport));
+    }
+
+    @Operation(summary = "오늘 적은 운동인증이 있는지 체크하는 API ✔️🔑",description = "오늘 적은 운동인증이 있는지 체크하는 API입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/records/check-today")
+    public ResponseDto<RecordResponseDto.RecordLimitDto> checkRecordLimit(@AuthUser User user){
+        Boolean isWrite = recordService.checkWriteRecord(user);
+        return ResponseDto.of(RecordConverter.toRecordLimitDto(isWrite));
     }
 }

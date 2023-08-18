@@ -417,6 +417,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public String changePassToken(User user, UserRequestDto.ChangePassTokenDto request) {
+        User target = userRepository.findById(user.getId()).get();
+        String encodedPassword = passwordEncoder.encode(request.getNewPassword());
+        logger.info("바뀐 pass : {}", encodedPassword);
+        User updatedUser = user.setPassword(encodedPassword);
+        return request.getNewPassword();
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));

@@ -95,19 +95,50 @@ public class RootServiceImpl implements RootService {
         return facilitiesInfoDtoList;
     }
 
-    @Override
-    public List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(String x, String y, String userX, String userY, String keyword) {
+//    @Override
+//    public List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(String x, String y, String userX, String userY, String keyword) {
+//
+//
+//        String queryKeyword = null;
+//        List<Object[]> facilitiesList = null;
+//
+//        queryKeyword = "%" + keyword + "%";
+//
+//        if((x == null || x.equals(""))  && (y == null || y.equals("")))
+//            facilitiesList = facilitiesRepository.findFacilitiesMyLoc(Float.parseFloat(userX), Float.parseFloat(userY),queryKeyword, queryKeyword, queryKeyword,Float.parseFloat(userX), Float.parseFloat(userY));
+//        else
+//            facilitiesList = facilitiesRepository.findFacilities(Float.parseFloat(userX), Float.parseFloat(userY), queryKeyword, queryKeyword, queryKeyword, Float.parseFloat(x), Float.parseFloat(y));
+//
+//
+//        List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()
+//                .map(facilities -> RootConverter.toFacilitiesInfoDto(facilities)).collect(Collectors.toList());
+//
+//        return facilitiesInfoDtoList;
+//    }
 
+    @Override
+    public List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(String x, String y, String userX, String userY, String keyword, Integer categoryId) {
+
+        if(categoryId != 0)
+            exerciseCategoryRepository.findById(categoryId).orElseThrow(()->new RootException(Code.CATEGORY_ERROR));
 
         String queryKeyword = null;
         List<Object[]> facilitiesList = null;
 
-        queryKeyword = "%" + keyword + "%";
+        queryKeyword = keyword == null ? null :  "%" + keyword + "%";
 
-        if((x == null || x.equals(""))  && (y == null || y.equals("")))
-            facilitiesList = facilitiesRepository.findFacilitiesMyLoc(Float.parseFloat(userX), Float.parseFloat(userY),queryKeyword, queryKeyword, queryKeyword,Float.parseFloat(userX), Float.parseFloat(userY));
-        else
-            facilitiesList = facilitiesRepository.findFacilities(Float.parseFloat(userX), Float.parseFloat(userY), queryKeyword, queryKeyword, queryKeyword, Float.parseFloat(x), Float.parseFloat(y));
+        if(queryKeyword == null) {
+            if (categoryId == 0)
+                facilitiesList = facilitiesRepository.findFacilities(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance);
+            else
+                facilitiesList = facilitiesRepository.findFacilitiesCategory(Float.parseFloat(userX), Float.parseFloat(userY), Float.parseFloat(x), Float.parseFloat(y), maxDistance, categoryId);
+        }
+        else {
+            if(categoryId == 0)
+                facilitiesList = facilitiesRepository.findFacilitiesKeyword(Float.parseFloat(userX), Float.parseFloat(userY), queryKeyword, queryKeyword, queryKeyword, Float.parseFloat(x), Float.parseFloat(y), maxDistance);
+            else
+                facilitiesList = facilitiesRepository.findFacilitiesKeywordCategory(Float.parseFloat(userX), Float.parseFloat(userY), queryKeyword, queryKeyword, queryKeyword, Float.parseFloat(x), Float.parseFloat(y), maxDistance, categoryId);
+        }
 
 
         List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()

@@ -73,4 +73,7 @@ public interface UserService {
     Boolean checkPass(User user, UserRequestDto.CheckPassDto request);
 
     void checkBlock(User user, Long userId);
+
+    String changePassToken(User user, UserRequestDto.ChangePassTokenDto request);
+
 }
