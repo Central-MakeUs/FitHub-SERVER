@@ -350,6 +350,7 @@ public class UserConverter {
                 .name(user.getName())
                 .email(user.getEmail())
                 .phoneNum(user.getPhoneNum())
+                .isSocial(user.getIsSocial())
                 .build();
     }
 
