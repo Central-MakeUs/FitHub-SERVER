@@ -179,6 +179,7 @@ public class UserResponseDto {
         String name;
         String email;
         String phoneNum;
+        Boolean isSocial;
     }
 
     @Builder
