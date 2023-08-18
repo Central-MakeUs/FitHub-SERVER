@@ -265,7 +265,7 @@ public class UserRestController {
     @PostMapping("/users/sign-in")
     public ResponseDto<UserResponseDto.LoginResultDto> login(@RequestBody UserRequestDto.LoginDto request){
         User user = userService.findByPhoneNum(request.getTargetPhoneNum());
-        String jwt = userService.login(user,request.getPassword());
+        String jwt = userService.login(user,request.getPassword(), request.getFcmToken());
         logger.info("로그인 토큰 : {}", jwt);
 
         return ResponseDto.of(UserConverter.toLoginDto(jwt, user));
@@ -404,6 +404,7 @@ public class UserRestController {
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4013", description = "BAD_REQUEST : 없는 유저입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 없는 카테고리입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4064", description = "FORBIDDEN : 조회가 할 수 없는 사용자 입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
@@ -414,6 +415,7 @@ public class UserRestController {
     })
     @GetMapping("/users/{userId}/articles/{categoryId}")
     public ResponseDto<ArticleResponseDto.ArticleDtoList> showArticleList(@PathVariable(name = "userId")Long userId, @PathVariable(name = "categoryId") Integer categoryId,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
+        userService.checkBlock(user,userId);
         return ResponseDto.of(ArticleConverter.toArticleDtoList(userService.findUserArticle(userId,categoryId,pageIndex),user,categoryId.equals(0)));
     }
 
@@ -422,6 +424,7 @@ public class UserRestController {
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4013", description = "BAD_REQUEST : 없는 유저입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "4030", description = "BAD_REQUEST : 없는 카테고리 입니다..", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4064", description = "FORBIDDEN : 조회가 할 수 없는 사용자 입니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @Parameters({
@@ -432,6 +435,7 @@ public class UserRestController {
     })
     @GetMapping("/users/{userId}/records/{categoryId}")
     public ResponseDto<RecordResponseDto.recordDtoList> showRecordList(@PathVariable(name = "userId")Long userId, @PathVariable(name = "categoryId") Integer categoryId,@RequestParam(name = "pageIndex") Integer pageIndex, @AuthUser User user){
+        userService.checkBlock(user,userId);
         return ResponseDto.of(RecordConverter.toRecordDtoList(userService.findUserRecord(userId,categoryId,pageIndex),user));
     }
 

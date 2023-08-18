@@ -142,13 +142,14 @@ public class UserServiceImpl implements UserService {
         ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(savedUser, exerciseCategory);
         exercisePreferenceRepository.save(exercisePreference);
 
-        FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
+        Optional<FcmToken> token = fcmTokenRepository.findByToken(request.getFcmToken());
+        if(token.isEmpty()) {
+            FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
                 .token(request.getFcmToken())
                 .user(savedUser)
-                .build()
-        );
-
-        fcmToken.setUser(savedUser);
+                .build());
+            fcmToken.setUser(savedUser);
+        }
         return UserConverter.toCompleteUser(savedUser, exerciseCategory);
     }
 
@@ -172,13 +173,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String login(User user, String password) {
+    @Transactional
+    public String login(User user, String password, String fcmToken) {
         System.out.println(password);
         String jwt = null;
         if(!passwordEncoder.matches(password, user.getPassword()))
             throw new UserException(Code.PASSWORD_ERROR);
-        else
+        else {
             jwt = tokenProvider.createAccessToken(user.getId(), user.getPhoneNum(), Arrays.asList(new SimpleGrantedAuthority("USER")));
+            Optional<FcmToken> byToken = fcmTokenRepository.findByToken(fcmToken);
+            if(byToken.isEmpty()) {
+                FcmToken token = fcmTokenRepository.save(FcmToken.builder()
+                        .user(user)
+                        .token(fcmToken)
+                        .build());
+                logger.info("토큰 추가 완료!");
+                token.setUser(user);
+            }
+        }
         return jwt;
     }
 
@@ -193,12 +205,17 @@ public class UserServiceImpl implements UserService {
         ExercisePreference exercisePreference = ExercisePreferenceConverter.toExercisePreference(updatedUser, exerciseCategory);
         exercisePreferenceRepository.save(exercisePreference);
 
-        FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
-                .token(request.getFcmToken())
-                .user(user)
-                .build());
+        Optional<FcmToken> token = fcmTokenRepository.findByToken(request.getFcmToken());
 
-        fcmToken.setUser(user);
+        if(token.isEmpty()) {
+            FcmToken fcmToken = fcmTokenRepository.save(FcmToken.builder()
+                    .token(request.getFcmToken())
+                    .user(user)
+                    .build());
+
+            fcmToken.setUser(user);
+        }
+
         return UserConverter.toCompleteUser(updatedUser, exerciseCategory);
     }
 
@@ -390,6 +407,13 @@ public class UserServiceImpl implements UserService {
         if (!passwordEncoder.matches(request.getPassword(), password))
             return false;
         return true;
+    }
+
+    @Override
+    public void checkBlock(User user, Long userId) {
+        Optional<UserReport> findResult = userReportRepository.findByReporterAndUser(user, userRepository.findById(userId).get());
+        if(findResult.isPresent())
+            throw new UserException(Code.BLOCKED_USER);
     }
 
     @Override

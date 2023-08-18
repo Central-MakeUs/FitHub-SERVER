@@ -45,6 +45,7 @@ public class RootApiResponseDto {
         private Integer maxExp;
         private Long monthRecordCount;
         private Long contiguousRecordCount;
+        private Boolean isSocial;
     }
 
     @Builder
@@ -158,8 +159,8 @@ public class RootApiResponseDto {
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class NotificationChangeDto{
-        Boolean newCommunityPermit;
-        Boolean newMarketingPermit;
+        Boolean CommunityPermit;
+        Boolean MarketingPermit;
     }
 
     @Builder

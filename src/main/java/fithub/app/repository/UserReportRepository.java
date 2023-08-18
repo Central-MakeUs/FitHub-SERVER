@@ -15,4 +15,6 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
     Long checkReport (@Param("reporter") User reporter, @Param("target") User target);
 
     Optional<UserReport> findByReporter(User user);
+
+    Optional<UserReport> findByReporterAndUser(User reporter, User target);
 }

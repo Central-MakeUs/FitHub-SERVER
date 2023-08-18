@@ -51,6 +51,7 @@ public class RootConverter {
         return RootApiResponseDto.HomeUserInfo.builder()
                 .userNickname(user.getNickname())
                 .GradeName(mainGrade.getName())
+                .isSocial(user.getIsSocial())
                 .GradeImageUrl(mainGrade.getGradeIcon())
                 .category(user.getMainExercise().getExerciseCategory().getName())
                 .exp(user.getMainExercise().getExp())
@@ -166,8 +167,8 @@ public class RootConverter {
 
     public static RootApiResponseDto.NotificationChangeDto toNotificationChangeDto(User user){
         return RootApiResponseDto.NotificationChangeDto.builder()
-                .newCommunityPermit(user.getCommunityPermit())
-                .newMarketingPermit(user.getMarketingAgree())
+                .CommunityPermit(user.getCommunityPermit())
+                .MarketingPermit(user.getMarketingAgree())
                 .build();
     }
 
