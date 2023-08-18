@@ -19,7 +19,8 @@ public interface RootService {
 
     List<RootApiResponseDto.FacilitiesInfoDto> exploreFacilities(Integer categoryId, String x, String y, String userX ,String userY);
 
-    List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(String x, String y, String userX ,String userY,String keyword);
+//    List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(String x, String y, String userX ,String userY,String keyword);
+    List<RootApiResponseDto.FacilitiesInfoDto> findFacilities(String x, String y, String userX ,String userY,String keyword, Integer categoryId);
 
     String saveAsImageUrl(RootRequestDto.SaveImageAsUrlDto request) throws IOException;
 
