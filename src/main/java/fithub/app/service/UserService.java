@@ -75,4 +75,5 @@ public interface UserService {
     void checkBlock(User user, Long userId);
 
     String changePassToken(User user, UserRequestDto.ChangePassTokenDto request);
+
 }
