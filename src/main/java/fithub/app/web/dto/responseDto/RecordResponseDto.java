@@ -113,4 +113,13 @@ public class RecordResponseDto {
         Long reportedRecordId;
         LocalDateTime reportedAt;
     }
+
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class RecordLimitDto{
+        Boolean isWrite;
+    }
 }

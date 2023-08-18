@@ -539,4 +539,18 @@ public class UserRestController {
         Code result = checkPass ? Code.PASSWORD_CORRECT : Code.PASSWORD_INCORRECT;
         return ResponseDto.of(result,null);
     }
+
+    @Operation(summary = "마이페이지에서 비밀번호 변경 API ✔️ 🔑", description = "마이페이지에서 비밀번호 변경 API입니다. 비밀번호 재설정과 달리 토큰으로 사용자 식별을 하기에 핸드폰 번호는 필요 없습니.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PatchMapping("/users/my-page/password")
+    public ResponseDto<UserResponseDto.PassChangeDto> changePassWithToken(@AuthUser User user, UserRequestDto.ChangePassTokenDto request){
+        userService.changePassToken(user,request);
+        return ResponseDto.of(UserConverter.toPassChangeDto(request.getNewPassword()));
+    }
 }

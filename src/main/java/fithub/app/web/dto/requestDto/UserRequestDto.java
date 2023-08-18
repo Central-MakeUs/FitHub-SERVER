@@ -149,6 +149,11 @@ public class UserRequestDto {
     }
 
     @Getter @Setter
+    public static class ChangePassTokenDto{
+        private String newPassword;
+    }
+
+    @Getter @Setter
     public static class LoginDto{
         private String targetPhoneNum;
         private String password;
