@@ -121,7 +121,7 @@ public class RecordConverter {
                 }).collect(Collectors.toList());
     }
 
-    public static RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, Boolean isLiked, User user){
+    public static RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, User user){
         return RecordResponseDto.RecordSpecDto.builder()
                 .recordId(record.getId())
                 .recordCategory(ExerciseCategoryConverter.toCategoryDto(record.getExerciseCategory()))
