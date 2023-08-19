@@ -76,10 +76,14 @@ public class CommentsRestController {
     public ResponseDto<CommentsResponseDto.CreateCommentDto> createCommentArticle(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id,@RequestBody CommentsRequestDto.CreateCommentDto request, @AuthUser User user) throws IOException
     {
         Comments newComments = type.equals("articles") ? commentsService.createOnArticle(request,id, user) : commentsService.createOnRecord(request, id, user);
-        if(type.equals("articles"))
-            commentsService.commentAlarmArticle(newComments.getArticle(),newComments,user);
-        else
-            commentsService.commentAlarmRecord(newComments.getRecord(), newComments,user);
+        if(type.equals("articles")) {
+            if(!newComments.getUser().getId().equals(user.getId()))
+                commentsService.commentAlarmArticle(newComments.getArticle(), newComments, user);
+        }
+        else {
+            if(!newComments.getUser().getId().equals(user.getId()))
+                commentsService.commentAlarmRecord(newComments.getRecord(), newComments, user);
+        }
         return ResponseDto.of(CommentsConverter.toCreateCommentDto(newComments));
     }
 

@@ -567,4 +567,6 @@ public class UserRestController {
         userService.logoutService(user);
         return ResponseDto.of(UserConverter.toLogoutDto());
     }
+
+
 }
