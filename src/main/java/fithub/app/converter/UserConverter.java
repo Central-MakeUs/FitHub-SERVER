@@ -365,4 +365,10 @@ public class UserConverter {
                 .quitAt(LocalDateTime.now())
                 .build();
     }
+
+    public static UserResponseDto.LogoutDto toLogoutDto(){
+        return UserResponseDto.LogoutDto.builder()
+                .logoutAt(LocalDateTime.now())
+                .build();
+    }
 }
