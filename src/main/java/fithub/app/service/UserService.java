@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
-    OAuthResult.OAuthResultDto kakaoOAuth(String socialId);
+    OAuthResult.OAuthResultDto kakaoOAuth(String socialId, String fcmToken);
 
-    OAuthResult.OAuthResultDto appleOAuth(String socialId);
+    OAuthResult.OAuthResultDto appleOAuth(String socialId, String fcmToken);
     Optional<User> checkExistNickname(String nickname);
 
     List<ExerciseCategory> getExerciseList();
@@ -76,4 +76,5 @@ public interface UserService {
 
     String changePassToken(User user, UserRequestDto.ChangePassTokenDto request);
 
+    void logoutService(User user);
 }

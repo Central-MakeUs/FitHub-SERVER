@@ -197,4 +197,12 @@ public class UserResponseDto {
     public static class MemberQuitDto{
         LocalDateTime quitAt;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class LogoutDto{
+        LocalDateTime logoutAt;
+    }
 }
