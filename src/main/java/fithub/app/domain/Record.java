@@ -29,7 +29,6 @@ public class Record extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "VARCHAR(30)")
     private String contents;
 
     @Column(columnDefinition = "BIGINT DEFAULT 0")
