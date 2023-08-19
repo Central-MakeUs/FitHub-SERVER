@@ -549,7 +549,7 @@ public class UserRestController {
             @Parameter(name = "user", hidden = true),
     })
     @PatchMapping("/users/my-page/password")
-    public ResponseDto<UserResponseDto.PassChangeDto> changePassWithToken(@AuthUser User user, UserRequestDto.ChangePassTokenDto request){
+    public ResponseDto<UserResponseDto.PassChangeDto> changePassWithToken(@AuthUser User user,@RequestBody UserRequestDto.ChangePassTokenDto request){
         userService.changePassToken(user,request);
         return ResponseDto.of(UserConverter.toPassChangeDto(request.getNewPassword()));
     }
