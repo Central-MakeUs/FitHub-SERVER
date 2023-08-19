@@ -195,7 +195,7 @@ public class ArticleRestController {
         Article article = articleService.toggleArticleLike(articleId, user);
         // 알림 보내기
         System.out.println(article.getUser().getCommunityPermit());
-        if(user.isLikedArticle(article) && article.getUser().getCommunityPermit())
+        if(user.isLikedArticle(article) && article.getUser().getCommunityPermit() && !article.getUser().getId().equals(user.getId()))
             articleService.alarmArticleLike(article,user);
         return ResponseDto.of(ArticleConverter.toArticleLikeDto(article,user));
     }
