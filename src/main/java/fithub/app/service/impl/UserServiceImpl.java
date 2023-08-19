@@ -80,7 +80,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public OAuthResult.OAuthResultDto kakaoOAuth(String socialId) {
+    public OAuthResult.OAuthResultDto kakaoOAuth(String socialId, String fcmToken) {
         SocialType socialType = SocialType.KAKAO;
 
         Boolean isLogin = true;
@@ -109,6 +109,18 @@ public class UserServiceImpl implements UserService {
             user = userOptional.get();
             if (user.getAge() == null || user.getGender() == null)
                 isLogin = false;
+            else
+            {
+                Optional<FcmToken> findToken = fcmTokenRepository.findByToken(fcmToken);
+
+                if(!findToken.isPresent()) {
+                    FcmToken savedToken = fcmTokenRepository.save(FcmToken.builder()
+                            .user(user)
+                            .token(fcmToken)
+                            .build());
+                    savedToken.setUser(user);
+                }
+            }
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
@@ -150,6 +162,9 @@ public class UserServiceImpl implements UserService {
                 .build());
             fcmToken.setUser(savedUser);
         }
+        else
+            token.get().setUser(savedUser);
+
         return UserConverter.toCompleteUser(savedUser, exerciseCategory);
     }
 
@@ -190,6 +205,8 @@ public class UserServiceImpl implements UserService {
                 logger.info("토큰 추가 완료!");
                 token.setUser(user);
             }
+            else
+                byToken.get().setUser(user);
         }
         return jwt;
     }
@@ -215,6 +232,8 @@ public class UserServiceImpl implements UserService {
 
             fcmToken.setUser(user);
         }
+        else
+            token.get().setUser(user);
 
         return UserConverter.toCompleteUser(updatedUser, exerciseCategory);
     }
@@ -427,6 +446,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public void logoutService(User user) {
+        List<FcmToken> userToken = fcmTokenRepository.findAllByUser(user);
+        userToken.stream()
+                .map(fcmToken -> {fcmTokenRepository.delete(fcmToken); return null;}).collect(Collectors.toList());
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public User updatePassword(String phoneNum,String password) {
         User user = userRepository.findByPhoneNum(phoneNum).orElseThrow(() ->new UserException(Code.NO_PHONE_USER));
@@ -436,7 +463,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = false)
-    public OAuthResult.OAuthResultDto appleOAuth(String socialId){
+    public OAuthResult.OAuthResultDto appleOAuth(String socialId, String fcmToken){
         SocialType socialType = SocialType.APPLE;
 
         Boolean isLogin = true;
@@ -465,6 +492,18 @@ public class UserServiceImpl implements UserService {
             user = userOptional.get();
             if (user.getAge() == null || user.getGender() == null)
                 isLogin = false;
+            else
+            {
+                Optional<FcmToken> findToken = fcmTokenRepository.findByToken(fcmToken);
+
+                if(!findToken.isPresent()) {
+                    FcmToken savedToken = fcmTokenRepository.save(FcmToken.builder()
+                            .user(user)
+                            .token(fcmToken)
+                            .build());
+                    savedToken.setUser(user);
+                }
+            }
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 

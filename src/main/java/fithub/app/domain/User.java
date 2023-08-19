@@ -236,6 +236,7 @@ public class User extends BaseEntity {
 
     public void setProfile(String newProfileUrl){
         this.profileUrl = newProfileUrl;
+        this.isDefaultProfile = false;
     }
 
     public void setProfileDefault(){

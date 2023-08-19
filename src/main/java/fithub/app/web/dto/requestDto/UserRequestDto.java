@@ -15,6 +15,8 @@ public class UserRequestDto {
     @Getter @Setter
     public static class socialDto{
         private String socialId;
+        @Nullable
+        private String fcmToken;
     }
 
     @Getter @Setter
@@ -27,6 +29,7 @@ public class UserRequestDto {
         }
 
         private String identityToken;
+        private String fcmToken;
     }
 
     @Getter @Setter

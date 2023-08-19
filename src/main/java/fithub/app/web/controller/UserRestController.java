@@ -79,7 +79,7 @@ public class UserRestController {
 
         logger.info("/login/social/kakao 넘겨 받은  body : {}",request.toString());
 
-        OAuthResult.OAuthResultDto result = userService.kakaoOAuth(request.getSocialId());
+        OAuthResult.OAuthResultDto result = userService.kakaoOAuth(request.getSocialId(), request.getFcmToken());
 
         Code responseCode;
 
@@ -111,7 +111,7 @@ public class UserRestController {
 
         logger.info("userId from apple service : {}", socialId);
 
-        OAuthResult.OAuthResultDto result = userService.appleOAuth(socialId);
+        OAuthResult.OAuthResultDto result = userService.appleOAuth(socialId, request.getFcmToken());
 
         Code responseCode;
 
@@ -552,5 +552,19 @@ public class UserRestController {
     public ResponseDto<UserResponseDto.PassChangeDto> changePassWithToken(@AuthUser User user, UserRequestDto.ChangePassTokenDto request){
         userService.changePassToken(user,request);
         return ResponseDto.of(UserConverter.toPassChangeDto(request.getNewPassword()));
+    }
+
+    @Operation(summary = "로그아웃 API ✔️ 🔑", description = "로그아웃 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @PostMapping("/users/logout")
+    public ResponseDto<UserResponseDto.LogoutDto> logout(@AuthUser User user){
+        userService.logoutService(user);
+        return ResponseDto.of(UserConverter.toLogoutDto());
     }
 }
