@@ -131,8 +131,7 @@ public class ArticleConverter {
                 }).collect(Collectors.toList());
     }
 
-    public static ArticleResponseDto.ArticleSpecDto toArticleSpecDto(Article article,
-                                                                     Boolean isLiked, Boolean isScraped, User user){
+    public static ArticleResponseDto.ArticleSpecDto toArticleSpecDto(Article article, User user){
         return ArticleResponseDto.ArticleSpecDto.builder()
                 .articleId(article.getId())
                 .articleCategory(ExerciseCategoryConverter.toCategoryDto(article.getExerciseCategory()))
@@ -146,8 +145,8 @@ public class ArticleConverter {
                 .Hashtags(HashTagConverter.toHashtagDtoList(article.getArticleHashTagList()))
                 .likes(staticArticleRepository.countLikes(article,user,user))
                 .scraps(staticArticleRepository.countScraps(article,user,user))
-                .isLiked(isLiked)
-                .isScraped(isScraped)
+                .isLiked(user.isLikedArticle(article))
+                .isScraped(user.isSavedArticle(article))
                 .build();
     }
 
@@ -222,7 +221,7 @@ public class ArticleConverter {
     public static ArticleResponseDto.ArticleLikeDto toArticleLikeDto(Article article, User user){
         return ArticleResponseDto.ArticleLikeDto.builder()
                 .articleId(article.getId())
-                .articleLikes(article.getLikes())
+                .articleLikes(staticArticleRepository.countLikes(article, user,user))
                 .isLiked(user.isLikedArticle(article))
                 .build();
     }
