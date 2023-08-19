@@ -1,5 +1,4 @@
-
-name: FitHub Dev CI/CD
+name: FitHub Release CI/CD
 
 on:
   pull_request:
@@ -9,7 +8,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest # (3).OS환경
-    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'release'
 
     steps:
       - name: Checkout
@@ -54,10 +53,9 @@ jobs:
         with:
           aws_access_key: ${{ secrets.AWS_ACTION_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_ACTION_SECRET_ACCESS_KEY }}
-          application_name: fithub-prod
-          environment_name: Fithub-prod-env
+          application_name: fithub-release
+          environment_name: Fithub-release-env
           version_label: github-action-${{ steps.current-time.outputs.formattedTime }}
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
           wait_for_environment_recovery: 60
-
