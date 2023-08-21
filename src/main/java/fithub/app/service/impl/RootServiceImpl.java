@@ -246,4 +246,9 @@ public class RootServiceImpl implements RootService {
         List<Terms> repositoryAll = termsRepository.findAll();
         return repositoryAll;
     }
+
+    @Override
+    public Terms getTermsOne(Integer termsId) {
+        return termsRepository.findById(termsId).get();
+    }
 }

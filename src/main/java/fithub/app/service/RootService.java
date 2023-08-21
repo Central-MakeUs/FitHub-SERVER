@@ -28,4 +28,6 @@ public interface RootService {
     List<RecommendFacilitiesKeyword> getRecommend();
 
     List<Terms> getTerms();
+
+    Terms getTermsOne(Integer termsId);
 }

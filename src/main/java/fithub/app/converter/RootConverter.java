@@ -190,6 +190,13 @@ public class RootConverter {
                 .build();
     }
 
+    public static RootApiResponseDto.TermsDto toTermsOneDto(Terms terms){
+        return RootApiResponseDto.TermsDto.builder()
+                .link(terms.getLink())
+                .id(terms.getId())
+                .build();
+    }
+
     public static RootApiResponseDto.TermsListDto toTermsResponseDto(List<Terms> termsList){
         List<RootApiResponseDto.TermsDto> termsDtoList = termsList.stream().map(
                 terms -> toTermsDto(terms)
