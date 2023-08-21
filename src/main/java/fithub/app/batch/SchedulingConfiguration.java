@@ -33,7 +33,7 @@
         }
 
         // 매일 수행 0 0 0 * * ?
-        @Scheduled(cron = "10 58 23 * * ?")
+        @Scheduled(cron = "0 0 0 * * ?")
         public void dailySetBestUser() throws JobExecutionException{
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("timestamp", System.currentTimeMillis())
@@ -42,7 +42,7 @@
         }
 
         // 7일마다 수행
-        @Scheduled(cron = "0 28 23 * * ?")
+        @Scheduled(cron = "0 12 * * 1 ?")
         public void deleteWeeklyAlarm() throws JobExecutionException{
             JobParameters jobParameters = new JobParametersBuilder()
                     .addLong("timestamp", System.currentTimeMillis())
