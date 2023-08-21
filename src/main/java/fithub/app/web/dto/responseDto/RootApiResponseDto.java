@@ -187,6 +187,7 @@ public class RootApiResponseDto {
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class TermsDto{
         Integer id;
+        private String title;
         String link;
     }
 }
