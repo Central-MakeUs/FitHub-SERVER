@@ -17,8 +17,8 @@ public interface CommentsService {
     Page<Comments> findOnArticle(Long id, Integer pageIndex, User user);
     Page<Comments> findOnRecord(Long id, Integer pageIndex, User user);
 
-    Comments createOnArticle (CommentsRequestDto.CreateCommentDto request, Long id, User user);
-    Comments createOnRecord (CommentsRequestDto.CreateCommentDto request, Long id, User user);
+    Comments createOnArticle (CommentsRequestDto.CreateCommentDto request, Long id, User user) throws IOException;
+    Comments createOnRecord (CommentsRequestDto.CreateCommentDto request, Long id, User user) throws IOException;
     Comments updateOnArticle(CommentsRequestDto.UpdateCommentDto request, Long id,Long commentsId, User user);
     Comments updateOnRecord(CommentsRequestDto.UpdateCommentDto request, Long id,Long commentsId,User user);
     void deleteOnArticle(Long id, Long commentsId, User user);
@@ -27,7 +27,7 @@ public interface CommentsService {
     Comments toggleCommentsLikeOnRecord(Long id, Long commentsId, User user);
     ContentsReport reportComments(Long commentsId, User user);
 
-    void commentAlarmArticle(Article article,Comments comments, User user) throws IOException;
+    void commentAlarmArticle(Article article,Comments comments, User user, User owner) throws IOException;
     void commentAlarmRecord(Record record, Comments comments,User user) throws IOException;
 
 }
