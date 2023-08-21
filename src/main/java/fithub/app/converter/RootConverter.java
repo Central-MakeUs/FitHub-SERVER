@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.text.DecimalFormat;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,7 +70,7 @@ public class RootConverter {
         return RootApiResponseDto.HomeProfileDto.builder()
                 .bestRecorderList(bestRecorderDtoList)
                 .userInfo(toHomeUserInfo(user))
-                .BestStandardDate(bestRecorderList.get(0).getStandardDate())
+                .BestStandardDate(bestRecorderList == null ? LocalDate.now() : bestRecorderList.get(0).getStandardDate())
                 .build();
     }
 
