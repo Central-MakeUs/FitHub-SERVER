@@ -121,7 +121,7 @@ public class RecordConverter {
                 }).collect(Collectors.toList());
     }
 
-    public static RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, Boolean isLiked, User user){
+    public static RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, User user){
         return RecordResponseDto.RecordSpecDto.builder()
                 .recordId(record.getId())
                 .recordCategory(ExerciseCategoryConverter.toCategoryDto(record.getExerciseCategory()))
@@ -133,7 +133,7 @@ public class RecordConverter {
                 .createdAt(staticTimeConverter.convertTime(record.getCreatedAt()))
                 .Hashtags(HashTagConverter.toHashtagDtoListRecord(record.getRecordHashTagList()))
                 .likes(staticRecordRepository.countLikes(record,user,user))
-                .isLiked(isLiked)
+                .isLiked(user.isLikedRecord(record))
                 .build();
     }
 
@@ -201,7 +201,7 @@ public class RecordConverter {
     public static RecordResponseDto.recordLikeDto toRecordLikeDto(Record record, User user){
         return RecordResponseDto.recordLikeDto.builder()
                 .recordId(record.getId())
-                .newLikes(record.getLikes())
+                .newLikes(staticRecordRepository.countLikes(record,user,user))
                 .isLiked(user.isLikedRecord(record))
                 .build();
     }
