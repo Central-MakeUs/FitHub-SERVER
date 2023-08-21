@@ -93,12 +93,15 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional(readOnly = false)
-    public Comments createOnArticle(CommentsRequestDto.CreateCommentDto request, Long id, User user) {
+    public Comments createOnArticle(CommentsRequestDto.CreateCommentDto request, Long id, User user) throws IOException
+    {
         Article article = articleRepository.findById(id).orElseThrow(() -> new CommentsException(Code.ARTICLE_NOT_FOUND));
         Comments comments = CommentsConverter.toCommentsArticle(request);
         comments.setUser(user);
         comments.setArticle(article);
         article.countComments();
+        if(!article.getUser().getId().equals(article.getUser().getId()))
+            commentAlarmArticle(comments.getArticle(), comments, user, article.getUser());
         return commentsRepository.save(comments);
     }
 
@@ -237,22 +240,22 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional
-    public void commentAlarmArticle(Article article,Comments comments, User user) throws IOException
+    public void commentAlarmArticle(Article article,Comments comments, User user, User owner) throws IOException
     {
+
         // 알림 테이블에 저장
         Notification notification = notificationRepository.save(Notification.builder()
                 .notificationCategory(NotificationCategory.ARTICLE)
                 .article(article)
-                .user(article.getUser())
+                .user(owner)
                 .notificationBody(user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot)
                 .isConfirmed(false)
                 .build());
 
         notification.setUser(article.getUser());
-
         // 알림 보내기
-        if(article.getUser().getCommunityPermit())
-            for(FcmToken fcmToken : article.getUser().getFcmTokenList()){
+        if(owner.getCommunityPermit())
+            for(FcmToken fcmToken : owner.getFcmTokenList()){
                 fireBaseService.sendMessageTo(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot, FCMType.ARTICLE.toString(),article.getId().toString(),notification.getId().toString());
             }
     }
