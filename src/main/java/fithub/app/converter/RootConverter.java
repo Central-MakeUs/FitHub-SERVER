@@ -186,6 +186,7 @@ public class RootConverter {
     public static RootApiResponseDto.TermsDto toTermsDto(Terms terms){
         return RootApiResponseDto.TermsDto.builder()
                 .link(terms.getLink())
+                .title(terms.getTitle())
                 .id(terms.getId() - 1)
                 .build();
     }
@@ -193,6 +194,7 @@ public class RootConverter {
     public static RootApiResponseDto.TermsDto toTermsOneDto(Terms terms){
         return RootApiResponseDto.TermsDto.builder()
                 .link(terms.getLink())
+                .title(terms.getTitle())
                 .id(terms.getId())
                 .build();
     }
