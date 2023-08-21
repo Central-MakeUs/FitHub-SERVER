@@ -277,4 +277,18 @@ public class RootController {
 //        Integer test = rootService.test();
 //        return test;
 //    }
+
+    @Operation(summary = "약관 조회 API ✔️ 🔑", description = "약관 조회 API입니다. ")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+    })
+    @GetMapping("/home/terms")
+    public ResponseDto<RootApiResponseDto.TermsListDto> showTerms(@AuthUser User user){
+        List<Terms> terms = rootService.getTerms();
+        return ResponseDto.of(RootConverter.toTermsResponseDto(terms));
+    }
 }

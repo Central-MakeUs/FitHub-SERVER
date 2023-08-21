@@ -171,4 +171,22 @@ public class RootApiResponseDto {
         List<String> keywordList;
         Integer size;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class TermsListDto{
+        List<TermsDto> termsDtoList;
+        Integer size;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class TermsDto{
+        Integer id;
+        String link;
+    }
 }

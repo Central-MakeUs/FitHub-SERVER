@@ -182,4 +182,22 @@ public class RootConverter {
                 .size(stringList.size())
                 .build();
     }
+
+    public static RootApiResponseDto.TermsDto toTermsDto(Terms terms){
+        return RootApiResponseDto.TermsDto.builder()
+                .link(terms.getLink())
+                .id(terms.getId() - 1)
+                .build();
+    }
+
+    public static RootApiResponseDto.TermsListDto toTermsResponseDto(List<Terms> termsList){
+        List<RootApiResponseDto.TermsDto> termsDtoList = termsList.stream().map(
+                terms -> toTermsDto(terms)
+        ).collect(Collectors.toList());
+
+        return RootApiResponseDto.TermsListDto.builder()
+                .termsDtoList(termsDtoList)
+                .size(termsList.size())
+                .build();
+    }
 }

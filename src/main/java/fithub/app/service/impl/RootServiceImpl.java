@@ -63,6 +63,8 @@ public class RootServiceImpl implements RootService {
 
     private final KakaoLocalFeign kakaoLocalFeign;
 
+    private final TermsRepository termsRepository;
+
     @Override
     public List<Grade> findAllGrade() {
         return gradeRepository.findAll();
@@ -237,5 +239,11 @@ public class RootServiceImpl implements RootService {
     @Override
     public List<RecommendFacilitiesKeyword>getRecommend() {
         return recommendFacilitiesKeywordRepository.findTop10ByOrderById();
+    }
+
+    @Override
+    public List<Terms> getTerms() {
+        List<Terms> repositoryAll = termsRepository.findAll();
+        return repositoryAll;
     }
 }
