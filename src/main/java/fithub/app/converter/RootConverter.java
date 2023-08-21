@@ -57,7 +57,7 @@ public class RootConverter {
                 .category(user.getMainExercise().getExerciseCategory().getName())
                 .exp(user.getMainExercise().getExp())
                 .maxExp(mainGrade.getMaxExp())
-                .monthRecordCount(user.getMonthlyRecordNum())
+                .monthRecordCount(user.getMainExercise().getRecords())
                 .contiguousRecordCount(user.getContiguousRecordNum())
                 .build();
     }
