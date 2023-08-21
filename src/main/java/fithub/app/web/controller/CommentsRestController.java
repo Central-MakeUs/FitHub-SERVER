@@ -77,11 +77,11 @@ public class CommentsRestController {
     {
         Comments newComments = type.equals("articles") ? commentsService.createOnArticle(request,id, user) : commentsService.createOnRecord(request, id, user);
         if(type.equals("articles")) {
-            if(!newComments.getUser().getId().equals(user.getId()))
-                commentsService.commentAlarmArticle(newComments.getArticle(), newComments, user);
+            if(!newComments.getUser().getId().equals(newComments.getArticle().getUser().getId()))
+                commentsService.commentAlarmArticle(newComments.getArticle(), newComments, user, newComments.getArticle().getUser());
         }
         else {
-            if(!newComments.getUser().getId().equals(user.getId()))
+            if(!newComments.getUser().getId().equals(newComments.getRecord().getUser().getId()))
                 commentsService.commentAlarmRecord(newComments.getRecord(), newComments, user);
         }
         return ResponseDto.of(CommentsConverter.toCreateCommentDto(newComments));
