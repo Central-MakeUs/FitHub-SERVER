@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 "/users/sign-up","/users/sign-in"
                         ,"/users/password","/users/login/social/kakao"
                         ,"/users/login/social/apple","/users/exist-nickname",
-                        "/users/exercise-category","/users/exist-phone/**","/home/facilities/**"
+                        "/users/exercise-category","/users/exist-phone/**","/home/facilities/**","/home/terms","/home/terms-list"
                 );
     }
 

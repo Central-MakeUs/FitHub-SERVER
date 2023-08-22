@@ -287,7 +287,7 @@ public class RootController {
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/home/terms-list")
-    public ResponseDto<RootApiResponseDto.TermsListDto> showTerms(@AuthUser User user){
+    public ResponseDto<RootApiResponseDto.TermsListDto> showTerms(){
         List<Terms> terms = rootService.getTerms();
         return ResponseDto.of(RootConverter.toTermsResponseDto(terms));
     }
@@ -301,7 +301,7 @@ public class RootController {
             @Parameter(name = "user", hidden = true),
     })
     @GetMapping("/home/terms")
-    public ResponseDto<RootApiResponseDto.TermsDto> showTerm(@AuthUser User user, @RequestParam(name = "termsId") Integer termsId){
+    public ResponseDto<RootApiResponseDto.TermsDto> showTerm(@RequestParam(name = "termsId") Integer termsId){
         Terms termsOne = rootService.getTermsOne(termsId);
         return ResponseDto.of(RootConverter.toTermsOneDto(termsOne));
     }
