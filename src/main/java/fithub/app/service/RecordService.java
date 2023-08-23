@@ -37,6 +37,7 @@ public interface RecordService {
     ContentsReport reportRecord(Long recordId, User user);
 
     void alarmRecordLike(Record record, User user) throws IOException;
+    void alarmRecordLikeApple(Record record, User user) throws IOException;
 
     Boolean checkWriteRecord(User user);
 }

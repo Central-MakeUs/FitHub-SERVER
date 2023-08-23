@@ -262,6 +262,28 @@ public class CommentsServiceImpl implements CommentsService {
 
     @Override
     @Transactional
+    public void commentAlarmArticleApple(Article article,Comments comments, User user, User owner) throws IOException
+    {
+
+        // 알림 테이블에 저장
+        Notification notification = notificationRepository.save(Notification.builder()
+                .notificationCategory(NotificationCategory.ARTICLE)
+                .article(article)
+                .user(owner)
+                .notificationBody(user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot)
+                .isConfirmed(false)
+                .build());
+
+        notification.setUser(article.getUser());
+        // 알림 보내기
+        if(owner.getCommunityPermit())
+            for(FcmToken fcmToken : owner.getFcmTokenList()){
+                fireBaseService.sendMessageToApple(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmBodyHad + article.getTitle() + alarmBodyMiddle + comments.getContents() + alarmBodyFoot, FCMType.ARTICLE.toString(),article.getId().toString(),notification.getId().toString());
+            }
+    }
+
+    @Override
+    @Transactional
     public void commentAlarmRecord(Record record, Comments comments,User user) throws IOException
     {
         // 알림 테이블에 저장
@@ -279,6 +301,28 @@ public class CommentsServiceImpl implements CommentsService {
         if(record.getUser().getCommunityPermit())
             for(FcmToken fcmToken : record.getUser().getFcmTokenList()){
                 fireBaseService.sendMessageToV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmRecordBodyHead +  comments.getContents() + alarmRecordBodyMiddle, FCMType.RECORD.toString(),record.getId().toString(),notification.getId().toString(),comments.getRecord().getImageUrl());
+            }
+    }
+
+    @Override
+    @Transactional
+    public void commentAlarmRecordApple(Record record, Comments comments,User user) throws IOException
+    {
+        // 알림 테이블에 저장
+        Notification notification = notificationRepository.save(Notification.builder()
+                .notificationCategory(NotificationCategory.RECORD)
+                .record(record)
+                .user(record.getUser())
+                .notificationBody(user.getNickname().toString() + alarmRecordBodyHead +  comments.getContents() + alarmRecordBodyMiddle)
+                .isConfirmed(false)
+                .build());
+
+        notification.setUser(record.getUser());
+
+        // 알림 보내기
+        if(record.getUser().getCommunityPermit())
+            for(FcmToken fcmToken : record.getUser().getFcmTokenList()){
+                fireBaseService.sendMessageToAppleV2(fcmToken.getToken(),alarmTitle,user.getNickname().toString() + alarmRecordBodyHead +  comments.getContents() + alarmRecordBodyMiddle, FCMType.RECORD.toString(),record.getId().toString(),notification.getId().toString(),comments.getRecord().getImageUrl());
             }
     }
 }

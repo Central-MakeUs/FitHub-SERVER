@@ -200,6 +200,27 @@ public class RecordRestController {
         return ResponseDto.of(RecordConverter.toRecordLikeDto(record, user));
     }
 
+    @Operation(summary = "운동인증 좋아요 누르기/취소 - apple✔️ 🔑",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 새로 바뀐 좋아요 갯수 응답에 포함"),
+            @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동인증이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "recordId", description = "운동 인증 아이디"),
+    })
+    @PostMapping("/records/{recordId}/likes/apple")
+    public ResponseDto<RecordResponseDto.recordLikeDto> likeRecordApple(@PathVariable(name = "recordId") @ExistRecord Long recordId, @AuthUser User user) throws IOException
+    {
+        Record record = recordService.toggleRecordLike(recordId, user);
+
+        // 알림 보내기
+        if(user.isLikedRecord(record) && record.getUser().getCommunityPermit() && !record.getUser().getId().equals(user.getId()))
+            recordService.alarmRecordLikeApple(record,user);
+        return ResponseDto.of(RecordConverter.toRecordLikeDto(record, user));
+    }
+
     @Operation(summary = "운동 인증 신고하기 ✔️🔑",description = "운동 인증을 신고하는 API이며 이미 신고한 경우는 안된다고 응답이 갑니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
