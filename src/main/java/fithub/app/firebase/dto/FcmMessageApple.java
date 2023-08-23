@@ -2,13 +2,11 @@ package fithub.app.firebase.dto;
 
 import lombok.*;
 
-import java.util.Map;
-
 @Builder
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FcmMessageV2 {
+public class FcmMessageApple {
 
     private boolean validateOnly;
     private Message message;
@@ -32,8 +30,6 @@ public class FcmMessageV2 {
     public static class Notification{
         private String title;
         private String body;
-        private String targetView;
-        private String targetPK;
     }
 
     @Builder
@@ -43,5 +39,6 @@ public class FcmMessageV2 {
     public static class Data{
         private String targetView;
         private String targetPK;
+        private String targetNotification;
     }
 }

@@ -198,6 +198,27 @@ public class ArticleRestController {
         return ResponseDto.of(ArticleConverter.toArticleLikeDto(article,user));
     }
 
+    @Operation(summary = "게시글 좋아요 누르기/취소 - apple ✔️🔑",description = "좋아요를 누른 적이 있다면 취소, 없다면 좋아요 누르기 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 새로 바뀐 좋아요 갯수 응답에 포함"),
+            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 없습니다.", content = @Content(schema = @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "articleId", description = "게시글 아이디")
+    })
+    @PostMapping("/articles/{articleId}/likes/apple")
+    public ResponseDto<ArticleResponseDto.ArticleLikeDto> likeArticleApple(@PathVariable(name = "articleId") @ExistArticle Long articleId, @AuthUser User user) throws IOException
+    {
+        Article article = articleService.toggleArticleLike(articleId, user);
+        // 알림 보내기
+        System.out.println(article.getUser().getCommunityPermit());
+        if(user.isLikedArticle(article) && article.getUser().getCommunityPermit() && !article.getUser().getId().equals(user.getId()))
+            articleService.alarmArticleLikeApple(article,user);
+        return ResponseDto.of(ArticleConverter.toArticleLikeDto(article,user));
+    }
+
     @Operation(summary = "게시글 저장/취소 ✔️🔑",description = "저장을 한 적이 있다면 취소, 없다면 저장하기 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답, 성공 시 새로 바뀐 저장 갯수 응답에 포함"),

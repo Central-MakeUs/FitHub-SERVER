@@ -59,7 +59,7 @@ public class CommentsRestController {
         return ResponseDto.of(CommentsConverter.toCommentsDtoList(comments, user));
     }
 
-    @Operation(summary = "댓글 작성 API ✔️", description = "댓글 작성 API 입니다.")
+    @Operation(summary = "댓글 작성 API ✔️🔑", description = "댓글 작성 API 입니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 존재하지 않음, 없는 게시글의 댓글 작성 시도.", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
@@ -83,6 +83,35 @@ public class CommentsRestController {
         else {
             if(!newComments.getUser().getId().equals(newComments.getRecord().getUser().getId()))
                 commentsService.commentAlarmRecord(newComments.getRecord(), newComments, user);
+        }
+        return ResponseDto.of(CommentsConverter.toCreateCommentDto(newComments));
+    }
+
+
+    @Operation(summary = "댓글 작성 API - 애플✔️🔑", description = "댓글 작성 API 입니다.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "4031", description = "NOT_FOUND : 게시글이 존재하지 않음, 없는 게시글의 댓글 작성 시도.", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4041", description = "NOT_FOUND : 운동 인증이 존재하지 않음, 없는 운동 인증의 댓글 작성 시도.", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "4053", description = "BAD_REQUEST : url에 type을 확인해주세요", content =@Content(schema =  @Schema(implementation = ResponseDto.class))),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @Parameters({
+            @Parameter(name = "user", hidden = true),
+            @Parameter(name = "type", description = "articles면 게시글의 댓글, records면 운동 인증의 댓글"),
+            @Parameter(name = "id", description = "게시글/운동 인증의 아이디")
+    })
+    @PostMapping("/{type}/{id}/comments/apple")
+    public ResponseDto<CommentsResponseDto.CreateCommentDto> createCommentArticleApple(@PathVariable(name = "type") String type,@PathVariable(name = "id") Long id,@RequestBody CommentsRequestDto.CreateCommentDto request, @AuthUser User user) throws IOException
+    {
+        Comments newComments = type.equals("articles") ? commentsService.createOnArticle(request,id, user) : commentsService.createOnRecord(request, id, user);
+        if(type.equals("articles")) {
+            if(!newComments.getUser().getId().equals(newComments.getArticle().getUser().getId()))
+                commentsService.commentAlarmArticleApple(newComments.getArticle(), newComments, user, newComments.getArticle().getUser());
+        }
+        else {
+            if(!newComments.getUser().getId().equals(newComments.getRecord().getUser().getId()))
+                commentsService.commentAlarmRecordApple(newComments.getRecord(), newComments, user);
         }
         return ResponseDto.of(CommentsConverter.toCreateCommentDto(newComments));
     }
