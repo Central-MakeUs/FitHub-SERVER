@@ -28,6 +28,8 @@ public interface CommentsService {
     ContentsReport reportComments(Long commentsId, User user);
 
     void commentAlarmArticle(Article article,Comments comments, User user, User owner) throws IOException;
+    void commentAlarmArticleApple(Article article,Comments comments, User user, User owner) throws IOException;
     void commentAlarmRecord(Record record, Comments comments,User user) throws IOException;
+    void commentAlarmRecordApple(Record record, Comments comments,User user) throws IOException;
 
 }
