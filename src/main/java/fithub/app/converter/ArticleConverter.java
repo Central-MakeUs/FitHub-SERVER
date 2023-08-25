@@ -8,6 +8,7 @@ import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.repository.ArticleRepositories.ArticleRepository;
 import fithub.app.repository.ExerciseCategoryRepository;
+import fithub.app.repository.HashTagRepositories.HashTagRepository;
 import fithub.app.utils.TimeConverter;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import fithub.app.web.dto.responseDto.ArticleResponseDto;
@@ -23,6 +24,7 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -40,11 +42,15 @@ public class ArticleConverter {
     private final AmazonS3Manager amazonS3Manager;
     private static ArticleRepository staticArticleRepository;
     private static ExerciseCategoryRepository staticExerciseCategoryRepository;
+
+    private final HashTagRepository hashTagRepository;
     private static AmazonS3Manager staticAmazonS3Manager;
 
     private static Logger staticLogger;
 
     private static String pattern = "https://cmc-fithub\\.s3\\.ap-northeast-2\\.amazonaws\\.com(.*)";
+
+    private static HashTagRepository staticHashTagRepository;
 
     private final TimeConverter timeConverter;
 
@@ -58,11 +64,12 @@ public class ArticleConverter {
         staticAmazonS3Manager = this.amazonS3Manager;
         staticTimeConverter = this.timeConverter;
         staticLogger = this.logger;
+        staticHashTagRepository = this.hashTagRepository;
     }
 
     public static Article toArticle(ArticleRequestDto.CreateArticleDto request, User user, List<HashTag> hashTagList, Integer categoryId)throws IOException
     {
-        ExerciseCategory exerciseCategory= staticExerciseCategoryRepository.findById(categoryId).get();
+        ExerciseCategory exerciseCategory= staticExerciseCategoryRepository.findById(categoryId).orElseThrow(()->new ArticleException(Code.CATEGORY_ERROR));
         Article article = Article.builder()
                 .title(request.getTitle())
                 .contents(request.getContents())
@@ -131,7 +138,13 @@ public class ArticleConverter {
                 }).collect(Collectors.toList());
     }
 
-    public static ArticleResponseDto.ArticleSpecDto toArticleSpecDto(Article article, User user){
+    public static ArticleResponseDto.ArticleSpecDto toArticleSpecDto(Article article, User user, ExerciseCategory exerciseCategory){
+
+        String name = exerciseCategory.getName();
+        Optional<HashTag> exerciseHashTagOptional = staticHashTagRepository.findByName(name);
+
+        HashTag hashTag = exerciseHashTagOptional.get();
+
         return ArticleResponseDto.ArticleSpecDto.builder()
                 .articleId(article.getId())
                 .articleCategory(ExerciseCategoryConverter.toCategoryDto(article.getExerciseCategory()))
@@ -142,7 +155,7 @@ public class ArticleConverter {
                 .comments(staticArticleRepository.countComments(article, user, user))
                 .articlePictureList(PictureConverter.toPictureDtoList(article.getArticleImageList()))
                 .createdAt(staticTimeConverter.convertTime(article.getCreatedAt()))
-                .Hashtags(HashTagConverter.toHashtagDtoList(article.getArticleHashTagList()))
+                .Hashtags(HashTagConverter.toHashtagDtoList(article.getArticleHashTagList(), hashTag))
                 .likes(staticArticleRepository.countLikes(article,user,user))
                 .scraps(staticArticleRepository.countScraps(article,user,user))
                 .isLiked(user.isLikedArticle(article))

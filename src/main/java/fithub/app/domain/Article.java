@@ -87,7 +87,7 @@ public class Article extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "category")
     private ExerciseCategory exerciseCategory;
 

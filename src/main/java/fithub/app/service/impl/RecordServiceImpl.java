@@ -95,7 +95,6 @@ public class RecordServiceImpl implements RecordService {
                     .map(tag -> hashTagRepository.findByName(tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
                     .collect(Collectors.toList());
         }
-        hashTagList.add(0,exerciseHash);
         Record record = RecordConverter.toRecord(request, user, hashTagList, categoryId);
         user.addRecordCount();
         return recordRepository.save(record);
@@ -103,7 +102,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Record getRecord(Long recordId) {
-        return recordRepository.findById(recordId).orElseThrow(()->new RecordException(Code.RECORD_NOT_FOUND));
+        return recordRepository.findById(recordId).orElseThrow(() -> new RecordException(Code.RECORD_NOT_FOUND));
     }
 
     @Override
@@ -177,8 +176,6 @@ public class RecordServiceImpl implements RecordService {
                     .map(tag -> hashTagRepository.findByName(tag).orElseGet(() -> HashTagConverter.newHashTag(tag)))
                     .collect(Collectors.toList());
         }
-
-        hashTagList.add(0,exercisehashTag);
 
         return RecordConverter.toUpdateRecord(record,request,hashTagList);
     }
