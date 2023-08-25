@@ -8,6 +8,7 @@ import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.repository.ExerciseCategoryRepository;
+import fithub.app.repository.HashTagRepositories.HashTagRepository;
 import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.utils.TimeConverter;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
@@ -39,6 +40,8 @@ public class RecordConverter {
 
     private final AmazonS3Manager amazonS3Manager;
 
+    private final HashTagRepository hashTagRepository;
+
     private static RecordRepository staticRecordRepository;
 
     private static ExerciseCategoryRepository staticExerciseCategoryRepository;
@@ -51,6 +54,8 @@ public class RecordConverter {
 
     private static TimeConverter staticTimeConverter;
 
+    private static HashTagRepository staticHashTagRepository;
+
     @PostConstruct
     public void init() {
         staticRecordRepository = this.recordRepository;
@@ -58,6 +63,7 @@ public class RecordConverter {
         staticAmazonS3Manager = this.amazonS3Manager;
         staticLogger = this.logger;
         staticTimeConverter = this.timeConverter;
+        staticHashTagRepository = this.hashTagRepository;
     }
 
     public static Record toRecord(RecordRequestDto.CreateRecordDto request, User user, List<HashTag> hashTagList, Integer categoryId) throws IOException
@@ -121,7 +127,10 @@ public class RecordConverter {
                 }).collect(Collectors.toList());
     }
 
-    public static RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, User user){
+    public static RecordResponseDto.RecordSpecDto toRecordSpecDto(Record record, User user, ExerciseCategory exerciseCategory){
+
+        HashTag hashTag = staticHashTagRepository.findByName(exerciseCategory.getName()).get();
+
         return RecordResponseDto.RecordSpecDto.builder()
                 .recordId(record.getId())
                 .recordCategory(ExerciseCategoryConverter.toCategoryDto(record.getExerciseCategory()))
@@ -131,7 +140,7 @@ public class RecordConverter {
                 .pictureImage(record.getImageUrl())
                 .comments(staticRecordRepository.countComments(record,user,user))
                 .createdAt(staticTimeConverter.convertTime(record.getCreatedAt()))
-                .Hashtags(HashTagConverter.toHashtagDtoListRecord(record.getRecordHashTagList()))
+                .Hashtags(HashTagConverter.toHashtagDtoListRecord(record.getRecordHashTagList(),hashTag))
                 .likes(staticRecordRepository.countLikes(record,user,user))
                 .isLiked(user.isLikedRecord(record))
                 .build();

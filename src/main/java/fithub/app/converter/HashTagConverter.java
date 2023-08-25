@@ -40,11 +40,14 @@ public class HashTagConverter {
                 .build();
     }
 
-    public static HashTagResponseDto.HashtagDtoList toHashtagDtoList(List<ArticleHashTag> hashTagList){
+    public static HashTagResponseDto.HashtagDtoList toHashtagDtoList(List<ArticleHashTag> hashTagList, HashTag exerciseHashTag){
         List<HashTagResponseDto.HashtagDto> hashtagDtoList =
                 hashTagList.stream()
                         .map(hashTag -> toHashtagDto(hashTag.getHashTag()))
                         .collect(Collectors.toList());
+
+        HashTagResponseDto.HashtagDto hashtagDto = toHashtagDto(exerciseHashTag);
+        hashtagDtoList.add(0,hashtagDto);
 
         return HashTagResponseDto.HashtagDtoList.builder()
                 .hashtags(hashtagDtoList)
@@ -52,11 +55,14 @@ public class HashTagConverter {
                 .build();
     }
 
-    public static HashTagResponseDto.HashtagDtoList toHashtagDtoListRecord(List<RecordHashTag> hashTagList){
+    public static HashTagResponseDto.HashtagDtoList toHashtagDtoListRecord(List<RecordHashTag> hashTagList, HashTag exerciseTag){
         List<HashTagResponseDto.HashtagDto> hashtagDtoList =
                 hashTagList.stream()
                         .map(hashTag -> toHashtagDto(hashTag.getHashTag()))
                         .collect(Collectors.toList());
+
+        HashTagResponseDto.HashtagDto exerciseHashTagDto = toHashtagDto(exerciseTag);
+        hashtagDtoList.add(0,exerciseHashTagDto);
 
         return HashTagResponseDto.HashtagDtoList.builder()
                 .hashtags(hashtagDtoList)
