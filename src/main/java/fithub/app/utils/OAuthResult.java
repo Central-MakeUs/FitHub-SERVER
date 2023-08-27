@@ -16,4 +16,15 @@ public class OAuthResult {
         String accessToken;
         Long userId;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AppleOAuthResultDto{
+        Boolean isLogin;
+        String accessToken;
+        String userName;
+        Long userId;
+    }
 }

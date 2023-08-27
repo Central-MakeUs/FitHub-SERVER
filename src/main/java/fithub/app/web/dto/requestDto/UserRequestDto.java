@@ -30,6 +30,8 @@ public class UserRequestDto {
 
         private String identityToken;
         private String fcmToken;
+        @Nullable
+        private String userName;
     }
 
     @Getter @Setter

@@ -463,7 +463,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = false)
-    public OAuthResult.OAuthResultDto appleOAuth(String socialId, String fcmToken){
+    public OAuthResult.AppleOAuthResultDto appleOAuth(String socialId, String fcmToken, String userName){
         SocialType socialType = SocialType.APPLE;
 
         Boolean isLogin = true;
@@ -479,6 +479,7 @@ public class UserServiceImpl implements UserService {
                             .isSocial(true)
                             .socialId(socialId)
                             .socialType(socialType)
+                            .name(userName)
                             .profileUrl("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png")
                             .communityPermit(Boolean.TRUE)
                             .fcmTokenList(new ArrayList<>())
@@ -507,9 +508,10 @@ public class UserServiceImpl implements UserService {
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
-        return OAuthResult.OAuthResultDto.builder()
+        return OAuthResult.AppleOAuthResultDto.builder()
                 .isLogin(isLogin)
                 .accessToken(accessToken)
+                .userName(userName)
                 .userId(user.getId())
                 .build();
     }
