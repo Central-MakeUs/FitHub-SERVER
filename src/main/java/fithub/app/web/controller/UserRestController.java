@@ -99,7 +99,7 @@ public class UserRestController {
 
     })
     @PostMapping("/users/login/social/apple")
-    public ResponseDto<OAuthResult.AppleOAuthResultDto> appleOauth(@RequestBody UserRequestDto.AppleSocialDto request) throws IOException {
+    public ResponseDto<OAuthResult.OAuthResultDto> appleOauth(@RequestBody UserRequestDto.AppleSocialDto request) throws IOException {
 
 
         logger.info("/login/social/apple 넘겨 받은 body : {}", request.getIdentityToken());
@@ -111,7 +111,7 @@ public class UserRestController {
 
         logger.info("userId from apple service : {}", socialId);
 
-        OAuthResult.AppleOAuthResultDto result = userService.appleOAuth(socialId, request.getFcmToken(), request.getUserName());
+        OAuthResult.OAuthResultDto result = userService.appleOAuth(socialId, request.getFcmToken(), request.getUserName());
 
         Code responseCode;
 
