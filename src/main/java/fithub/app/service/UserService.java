@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface UserService {
     OAuthResult.OAuthResultDto kakaoOAuth(String socialId, String fcmToken);
 
-    OAuthResult.AppleOAuthResultDto appleOAuth(String socialId, String fcmToken, String userName);
+    OAuthResult.OAuthResultDto appleOAuth(String socialId, String fcmToken, String userName);
     Optional<User> checkExistNickname(String nickname);
 
     List<ExerciseCategory> getExerciseList();
