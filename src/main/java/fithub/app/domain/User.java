@@ -129,8 +129,8 @@ public class User extends BaseEntity {
     @JoinColumn(name = "best_exercise")
     private UserExercise bestRecordExercise;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserReport userReport;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<UserReport> targetUserList;
 
     public User update(String name){
         this.name = name;
