@@ -150,6 +150,28 @@ public class RootServiceImpl implements RootService {
     }
 
     @Override
+    public List<RootApiResponseDto.FacilitiesInfoDto> findFacilitiesKeyword(String userX, String userY, String keyword, Integer categoryId) {
+        if(categoryId != 0)
+            exerciseCategoryRepository.findById(categoryId).orElseThrow(()->new RootException(Code.CATEGORY_ERROR));
+
+        String queryKeyword = null;
+        List<Object[]> facilitiesList = null;
+
+        queryKeyword = keyword == null ? null :  "%" + keyword + "%";
+
+        if(categoryId != 0){
+            facilitiesList = facilitiesRepository.findFacilitiesByKeywordCategory(Float.parseFloat(userX),Float.parseFloat(userY),queryKeyword,queryKeyword,maxDistance, categoryId);
+        }else{
+            facilitiesList = facilitiesRepository.findFacilitiesByKeyword(Float.parseFloat(userX),Float.parseFloat(userY),queryKeyword,queryKeyword,maxDistance);
+        }
+
+        List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()
+                .map(facilities -> RootConverter.toFacilitiesInfoDto(facilities)).collect(Collectors.toList());
+
+        return facilitiesInfoDtoList;
+    }
+
+    @Override
     @Transactional
     public String saveAsImageUrl(RootRequestDto.SaveImageAsUrlDto request) throws IOException
     {
