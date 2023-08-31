@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public interface UserExerciseRepository extends JpaRepository<UserExercise, Long> {
     Optional<UserExercise> findByUserAndExerciseCategory(User user, ExerciseCategory exerciseCategory);
+    List<UserExercise> findAllByUserAndExerciseCategory(User user, ExerciseCategory exerciseCategory);
 
     @Query("select ue from UserExercise ue where ue.user = :user and ue.exp > 0")
     List<UserExercise> findUserExercise(@Param("user") User user);
