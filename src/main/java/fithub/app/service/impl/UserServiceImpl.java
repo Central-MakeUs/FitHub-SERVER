@@ -414,9 +414,10 @@ public class UserServiceImpl implements UserService {
 //        Optional<BestRecorder> byUserId = bestRecorderRepository.findByUserId(user.getId());
 //        if(byUserId.isPresent())
 //
-        Optional<UserReport> userReport = userReportRepository.findByReporter(user);
-        if(userReport.isPresent())
-            userReportRepository.delete(userReport.get());
+        List<UserReport> userReport = userReportRepository.findAllByReporter(user);
+        for(UserReport report : userReport){
+            userReportRepository.delete(report);
+        }
         userReportRepository.flush();
         userRepository.delete(quitUser);
     }

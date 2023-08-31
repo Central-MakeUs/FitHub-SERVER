@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface UserReportRepository extends JpaRepository<UserReport, Long> {
@@ -15,6 +16,7 @@ public interface UserReportRepository extends JpaRepository<UserReport, Long> {
     Long checkReport (@Param("reporter") User reporter, @Param("target") User target);
 
     Optional<UserReport> findByReporter(User user);
+    List<UserReport> findAllByReporter(User user);
 
     Optional<UserReport> findByReporterAndUser(User reporter, User target);
 }
