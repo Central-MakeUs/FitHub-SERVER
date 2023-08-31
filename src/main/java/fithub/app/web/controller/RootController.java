@@ -212,7 +212,7 @@ public class RootController {
 //        return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y));
 //    }
 
-    @Operation(summary = "지도 둘러보기 API ✔️🔑- 지도에서 사용", description = "검색 키워드가 도로명 주소, 주소, 이름에 포함된 시설을 거리순으로 최대 15개 보여줍니다. 지도에서 보기를 눌러 좌표가 변경 될 경우를 대비 하여 중심 좌표를 선택으로 받습니다.")
+    @Operation(summary = "지도 둘러보기 API ✔️🔑- 지도에서 사용", description = "지도 둘러보기에서 사용되는 API입니다")
     @Parameters({
             @Parameter(name = "x", description = "중심 x"),
             @Parameter(name = "y", description = "중심 y"),
@@ -229,6 +229,23 @@ public class RootController {
     public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilities(@RequestParam(name = "x") String x, @RequestParam(name = "y")String y, @RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY, @RequestParam(name = "keyword", required = false) String keyword, @PathVariable(name = "categoryId") Integer categoryId){
         List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilities( x, y, userX, userY, keyword, categoryId);
         return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,x,y));
+    }
+
+    @Operation(summary = "지도 키워드로 검색하기 API ✔️🔑- 지도에서 사용", description = "검색 키워드가 도로명 주소, 주소, 이름에 포함된 시설을 거리순으로 최대 15개 보여줍니다. 지도에서 보기를 눌러 좌표가 변경 될 경우를 대비 하여 중심 좌표를 선택으로 받습니다.")
+    @Parameters({
+            @Parameter(name = "userX", description = "사용자 X"),
+            @Parameter(name = "userY", description = "사용자 Y"),
+            @Parameter(name = "keyword", description = "검색어"),
+            @Parameter(name = "categoryId", description = "카테고리 필터, 0이면 전체"),
+    })
+    @ApiResponses({
+            @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
+            @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
+    })
+    @GetMapping("/home/facilities/keyword/{categoryId}")
+    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilitiesKeyword(@RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY, @RequestParam(name = "keyword", required = true) String keyword, @PathVariable(name = "categoryId") Integer categoryId){
+        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilitiesKeyword(userX, userY, keyword, categoryId);
+        return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,userX,userY));
     }
 
     @Operation(summary = "추천 검색어 조회 API ✔️ 🔑", description = "추천 검색어 조회 API 입니다. ")
