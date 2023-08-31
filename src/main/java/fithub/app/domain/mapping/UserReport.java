@@ -25,7 +25,7 @@ public class UserReport extends BaseEntity {
     @JoinColumn(name = "category")
     private UserReportCategory userReportCategory;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "target_user")
     private User user;
 
