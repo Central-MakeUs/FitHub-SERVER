@@ -149,7 +149,7 @@ public class User extends BaseEntity {
     }
 
     public User updateInfo(UserRequestDto.UserOAuthInfo request, Integer age, Gender gender, String profileUrl, Boolean isDefaultProfile){
-        this.name = request.getName();
+        this.name = request.getName() == "" || request.getName() == null ? "이름 설정이 필요합니다." : request.getName();
         this.age = age;
         this.marketingAgree = request.getMarketingAgree();
         this.nickname = request.getNickname();

@@ -49,13 +49,13 @@ public class UserRequestDto {
         }
 
         private Boolean marketingAgree;
-        @NotBlank
+
         private String name;
         @NotBlank
         private String nickname;
-        @NotBlank
+
         private String birth;
-        @NotBlank
+
         private String gender;
         private Integer preferExercises;
         @Nullable
