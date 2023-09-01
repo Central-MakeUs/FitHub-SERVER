@@ -156,7 +156,6 @@ public class RootServiceImpl implements RootService {
 
         queryKeyword = keyword == null ? null :  "%" + keyword + "%";
         facilitiesList = facilitiesRepository.findFacilitiesByKeyword(Float.parseFloat(userX),Float.parseFloat(userY),queryKeyword,queryKeyword,maxDistance);
-
         List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()
                 .map(facilities -> RootConverter.toFacilitiesInfoDto(facilities)).collect(Collectors.toList());
 
