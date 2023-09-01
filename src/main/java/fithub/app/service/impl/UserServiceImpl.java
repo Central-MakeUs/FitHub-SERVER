@@ -107,10 +107,10 @@ public class UserServiceImpl implements UserService {
         }
         else{
             user = userOptional.get();
-//            if (user.getAge() == null || user.getGender() == null)
-//                isLogin = false;
-//            else
-//            {
+            if (user.getNickname() == null || user.getMainExercise() == null)
+                isLogin = false;
+            else
+            {
                 Optional<FcmToken> findToken = fcmTokenRepository.findByToken(fcmToken);
 
                 if(!findToken.isPresent()) {
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
                             .build());
                     savedToken.setUser(user);
                 }
-//            }
+            }
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
@@ -489,18 +489,22 @@ public class UserServiceImpl implements UserService {
 
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
-        else{
+        else {
             user = userOptional.get();
-            Optional<FcmToken> findToken = fcmTokenRepository.findByToken(fcmToken);
+            if (user.getNickname() == null || user.getMainExercise() == null) {
+                isLogin = false;
+            } else {
+                Optional<FcmToken> findToken = fcmTokenRepository.findByToken(fcmToken);
 
-            if(!findToken.isPresent()) {
-                FcmToken savedToken = fcmTokenRepository.save(FcmToken.builder()
-                        .user(user)
-                        .token(fcmToken)
-                        .build());
-                savedToken.setUser(user);
+                if (!findToken.isPresent()) {
+                    FcmToken savedToken = fcmTokenRepository.save(FcmToken.builder()
+                            .user(user)
+                            .token(fcmToken)
+                            .build());
+                    savedToken.setUser(user);
+                }
+                accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType), socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
             }
-            accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
         return OAuthResult.OAuthResultDto.builder()
