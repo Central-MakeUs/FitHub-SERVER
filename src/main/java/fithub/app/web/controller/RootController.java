@@ -90,7 +90,7 @@ public class RootController {
             logger.info("현재 스플래시 화면의 유저 : {}", user.getName());
             logger.info("현재 스플래시 화면의 유저 : {}", user.getAge());
             logger.info("현재 스플래시 화면의 유저 : {}", user.getGender());
-            if (user.getAge() == null || user.getGender() == null)
+            if (user.getNickname() == null || user.getMainExercise() == null)
                 result = Code.AUTO_LOGIN_NOT_MAIN;
             else {
                 result = Code.AUTO_LOGIN_MAIN;
