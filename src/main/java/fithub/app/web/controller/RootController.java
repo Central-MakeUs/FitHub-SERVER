@@ -236,15 +236,14 @@ public class RootController {
             @Parameter(name = "userX", description = "사용자 X"),
             @Parameter(name = "userY", description = "사용자 Y"),
             @Parameter(name = "keyword", description = "검색어"),
-            @Parameter(name = "categoryId", description = "카테고리 필터, 0이면 전체"),
     })
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @GetMapping("/home/facilities/keyword/{categoryId}")
-    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilitiesKeyword(@RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY, @RequestParam(name = "keyword", required = true) String keyword, @PathVariable(name = "categoryId") Integer categoryId){
-        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilitiesKeyword(userX, userY, keyword, categoryId);
+    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilitiesKeyword(@RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY, @RequestParam(name = "keyword", required = true) String keyword){
+        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilitiesKeyword(userX, userY, keyword);
         return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,userX,userY));
     }
 
