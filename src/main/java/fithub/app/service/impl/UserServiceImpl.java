@@ -107,10 +107,10 @@ public class UserServiceImpl implements UserService {
         }
         else{
             user = userOptional.get();
-            if (user.getAge() == null || user.getGender() == null)
-                isLogin = false;
-            else
-            {
+//            if (user.getAge() == null || user.getGender() == null)
+//                isLogin = false;
+//            else
+//            {
                 Optional<FcmToken> findToken = fcmTokenRepository.findByToken(fcmToken);
 
                 if(!findToken.isPresent()) {
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
                             .build());
                     savedToken.setUser(user);
                 }
-            }
+//            }
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
