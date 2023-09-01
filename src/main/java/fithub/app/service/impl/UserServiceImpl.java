@@ -105,23 +105,23 @@ public class UserServiceImpl implements UserService {
 
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
-        else{
+        else {
             user = userOptional.get();
             if (user.getNickname() == null || user.getMainExercise() == null)
                 isLogin = false;
-            else
-            {
+            else {
                 Optional<FcmToken> findToken = fcmTokenRepository.findByToken(fcmToken);
 
-                if(!findToken.isPresent()) {
+                if (!findToken.isPresent()) {
                     FcmToken savedToken = fcmTokenRepository.save(FcmToken.builder()
                             .user(user)
                             .token(fcmToken)
                             .build());
                     savedToken.setUser(user);
                 }
+//            }
+                accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType), socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
             }
-            accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
         return OAuthResult.OAuthResultDto.builder()
