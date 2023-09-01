@@ -175,7 +175,7 @@ public class UserConverter {
     public static User toSocialUser(UserRequestDto.UserOAuthInfo request, User user) throws IOException
     {
 
-        if(!(request.getGender() == ""|| request.getGender() == null || request.getBirth() == ""|| request.getBirth() == null || request.getName() == "" || request.getName() == null)){
+        if((request.getGender() == ""|| request.getGender() == null || request.getBirth() == ""|| request.getBirth() == null || request.getName() == "" || request.getName() == null)){
             String profileUrl = request.getProfileImage() == null ? "https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png" : uploadProfileImage(request.getProfileImage());
             Boolean isDefaultProfile = request.getProfileImage() == null;
             User updatedUser = user.updateInfo(request, null, null, profileUrl, isDefaultProfile);
