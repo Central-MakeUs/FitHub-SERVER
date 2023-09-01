@@ -491,19 +491,14 @@ public class UserServiceImpl implements UserService {
         }
         else{
             user = userOptional.get();
-            if (user.getAge() == null || user.getGender() == null)
-                isLogin = false;
-            else
-            {
-                Optional<FcmToken> findToken = fcmTokenRepository.findByToken(fcmToken);
+            Optional<FcmToken> findToken = fcmTokenRepository.findByToken(fcmToken);
 
-                if(!findToken.isPresent()) {
-                    FcmToken savedToken = fcmTokenRepository.save(FcmToken.builder()
-                            .user(user)
-                            .token(fcmToken)
-                            .build());
-                    savedToken.setUser(user);
-                }
+            if(!findToken.isPresent()) {
+                FcmToken savedToken = fcmTokenRepository.save(FcmToken.builder()
+                        .user(user)
+                        .token(fcmToken)
+                        .build());
+                savedToken.setUser(user);
             }
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
