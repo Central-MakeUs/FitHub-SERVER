@@ -141,11 +141,47 @@ public class RootConverter {
                 .build();
     }
 
+    public static RootApiResponseDto.FacilitiesInfoKeywordDto toFacilitiesInfoKeywordDto(Object[] facilities){
+
+        ExerciseCategory exerciseCategory = staticExerciseCategoryRepository.findById((Integer) facilities[7]).get();
+
+        DecimalFormat decimalFormat = new DecimalFormat("#.#");
+        DecimalFormat decimalFormat2 = new DecimalFormat("#");
+        Double distance = (Double) facilities[8];
+        String dist = distance >= 1000 ? decimalFormat.format(distance / 1000) + "km" : decimalFormat2.format(distance) + 'm';
+
+        return RootApiResponseDto.FacilitiesInfoKeywordDto.builder()
+                .name(((String) facilities[0]))
+                .address((String) facilities[1])
+                .roadAddress(((String) facilities[2]))
+                .imageUrl((String) facilities[3])
+                .phoneNumber((String) facilities[4])
+                .x((String) facilities[5])
+                .y((String) facilities[6])
+                .centerX((String) facilities[9])
+                .centerY((String) facilities[10])
+                .category(exerciseCategory.getName())
+                .dist(dist)
+                .build();
+    }
+
     public static RootApiResponseDto.FacilitiesResponseDto toFacilitiesResponseDto(List<RootApiResponseDto.FacilitiesInfoDto> facilitiesList, String x, String y){
 
         return RootApiResponseDto.FacilitiesResponseDto.builder()
                 .userX(x)
                 .userY(y)
+                .facilitiesList(facilitiesList)
+                .size(facilitiesList.size())
+                .build();
+    }
+
+    public static RootApiResponseDto.FacilitiesResponseKeywordDto toFacilitiesKeywordResponseDto(List<RootApiResponseDto.FacilitiesInfoKeywordDto> facilitiesList, String x, String y){
+
+        return RootApiResponseDto.FacilitiesResponseKeywordDto.builder()
+                .userX(x)
+                .userY(y)
+                .centerX(facilitiesList.size() > 1 ? facilitiesList.get(0).getCenterX() : null)
+                .centerY(facilitiesList.size() > 1 ? facilitiesList.get(0).getCenterY() : null)
                 .facilitiesList(facilitiesList)
                 .size(facilitiesList.size())
                 .build();
