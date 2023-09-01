@@ -242,9 +242,9 @@ public class RootController {
             @ApiResponse(responseCode = "5000", description = "Server Error : 똘이에게 알려주세요",content =@Content(schema =  @Schema(implementation = ResponseDto.class)))
     })
     @GetMapping("/home/facilities/keyword/{categoryId}")
-    public ResponseDto<RootApiResponseDto.FacilitiesResponseDto> getFacilitiesKeyword(@RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY, @RequestParam(name = "keyword", required = true) String keyword){
-        List<RootApiResponseDto.FacilitiesInfoDto> facilities = rootService.findFacilitiesKeyword(userX, userY, keyword);
-        return ResponseDto.of(RootConverter.toFacilitiesResponseDto(facilities,userX,userY));
+    public ResponseDto<RootApiResponseDto.FacilitiesResponseKeywordDto> getFacilitiesKeyword(@RequestParam(name = "userX") String userX, @RequestParam(name = "userY")String  userY, @RequestParam(name = "keyword", required = true) String keyword){
+        List<RootApiResponseDto.FacilitiesInfoKeywordDto> facilities = rootService.findFacilitiesKeyword(userX, userY, keyword);
+        return ResponseDto.of(RootConverter.toFacilitiesKeywordResponseDto(facilities,userX,userY));
     }
 
     @Operation(summary = "추천 검색어 조회 API ✔️ 🔑", description = "추천 검색어 조회 API 입니다. ")
