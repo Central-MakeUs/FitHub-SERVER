@@ -120,8 +120,8 @@ public class UserServiceImpl implements UserService {
                     savedToken.setUser(user);
                 }
 //            }
-                accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType), socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
             }
+            accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType), socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
         return OAuthResult.OAuthResultDto.builder()
@@ -503,8 +503,8 @@ public class UserServiceImpl implements UserService {
                             .build());
                     savedToken.setUser(user);
                 }
-                accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType), socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
             }
+            accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType), socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
         return OAuthResult.OAuthResultDto.builder()
