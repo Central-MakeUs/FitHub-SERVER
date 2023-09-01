@@ -129,11 +129,42 @@ public class RootApiResponseDto {
     @Getter
     @AllArgsConstructor(access = AccessLevel.PROTECTED)
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class FacilitiesInfoKeywordDto {
+        private  String name;
+        private  String address;
+        private  String roadAddress;
+        private  String imageUrl;
+        private  String phoneNumber;
+        private  String category;
+        private  String x;
+        private  String y;
+        private  String centerX;
+        private  String centerY;
+        private  String dist;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class FacilitiesResponseDto{
         List<FacilitiesInfoDto> facilitiesList;
         private Integer size;
         private String userX;
         private String userY;
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class FacilitiesResponseKeywordDto{
+        List<FacilitiesInfoKeywordDto> facilitiesList;
+        private Integer size;
+        private String userX;
+        private String userY;
+        private String centerX;
+        private String centerY;
     }
 
     @Builder
