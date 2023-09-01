@@ -59,3 +59,7 @@ jobs:
           region: ap-northeast-2
           deployment_package: deploy/deploy.zip
           wait_for_environment_recovery: 60
+
+
+
+
