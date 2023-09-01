@@ -30,6 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
         CorsConfiguration configuration = new CorsConfiguration();
         // 모든 출처를 허용합니다.
         configuration.setAllowedOrigins(Arrays.asList("https://www.profithub.store"));
+        configuration.setAllowedOrigins(Arrays.asList("https://api.profithub.store"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
