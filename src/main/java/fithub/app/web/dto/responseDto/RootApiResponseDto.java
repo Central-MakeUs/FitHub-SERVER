@@ -120,6 +120,7 @@ public class RootApiResponseDto {
         private  String imageUrl;
         private  String phoneNumber;
         private  String category;
+        private  Integer categoryId;
         private  String x;
         private  String y;
         private  String dist;
