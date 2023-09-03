@@ -236,7 +236,7 @@ public class RootController {
             @Parameter(name = "userX", description = "사용자 X"),
             @Parameter(name = "userY", description = "사용자 Y"),
             @Parameter(name = "keyword", description = "검색어"),
-            @Parameter(name = "category", description = "운동 종목 필터, 0이면 전체"),
+            @Parameter(name = "categoryId", description = "운동 종목 필터, 0이면 전체"),
     })
     @ApiResponses({
             @ApiResponse(responseCode = "2000", description = "OK : 정상응답"),
