@@ -150,15 +150,23 @@ public class RootServiceImpl implements RootService {
     }
 
     @Override
-    public List<RootApiResponseDto.FacilitiesInfoKeywordDto> findFacilitiesKeyword(String userX, String userY, String keyword) {
+    public List<RootApiResponseDto.FacilitiesInfoDto> findFacilitiesKeyword(String userX, String userY, String keyword, Integer categoryId) {
         String queryKeyword = null;
         List<Object[]> facilitiesList = null;
 
-        queryKeyword = keyword == null ? null :  "%" + keyword + "%";
-        facilitiesList = facilitiesRepository.findFacilitiesByKeyword(Float.parseFloat(userX),Float.parseFloat(userY),queryKeyword,queryKeyword,5000,queryKeyword, queryKeyword);
+        ExerciseCategory exerciseCategory = null;
 
-        List<RootApiResponseDto.FacilitiesInfoKeywordDto> facilitiesInfoDtoList = facilitiesList.stream()
-                .map(facilities -> RootConverter.toFacilitiesInfoKeywordDto(facilities)).collect(Collectors.toList());
+        if(categoryId != 0)
+            exerciseCategory = exerciseCategoryRepository.findById(categoryId).orElseThrow(()->new RootException(Code.CATEGORY_ERROR));
+
+        queryKeyword = keyword == null ? null :  "%" + keyword + "%";
+        if(categoryId == 0)
+            facilitiesList = facilitiesRepository.findFacilitiesByKeyword(Float.parseFloat(userX),Float.parseFloat(userY),queryKeyword,queryKeyword);
+        else
+            facilitiesList = facilitiesRepository.findFacilitiesByKeywordCategory(Float.parseFloat(userX),Float.parseFloat(userY),queryKeyword,queryKeyword, categoryId);
+
+        List<RootApiResponseDto.FacilitiesInfoDto> facilitiesInfoDtoList = facilitiesList.stream()
+                .map(facilities -> RootConverter.toFacilitiesInfoDto(facilities)).collect(Collectors.toList());
 
         return facilitiesInfoDtoList;
     }

@@ -43,11 +43,16 @@ public interface FacilitiesRepository extends JpaRepository<Facilities, Long> {
     @Query(value = "select name, address, road_address, image_url, phone_num, x, y, category, ROUND(ST_Distance_Sphere(POINT(facilities.x, facilities.y), Point(?,?))) as distance from facilities where ST_Distance_Sphere(Point(cast(facilities.x as float), cast(facilities.y as float )), Point(?, ?)) <= ? and category = ? order by  distance;",nativeQuery = true)
     List<Object[]> findFacilitiesCategoryAll(Float targetX, Float targetY, Float targetX2,Float targetY2,Integer maxDistance, Integer category);
 
-    @Query(value = "select name, address, road_address, image_url, phone_num, f.x, f.y, category, ROUND(ST_Distance_Sphere(POINT(f.x, f.y), Point(?,?))) as distance, target.x as centerX, target.y as centerY from facilities as f join (select sub_f.x, sub_f.y from facilities as sub_f where name like ? or address like ? limit 1) as target where ST_Distance_Sphere(Point(cast(f.x as float), cast(f.y as float )), Point(target.x, target.y)) <= ? and f.name like ? or f.address like ? order by distance;",nativeQuery = true)
-    List<Object[]> findFacilitiesByKeyword(Float userX,Float userY, String queryKeyword1, String queryKeyword2, Integer maxDistance, String queryKeyword3, String queryKeyword4);
+//    @Query(value = "select name, address, road_address, image_url, phone_num, f.x, f.y, category, ROUND(ST_Distance_Sphere(POINT(f.x, f.y), Point(?,?))) as distance, target.x as centerX, target.y as centerY from facilities as f join (select sub_f.x, sub_f.y from facilities as sub_f where name like ? or address like ? limit 1) as target where ST_Distance_Sphere(Point(cast(f.x as float), cast(f.y as float )), Point(target.x, target.y)) <= ? and f.name like ? or f.address like ? order by distance;",nativeQuery = true)
+@Query(value = "select name, address, road_address, image_url, phone_num, f.x, f.y, category, ROUND(ST_Distance_Sphere(POINT(f.x, f.y), Point(?,?))) as distance from facilities as f where f.name like ? or f.address like ? order by distance limit 15;", nativeQuery = true)
+    List<Object[]> findFacilitiesByKeyword(Float userX,Float userY, String queryKeyword1, String queryKeyword2);
 
-    @Query(value = "select name, address, road_address, image_url, phone_num, f.x, f.y, category, ROUND(ST_Distance_Sphere(POINT(f.x, f.y), Point(?,?))) as distance from facilities as f join (select sub_f.x, sub_f.y from facilities as sub_f where name like ? or address like ? limit 1) as target where ST_Distance_Sphere(Point(cast(f.x as float), cast(f.y as float )), Point(target.x, target.y)) <= ? and category = ? order by distance;",nativeQuery = true)
-    List<Object[]> findFacilitiesByKeywordCategory(Float userX,Float userY, String queryKeyword1, String queryKeyword2, Integer maxDistance, Integer categoryId);
+    // 카드뷰 바로 띄우기 위한 쿼리
+//    @Query(value = "select name, address, road_address, image_url, phone_num, f.x, f.y, category, ROUND(ST_Distance_Sphere(POINT(f.x, f.y), Point(?,?))) as distance from facilities as f join (select sub_f.x, sub_f.y from facilities as sub_f where name like ? or address like ? limit 1) as target where ST_Distance_Sphere(Point(cast(f.x as float), cast(f.y as float )), Point(target.x, target.y)) <= ? and category = ? order by distance;",nativeQuery = true)
+
+
+    @Query(value = "select name, address, road_address, image_url, phone_num, f.x, f.y, category, ROUND(ST_Distance_Sphere(POINT(f.x, f.y), Point(?,?))) as distance from facilities as f where f.name like ? or f.address like ? and category = ? order by distance limit 15;", nativeQuery = true)
+    List<Object[]> findFacilitiesByKeywordCategory(Float userX,Float userY, String queryKeyword1, String queryKeyword2, Integer categoryId);
 
     Optional<Facilities> findByKakaoId(String kakaoId);
 }
