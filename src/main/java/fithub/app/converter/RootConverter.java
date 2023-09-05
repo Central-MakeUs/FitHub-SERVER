@@ -137,6 +137,7 @@ public class RootConverter {
                 .x((String) facilities[5])
                 .y((String) facilities[6])
                 .category(exerciseCategory.getName())
+                .categoryId((Integer) facilities[7])
                 .dist(dist)
                 .build();
     }

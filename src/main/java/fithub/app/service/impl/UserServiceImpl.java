@@ -464,7 +464,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = false)
-    public OAuthResult.OAuthResultDto appleOAuth(String socialId, String fcmToken, String userName){
+    public OAuthResult.AppleOAuthResultDto appleOAuth(String socialId, String fcmToken, String userName){
         SocialType socialType = SocialType.APPLE;
 
         Boolean isLogin = true;
@@ -507,9 +507,10 @@ public class UserServiceImpl implements UserService {
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType), socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
 
-        return OAuthResult.OAuthResultDto.builder()
+        return OAuthResult.AppleOAuthResultDto.builder()
                 .isLogin(isLogin)
                 .accessToken(accessToken)
+                .userName(userName)
                 .userId(user.getId())
                 .build();
     }
