@@ -41,6 +41,8 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
 
     List<Record> findByIdIn(List<Long> recordIdList);
 
+    List<Record> findAllByExerciseCategory(ExerciseCategory exerciseCategory);
+
     @Query("select count(rl) from RecordLikes rl where rl.record = :record and rl.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and rl.user not in (select ur.reporter from UserReport ur where ur.user = :target)")
     Long countLikes(@Param("record") Record record, @Param("reporter") User reporter, @Param("target") User target);
 

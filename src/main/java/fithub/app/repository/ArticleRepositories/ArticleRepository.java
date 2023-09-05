@@ -47,6 +47,8 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     Page<Article> findAllByUserAndExerciseCategoryOrderByCreatedAtDesc(User user, ExerciseCategory exerciseCategory,Pageable pageable);
 
     List<Article> findByIdIn(List<Long> articleList);
+
+    List<Article> findAllByExerciseCategory(ExerciseCategory exerciseCategory);
     void deleteAllByIdInBatch(Iterable<Long> artilceIdList);
 
     @Query("select count(al) from ArticleLikes al where al.article = :article and al.user not in (select ur.user from UserReport ur where ur.reporter = :reporter) and al.user not in (select ur.reporter from UserReport ur where ur.user = :target)")
