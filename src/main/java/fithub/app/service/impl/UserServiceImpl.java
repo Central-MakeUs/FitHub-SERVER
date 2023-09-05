@@ -470,7 +470,7 @@ public class UserServiceImpl implements UserService {
         Boolean isLogin = true;
         String accessToken = null;
         User user;
-
+        String resultName = null;
         Optional<User> userOptional = userRepository.findBySocialIdAndSocialType(socialId, socialType);
 
         if (!userOptional.isPresent()){
@@ -480,13 +480,14 @@ public class UserServiceImpl implements UserService {
                             .isSocial(true)
                             .socialId(socialId)
                             .socialType(socialType)
+                            .name(userName)
                             .profileUrl("https://cmc-fithub.s3.ap-northeast-2.amazonaws.com/profile/%EA%B8%B0%EB%B3%B8+%EC%9D%B4%EB%AF%B8%EC%A7%80.png")
                             .communityPermit(Boolean.TRUE)
                             .fcmTokenList(new ArrayList<>())
                             .isDefaultProfile(true)
                             .build()
             );
-
+            resultName = userName;
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType),socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
         }
         else {
@@ -505,12 +506,13 @@ public class UserServiceImpl implements UserService {
                 }
             }
             accessToken = tokenProvider.createAccessToken(user.getId(), String.valueOf(socialType), socialId, Arrays.asList(new SimpleGrantedAuthority("USER")));
+            resultName = user.getName();
         }
 
         return OAuthResult.AppleOAuthResultDto.builder()
                 .isLogin(isLogin)
                 .accessToken(accessToken)
-                .userName(userName)
+                .userName(resultName)
                 .userId(user.getId())
                 .build();
     }
