@@ -60,6 +60,14 @@ public class SearchServiceImpl implements SearchService {
             List<Long> articleIds = allByHashTag.stream()
                     .map(articleHashTag -> articleHashTag.getArticle().getId())
                     .collect(Collectors.toList());
+
+            if(!byName.get().getExerciseCategory().equals(null)){
+                List<Article> exerciseHashTag = articleRepository.findAllByExerciseCategory(byName.get().getExerciseCategory());
+
+                List<Long> exerciseHashTagId = exerciseHashTag.stream()
+                        .map(article -> article.getId()).collect(Collectors.toList());
+                articleIds.addAll(exerciseHashTagId);
+            }
             searchResult = articleRepository.findByIdInOrderByLikesDescCreatedAtDesc(articleIds, PageRequest.of(pageIndex, size));
         }
         return searchResult;
@@ -78,7 +86,14 @@ public class SearchServiceImpl implements SearchService {
             List<Long> recordIds = allByHashTag.stream()
                     .map(articleHashTag -> articleHashTag.getRecord().getId())
                     .collect(Collectors.toList());
+            if(!byName.get().getExerciseCategory().equals(null)){
+                List<Record> exerciseHashtag = recordRepository.findAllByExerciseCategory(byName.get().getExerciseCategory());
 
+                List<Long> exerciseHasthtagRecord = exerciseHashtag.stream()
+                        .map(record -> record.getId()).collect(Collectors.toList());
+
+                recordIds.addAll(exerciseHasthtagRecord);
+            }
             searchResult = recordRepository.findByIdInOrderByCreatedAtDesc(recordIds, PageRequest.of(pageIndex, size));
         }
         return searchResult;
@@ -96,6 +111,14 @@ public class SearchServiceImpl implements SearchService {
             List<Long> articleIds = allByHashTag.stream()
                     .map(articleHashTag -> articleHashTag.getArticle().getId())
                     .collect(Collectors.toList());
+
+            if(!byName.get().getExerciseCategory().equals(null)){
+                List<Article> exerciseHashTag = articleRepository.findAllByExerciseCategory(byName.get().getExerciseCategory());
+
+                List<Long> exerciseHashTagId = exerciseHashTag.stream()
+                        .map(article -> article.getId()).collect(Collectors.toList());
+                articleIds.addAll(exerciseHashTagId);
+            }
             searchResult = articleRepository.findByIdInOrderByCreatedAtDesc(articleIds, PageRequest.of(pageIndex, size));
         }
         return searchResult;
@@ -114,6 +137,15 @@ public class SearchServiceImpl implements SearchService {
             List<Long> recordIds = allByHashTag.stream()
                     .map(recordHashTag -> recordHashTag.getRecord().getId())
                     .collect(Collectors.toList());
+
+            if(!byName.get().getExerciseCategory().equals(null)){
+                List<Record> exerciseHashtag = recordRepository.findAllByExerciseCategory(byName.get().getExerciseCategory());
+
+                List<Long> exerciseHasthtagRecord = exerciseHashtag.stream()
+                        .map(record -> record.getId()).collect(Collectors.toList());
+
+                recordIds.addAll(exerciseHasthtagRecord);
+            }
             searchResult = recordRepository.findByIdInOrderByLikesDescCreatedAtDesc(recordIds, PageRequest.of(pageIndex, size));
         }
         return searchResult;
@@ -136,6 +168,22 @@ public class SearchServiceImpl implements SearchService {
             List<Long> articleIds = articleHashTagList.stream()
                     .map(recordHashTag -> recordHashTag.getArticle().getId())
                     .collect(Collectors.toList());
+
+            if(!byName.get().getExerciseCategory().equals(null)){
+
+                List<Article> exerciseHashTag = articleRepository.findAllByExerciseCategory(byName.get().getExerciseCategory());
+
+                List<Long> exerciseHashTagId = exerciseHashTag.stream()
+                        .map(article -> article.getId()).collect(Collectors.toList());
+                articleIds.addAll(exerciseHashTagId);
+
+                List<Record> exerciseHashtag = recordRepository.findAllByExerciseCategory(byName.get().getExerciseCategory());
+
+                List<Long> exerciseHasthtagRecord = exerciseHashtag.stream()
+                        .map(record -> record.getId()).collect(Collectors.toList());
+
+                recordIds.addAll(exerciseHasthtagRecord);
+            }
 
             searchArticle = articleRepository.findByIdInOrderByCreatedAtDesc(articleIds,PageRequest.of(0,3));
             searchRecord = recordRepository.findByIdInOrderByCreatedAtDesc(recordIds,PageRequest.of(0,3));
