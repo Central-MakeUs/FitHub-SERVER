@@ -32,4 +32,8 @@ public class HashTag extends BaseEntity {
 
     @OneToMany(mappedBy = "hashTag", cascade = CascadeType.ALL)
     private List<RecordHashTag> recordHashTagList = new ArrayList<>();
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private ExerciseCategory exerciseCategory;
 }
