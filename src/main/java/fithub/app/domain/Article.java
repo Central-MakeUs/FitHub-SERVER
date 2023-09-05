@@ -4,6 +4,7 @@ import fithub.app.domain.common.BaseEntity;
 import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ArticleLikes;
 import fithub.app.domain.mapping.ContentsReport;
+import fithub.app.domain.mapping.SavedArticle;
 import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -82,6 +83,9 @@ public class Article extends BaseEntity {
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
     private List<ContentsReport> contentsReportList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL)
+    private List<SavedArticle> savedArticleList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
