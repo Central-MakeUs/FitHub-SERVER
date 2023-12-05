@@ -2,7 +2,7 @@ package fithub.app.web.controller;
 
 import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.base.ResponseDto;
-import fithub.app.converter.CommentsConverter;
+import fithub.app.service.converter.CommentsConverter;
 import fithub.app.domain.Comments;
 import fithub.app.domain.User;
 import fithub.app.domain.mapping.ContentsReport;

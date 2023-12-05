@@ -1,4 +1,4 @@
-package fithub.app.converter;
+package fithub.app.service.converter;
 
 import fithub.app.domain.Comments;
 import fithub.app.domain.User;

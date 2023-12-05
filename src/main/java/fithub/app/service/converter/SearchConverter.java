@@ -1,12 +1,10 @@
-package fithub.app.converter;
+package fithub.app.service.converter;
 
 import fithub.app.domain.Article;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
 import fithub.app.web.dto.responseDto.SearchPreViewResponseDto;
 import org.springframework.data.domain.Page;
-
-import java.util.List;
 
 public class SearchConverter {
 

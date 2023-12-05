@@ -3,7 +3,7 @@ package fithub.app.sms.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fithub.app.base.Code;
-import fithub.app.converter.PhoneAuthConverter;
+import fithub.app.service.converter.PhoneAuthConverter;
 import fithub.app.domain.PhoneAuth;
 
 import fithub.app.base.exception.handler.PhoneAuthException;

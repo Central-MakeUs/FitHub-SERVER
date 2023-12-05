@@ -2,10 +2,7 @@ package fithub.app.web.controller;
 
 import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.base.ResponseDto;
-import fithub.app.converter.ArticleConverter;
-import fithub.app.converter.RecordConverter;
-import fithub.app.converter.UserConverter;
-import fithub.app.domain.Article;
+import fithub.app.service.converter.RecordConverter;
 import fithub.app.domain.Record;
 import fithub.app.domain.User;
 import fithub.app.domain.mapping.ContentsReport;
@@ -14,8 +11,6 @@ import fithub.app.validation.annotation.ExistCategory;
 import fithub.app.validation.annotation.ExistRecord;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
-import fithub.app.web.dto.responseDto.UserResponseDto;
-import io.swagger.models.auth.In;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -29,7 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
