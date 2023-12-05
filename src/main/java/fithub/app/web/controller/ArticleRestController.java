@@ -2,7 +2,7 @@ package fithub.app.web.controller;
 
 import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.base.ResponseDto;
-import fithub.app.converter.ArticleConverter;
+import fithub.app.service.converter.ArticleConverter;
 import fithub.app.domain.Article;
 import fithub.app.domain.User;
 import fithub.app.domain.mapping.ContentsReport;
@@ -25,14 +25,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 @Validated
 @RestController

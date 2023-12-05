@@ -1,4 +1,4 @@
-package fithub.app.converter;
+package fithub.app.service.converter;
 
 import fithub.app.auth.provider.TokenProvider;
 import fithub.app.aws.s3.AmazonS3Manager;
@@ -11,7 +11,6 @@ import fithub.app.domain.mapping.UserReport;
 import fithub.app.repository.*;
 import fithub.app.utils.OAuthResult;
 import fithub.app.web.dto.requestDto.UserRequestDto;
-import fithub.app.web.dto.responseDto.RootApiResponseDto;
 import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.criteria.Root;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -29,7 +27,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component

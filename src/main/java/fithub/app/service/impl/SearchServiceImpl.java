@@ -2,7 +2,7 @@ package fithub.app.service.impl;
 
 import fithub.app.base.Code;
 import fithub.app.base.exception.handler.SearchException;
-import fithub.app.converter.SearchConverter;
+import fithub.app.service.converter.SearchConverter;
 import fithub.app.domain.*;
 import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.RecordHashTag;

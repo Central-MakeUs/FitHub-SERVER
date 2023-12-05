@@ -1,7 +1,7 @@
 package fithub.app.auth.handler.annotation;
 
 import fithub.app.base.Code;
-import fithub.app.converter.UserConverter;
+import fithub.app.service.converter.UserConverter;
 import fithub.app.domain.User;
 import fithub.app.base.exception.handler.UserException;
 import lombok.RequiredArgsConstructor;

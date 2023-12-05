@@ -1,4 +1,4 @@
-package fithub.app.converter.common;
+package fithub.app.service.converter.common;
 
 import fithub.app.utils.ResponseCode;
 import fithub.app.web.dto.common.BaseDto;

@@ -1,10 +1,9 @@
-package fithub.app.converter;
+package fithub.app.service.converter;
 
 import fithub.app.aws.s3.AmazonS3Manager;
 import fithub.app.base.Code;
 import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.domain.*;
-import fithub.app.domain.mapping.ArticleHashTag;
 import fithub.app.domain.mapping.ContentsReport;
 import fithub.app.domain.mapping.RecordHashTag;
 import fithub.app.repository.ExerciseCategoryRepository;
@@ -13,7 +12,6 @@ import fithub.app.repository.RecordRepositories.RecordRepository;
 import fithub.app.utils.TimeConverter;
 import fithub.app.web.dto.requestDto.RecordRequestDto;
 import fithub.app.web.dto.responseDto.RecordResponseDto;
-import fithub.app.web.dto.responseDto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

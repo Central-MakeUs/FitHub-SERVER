@@ -1,4 +1,4 @@
-package fithub.app.converter;
+package fithub.app.service.converter;
 
 import fithub.app.domain.*;
 import fithub.app.repository.ExerciseCategoryRepository;

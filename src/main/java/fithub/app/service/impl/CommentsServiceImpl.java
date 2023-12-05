@@ -3,7 +3,7 @@ package fithub.app.service.impl;
 import fithub.app.base.Code;
 import fithub.app.base.exception.handler.ArticleException;
 import fithub.app.base.exception.handler.CommentsException;
-import fithub.app.converter.CommentsConverter;
+import fithub.app.service.converter.CommentsConverter;
 import fithub.app.domain.*;
 import fithub.app.domain.enums.ContentsType;
 import fithub.app.domain.enums.NotificationCategory;

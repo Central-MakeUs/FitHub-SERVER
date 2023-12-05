@@ -1,4 +1,4 @@
-package fithub.app.converter;
+package fithub.app.service.converter;
 
 import fithub.app.domain.User;
 import fithub.app.domain.UserExercise;

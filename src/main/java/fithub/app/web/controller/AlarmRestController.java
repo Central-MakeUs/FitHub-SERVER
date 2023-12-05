@@ -2,14 +2,12 @@ package fithub.app.web.controller;
 
 import fithub.app.auth.handler.annotation.AuthUser;
 import fithub.app.base.ResponseDto;
-import fithub.app.converter.NotificationConverter;
+import fithub.app.service.converter.NotificationConverter;
 
 import fithub.app.domain.Notification;
 import fithub.app.domain.User;
 import fithub.app.firebase.service.FireBaseService;
 import fithub.app.service.NotificationService;
-import fithub.app.utils.FCMType;
-import fithub.app.web.dto.requestDto.ArticleRequestDto;
 import fithub.app.web.dto.responseDto.NotificationResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,8 +20,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @Tag(name = "알람 API", description = "푸쉬 알람 API")
 @RestController
